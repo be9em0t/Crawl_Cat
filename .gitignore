@@ -9,7 +9,6 @@ __pycache__/
 
 env/
 .env
-extract_llm.yml
 venv/
 .venv/
 

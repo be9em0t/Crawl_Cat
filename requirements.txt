@@ -2,3 +2,5 @@ pyyaml
 python-dotenv
 crawl4ai
 pydantic
+
+pytest

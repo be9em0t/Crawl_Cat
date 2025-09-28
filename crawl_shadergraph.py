@@ -55,43 +55,47 @@ def load_config(path: Optional[str]):
 
 
 def resolve_provider_and_token(config_path: Optional[str], provider_override: Optional[str], token_override: Optional[str]):
+    """Resolve the LLM provider and API token.
+
+    Returns a tuple: (api_token or None, provider str, provider_source)
+    provider_source is one of: 'cli', 'config', 'env', 'fallback'
+    """
     # CLI overrides take precedence
     if provider_override or token_override:
-        return token_override, provider_override
+        return token_override, provider_override, 'cli'
 
-    # Try config file
+    # If a config file provides a provider name, use it (tokens still come from env)
     if config_path:
         cfg = load_config(config_path)
         if cfg:
             prov = cfg.get('provider')
-            # Do NOT read API tokens from YAML. Prefer environment variables.
             if prov:
-                # Even if the YAML contains the provider, check environment vars for tokens
+                # Prefer environment variables for tokens (never read tokens from YAML)
                 openai_key = os.getenv('OPENAI_API_KEY')
                 if openai_key:
-                    return openai_key, prov
+                    return openai_key, prov, 'config'
                 anthropic_key = os.getenv('ANTHROPIC_API_KEY')
                 if anthropic_key:
-                    return anthropic_key, prov
+                    return anthropic_key, prov, 'config'
                 hf = os.getenv('HUGGINGFACE_API_TOKEN')
                 if hf:
-                    return hf, prov
-                # No token in environment: return provider only
-                return None, prov
+                    return hf, prov, 'config'
+                # No token in environment: return provider only (from config)
+                return None, prov, 'config'
 
     # Fallback env vars
     openai_key = os.getenv('OPENAI_API_KEY')
     if openai_key:
-        return openai_key, 'openai/gpt-4o-mini'
+        return openai_key, 'openai/gpt-4.1', 'env'
     anthropic_key = os.getenv('ANTHROPIC_API_KEY')
     if anthropic_key:
-        return anthropic_key, 'anthropic/claude-3-haiku-20240307'
+        return anthropic_key, 'anthropic/claude-3-haiku-latest', 'env'
     hf = os.getenv('HUGGINGFACE_API_TOKEN')
     if hf:
-        return hf, 'huggingface/microsoft/DialoGPT-medium'
+        return hf, 'huggingface/microsoft/DialoGPT-medium', 'env'
 
     # Default to local
-    return None, 'ollama/llama2'
+    return None, 'ollama/llama2', 'fallback'
 
 
 async def run_crawl(url: str, api_token: Optional[str], provider: str, instruction: Optional[str]):
@@ -190,45 +194,97 @@ async def run_crawl(url: str, api_token: Optional[str], provider: str, instructi
             if norm_cats:
                 normalized.append({'topic': topic, 'categories': norm_cats})
 
-    # Write outputs
-    with open('shadergraph_nodes.json', 'w', encoding='utf-8') as f:
-        json.dump({'url': url, 'extraction': extracted}, f, indent=2, ensure_ascii=False)
-
-    with open('shadergraph_crawlmode.json', 'w', encoding='utf-8') as f:
-        json.dump(normalized, f, indent=2, ensure_ascii=False)
-
-    # Also return summary
-    return normalized
+    # Return both the raw extracted content and normalized Crawl Mode structure
+    return extracted, normalized
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', type=str, default='extract_llm.yml', help='Path to YAML config')
+    parser.add_argument('crawl_yaml', type=str, nargs='?', help='Path to a single crawl YAML file (required)')
+    parser.add_argument('--config', type=str, default='extract_llm.yml', help='Path to YAML config for provider/instruction defaults')
     parser.add_argument('--provider', type=str, default=None, help='LLM provider override')
     parser.add_argument('--api-token', type=str, default=None, help='LLM API token override')
     parser.add_argument('--instruction', type=str, default=None, help='LLM instruction override')
     args = parser.parse_args()
 
-    url = 'https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html'
+    # Require a single YAML argument; print help if missing
+    if not args.crawl_yaml:
+        parser.print_help()
+        raise SystemExit(1)
 
-    api_token, provider = resolve_provider_and_token(args.config, args.provider, args.api_token)
+    if not os.path.isfile(args.crawl_yaml):
+        print('Crawl YAML not found:', args.crawl_yaml)
+        raise SystemExit(1)
 
+    cfg = load_config(args.crawl_yaml)
+    if not cfg:
+        print('Failed to load YAML config or file empty:', args.crawl_yaml)
+        raise SystemExit(1)
+
+    url = cfg.get('url')
+    instruction = cfg.get('instruction') or args.instruction
+    output_prefix = cfg.get('output_prefix') or cfg.get('name') or os.path.splitext(os.path.basename(args.crawl_yaml))[0]
+
+    # Determine provider and token
+    cfg_provider = cfg.get('provider')
+    if args.provider or args.api_token:
+        # explicit CLI overrides
+        api_token = args.api_token
+        provider = args.provider
+        provider_source = 'cli'
+    elif cfg_provider:
+        # provider specified in the crawl YAML; prefer environment tokens
+        provider = cfg_provider
+        api_token = None
+        if provider.startswith('openai/'):
+            api_token = os.getenv('OPENAI_API_KEY')
+        elif provider.startswith('anthropic/'):
+            api_token = os.getenv('ANTHROPIC_API_KEY')
+        elif provider.startswith('huggingface/'):
+            api_token = os.getenv('HUGGINGFACE_API_TOKEN')
+        # fallback: check common envs in order
+        if not api_token:
+            api_token = os.getenv('OPENAI_API_KEY') or os.getenv('ANTHROPIC_API_KEY') or os.getenv('HUGGINGFACE_API_TOKEN')
+        provider_source = 'config'
+    else:
+        api_token, provider, provider_source = resolve_provider_and_token(args.config, args.provider, args.api_token)
+
+    print('\nRunning crawl for:', url)
     print('Resolved provider:', provider)
+    print('Provider source:', provider_source)
     print('API token present:', bool(api_token))
-    print('Instruction override present:', bool(args.instruction))
 
     # Basic validation: if provider is a hosted provider that requires a key, ensure we have one
     hosted_prefixes = ['openai/', 'anthropic/', 'huggingface/']
     if any(provider.startswith(p) for p in hosted_prefixes) and not api_token:
         print('\n\n❌ Missing API token for hosted LLM provider:', provider)
-        print('Please set the appropriate environment variable (e.g. OPENAI_API_KEY) or pass --api-token')
+        if provider_source == 'config':
+            print(f"Provider '{provider}' was selected from the config file: {args.config}")
+            print('No API token was found in your environment. Please set the appropriate environment variable:')
+            if provider.startswith('openai/'):
+                print('  export OPENAI_API_KEY="<your-key>"')
+            elif provider.startswith('anthropic/'):
+                print('  export ANTHROPIC_API_KEY="<your-key>"')
+            elif provider.startswith('huggingface/'):
+                print('  export HUGGINGFACE_API_TOKEN="<your-token>"')
+            print('Or re-run with --api-token <TOKEN> to provide it directly.')
+        else:
+            print('Please set the appropriate environment variable (e.g. OPENAI_API_KEY) or pass --api-token')
         raise SystemExit(1)
 
-    normalized = asyncio.run(run_crawl(url, api_token, provider, args.instruction))
+    extracted, normalized = asyncio.run(run_crawl(url, api_token, provider, instruction))
 
     print('\nCrawl Mode topics found:', len(normalized))
     for t in normalized:
         print('-', t.get('topic'), '->', len(t.get('categories', [])), 'categories')
+
+    # write outputs with the output_prefix
+    nodes_out = f"{output_prefix}_nodes.json"
+    crawlmode_out = f"{output_prefix}_crawlmode.json"
+    with open(nodes_out, 'w', encoding='utf-8') as f:
+        json.dump({'url': url, 'extraction': extracted}, f, indent=2, ensure_ascii=False)
+    with open(crawlmode_out, 'w', encoding='utf-8') as f:
+        json.dump(normalized, f, indent=2, ensure_ascii=False)
 
 
 if __name__ == '__main__':

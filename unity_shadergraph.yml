@@ -1,0 +1,17 @@
+# unity_shadergraph.yaml
+# Config for crawling Unity ShaderGraph Node Library
+
+name: "unity_shadergraph"
+type: "llm"
+provider: "openai/gpt-4.1"
+url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+output_prefix: "unity_shadergraph"
+instruction: |
+  Return a strict JSON array of topic objects. Each topic must have 'topic' (string) and 'categories' (array).
+  Each category must have 'category' (string) and 'nodes' (array of node-name strings).
+
+  Only return the JSON array (no commentary or markdown). Ensure all topics, categories and node names
+  from the page are included in the structure above.
+params:
+  temperature: 0.0
+  max_tokens: 3000

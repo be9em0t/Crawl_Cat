@@ -1,0 +1,18 @@
+# houdini_obj_nodes.yaml
+# Config for crawling Houdini OBJ nodes index
+
+name: "houdini_obj_nodes"
+type: "llm"
+provider: "openai/gpt-4.1"
+url: "https://www.sidefx.com/docs/houdini20.5/nodes/obj/index.html"
+output_prefix: "houdini_obj_nodes"
+instruction: |
+  Return a strict JSON array of topic objects representing the Houdini OBJ nodes index.
+  Each topic must have 'topic' (string) and 'categories' (array).
+  Each category must have 'category' (string) and 'nodes' (array of node-name strings).
+
+  For this page, treat each node family or grouping as a category under a topic named 'OBJ Nodes'.
+  Only return the JSON array (no commentary). Ensure all node names are included.
+params:
+  temperature: 0.0
+  max_tokens: 3000
