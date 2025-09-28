@@ -7,11 +7,38 @@ provider: "openai/gpt-4.1"
 url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
 output_prefix: "unity_shadergraph"
 instruction: |
-  Return a strict JSON array of topic objects. Each topic must have 'topic' (string) and 'categories' (array).
-  Each category must have 'category' (string) and 'nodes' (array of node-name strings).
+  Return a strict JSON array that represents the ShaderGraph "Crawl Mode" structure. 
+  Limit only to "Graph nodes", skip "Block nodes".
+  The top-level value MUST be a JSON array of topic objects. Each topic object must have:
+    - "topic": string
+    - "categories": an array of category objects
 
-  Only return the JSON array (no commentary or markdown). Ensure all topics, categories and node names
-  from the page are included in the structure above.
+  Each category object must have:
+    - "category": string
+    - "nodes": an array of node name strings
+
+  Rules:
+  - If a topic has zero categories, represent it as a single category with the topic name.
+    Example: {"topic": "Channel", "categories": [{"category": "Channel", "nodes": ["Combine Channels", "Split Channels"]}]}
+  - Do NOT include any descriptions, explanations, or extra text outside the JSON array.
+  - Only return valid JSON (no Markdown, no commentary). Example top-level shape:
+
+  [
+    {
+      "topic": "Artistic",
+      "categories": [
+        {"category": "Adjustment", "nodes": ["Channel Mixer", "Contrast"]},
+        {"category": "Blend", "nodes": ["Blend Node A", "Blend Node B"]}
+      ]
+    },
+    {
+      "topic": "Channel",
+      "categories": [{"category": "Channel", "nodes": ["Combine Channels", "Split Channels"]}]
+    }
+  ]
+
+  Make the JSON precise: include all topics, categories and node names found on the page in the structure above.
+  End of instruction.
 params:
   temperature: 0.0
   max_tokens: 3000
