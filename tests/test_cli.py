@@ -27,16 +27,24 @@ def test_missing_yaml_exits_with_error():
     assert 'not found' in out.lower() or 'crawl yaml not found' in out.lower()
 
 
-def test_run_with_minimal_yaml(tmp_path, monkeypatch):
+def test_run_with_minimal_yaml(tmp_path):
     # create a minimal YAML that points to a harmless page and a simple instruction
     yaml_content = '''\nname: test_minimal\nurl: https://example.com/\ninstruction: |\n  Return a strict JSON array of topic objects.\nparams:\n  temperature: 0.0\n'''
     cfg = tmp_path / 'test_minimal.yaml'
     cfg.write_text(yaml_content, encoding='utf-8')
 
     # set a dummy OPENAI_API_KEY to bypass missing-token checks (provider falls back to env)
-    monkeypatch.setenv('OPENAI_API_KEY', 'sk-test')
+    old_key = os.environ.get('OPENAI_API_KEY')
+    try:
+        os.environ['OPENAI_API_KEY'] = 'sk-test'
 
-    code, out = run([str(cfg)])
+        code, out = run([str(cfg)])
+    finally:
+        # restore previous environment
+        if old_key is None:
+            os.environ.pop('OPENAI_API_KEY', None)
+        else:
+            os.environ['OPENAI_API_KEY'] = old_key
     # the crawl may actually try to perform network I/O depending on crawl4ai behavior.
     # We accept non-zero exit codes as long as our CLI started and printed resolved provider info.
     assert 'Resolved provider:' in out

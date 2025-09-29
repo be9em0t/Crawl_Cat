@@ -33,6 +33,8 @@ except Exception:
     # python-dotenv not installed; rely on existing environment
     pass
 
+# Review/approve flow removed: persistent cleanup - this script no longer supports --review/--review-file/--approve
+
 
 class ShaderGraphNode(BaseModel):
     name: str = Field(description="The name of the ShaderGraph node")
@@ -172,7 +174,7 @@ def resolve_provider_and_token(config_path: Optional[str], provider_override: Op
     return None, 'ollama/llama2', 'fallback'
 
 
-async def run_crawl(url: str, api_token: Optional[str], provider: str, instruction: Optional[str]):
+async def run_crawl(url: str, api_token: Optional[str], provider: str, instruction: Optional[str], params: Optional[dict] = None):
     # Configure LLM
     if api_token:
         llm_config = LLMConfig(provider=provider, api_token=api_token)
@@ -215,17 +217,25 @@ async def run_crawl(url: str, api_token: Optional[str], provider: str, instructi
         }
     }
 
+    # Allow YAML/CLI provided params to override defaults
+    params = params or {}
+    temperature = params.get('temperature', 0.0)
+    max_tokens = params.get('max_tokens', 3000)
+    chunk_token_threshold = params.get('chunk_token_threshold', 2000)
+    apply_chunking = params.get('apply_chunking', True)
+    overlap_rate = params.get('overlap_rate', 0.0)
+
     llm_strategy = LLMExtractionStrategy(
         llm_config=llm_config,
         schema=schema,
         extraction_type='schema',
         instruction=instruction,
-        chunk_token_threshold=2000,
-        overlap_rate=0.0,
-        apply_chunking=True,
-        input_format='markdown',
-        extra_args={'temperature': 0.0, 'max_tokens': 3000},
-        verbose=True
+        chunk_token_threshold=chunk_token_threshold,
+        overlap_rate=overlap_rate,
+        apply_chunking=apply_chunking,
+        input_format=params.get('input_format', 'markdown'),
+        extra_args={'temperature': temperature, 'max_tokens': max_tokens},
+        verbose=params.get('verbose', True)
     )
 
     crawl_cfg = CrawlerRunConfig(
@@ -235,8 +245,11 @@ async def run_crawl(url: str, api_token: Optional[str], provider: str, instructi
 
     browser_cfg = BrowserConfig(headless=True)
 
+    import time
+    start = time.perf_counter()
     async with AsyncWebCrawler(config=browser_cfg) as crawler:
         result = await crawler.arun(url=url, config=crawl_cfg)
+    elapsed = time.perf_counter() - start
 
     if not result.success:
         raise RuntimeError(f"Crawl failed: {result.error_message}")
@@ -268,8 +281,44 @@ async def run_crawl(url: str, api_token: Optional[str], provider: str, instructi
             if norm_cats:
                 normalized.append({'topic': topic, 'categories': norm_cats})
 
-    # Return both the raw extracted content and normalized Crawl Mode structure
-    return extracted, normalized
+    # Build metrics: counts and any provider-reported usage if available
+    counts = {
+        'topics': 0,
+        'categories': 0,
+        'nodes': 0,
+        'nodes_with_description': 0
+    }
+    if isinstance(normalized, list):
+        counts['topics'] = len(normalized)
+        for t in normalized:
+            cats = t.get('categories', []) if isinstance(t, dict) else []
+            counts['categories'] += len(cats)
+            for c in cats:
+                nodes = c.get('nodes', []) if isinstance(c, dict) else []
+                counts['nodes'] += len(nodes)
+                for n in nodes:
+                    if isinstance(n, dict) and (n.get('description') or '').strip():
+                        counts['nodes_with_description'] += 1
+
+    # Try to extract provider token usage information if the crawler exposes it
+    llm_usage = None
+    # common attribute names that might appear on result objects
+    for attr in ('usage', 'llm_usage', 'token_usage', 'stats'):
+        if hasattr(result, attr):
+            try:
+                llm_usage = getattr(result, attr)
+                break
+            except Exception:
+                llm_usage = None
+
+    metrics = {
+        'elapsed_s': elapsed,
+        'counts': counts,
+        'llm_usage': llm_usage
+    }
+
+    # Return both the raw extracted content, normalized structure, and metrics
+    return extracted, normalized, metrics
 
 
 def main():
@@ -281,9 +330,6 @@ def main():
     parser.add_argument('--instruction', type=str, default=None, help='LLM instruction override')
     parser.add_argument('--save-raw', action='store_true', help='Write raw extraction output with metadata to <prefix>_raw.json')
     parser.add_argument('--content', action='store_true', help='Use LLM to capture additional content (descriptions) per node')
-    parser.add_argument('--approve', action='store_true', help='If selectors are proposed or provided via --review-file, write them back to the YAML')
-    parser.add_argument('--review', action='store_true', help='Print proposed dom_selectors and sample deterministic extraction for review (no write). Implies --content.')
-    parser.add_argument('--review-file', type=str, default=None, help='Save proposed dom selectors to this file (JSON) for offline review. Implies --content.')
     args = parser.parse_args()
 
     # Require a single YAML argument; print help if missing
@@ -306,14 +352,8 @@ def main():
     content_instruction = cfg.get('content_instruction')
     dom_discovery_instruction = cfg.get('dom_discovery_instruction')
     dom_selectors = cfg.get('dom_selectors') or {}
-    approve = args.approve
-    review = args.review
-
-    # Make review and review-file imply content (so the content pass and discovery run)
-    if review or args.review_file:
-        if not args.content:
-            print('Note: --review/--review-file implies --content; enabling content pass')
-        args.content = True
+        # review/approve functionality removed - nothing to imply here
+        # The args.approve and args.review have been removed as part of the cleanup.
     instruction = structure_instruction or args.instruction
     output_prefix = cfg.get('output_prefix') or cfg.get('name') or os.path.splitext(os.path.basename(args.crawl_yaml))[0]
 
@@ -370,7 +410,7 @@ def main():
             raise SystemExit(1)
 
     # Always run structure extraction first to get a canonical structure
-    extracted_struct, normalized = asyncio.run(run_crawl(url, api_token, provider, instruction))
+    extracted_struct, normalized, struct_metrics = asyncio.run(run_crawl(url, api_token, provider, instruction, params=cfg.get('params')))
 
     # If saving raw, write the structure extraction raw output
     if args.save_raw:
@@ -419,22 +459,10 @@ def main():
 
         combined_content_instruction = "\n\n".join(content_prompt_parts)
 
-        # If dom_selectors not provided but we have an LLM, ask it to propose selectors using dom_discovery_instruction
-        if not dom_selectors and dom_discovery_instruction and api_token:
-            # Ask LLM to propose selectors
-            try:
-                _, proposed = asyncio.run(run_crawl(url, api_token, provider, dom_discovery_instruction))
-                # proposed expected to be a JSON object; normalized result may be list-wrapped
-                if isinstance(proposed, list) and proposed:
-                    proposed = proposed[0]
-                if isinstance(proposed, dict):
-                    dom_proposed = proposed
-                    dom_selectors = dom_proposed
-            except Exception:
-                dom_proposed = None
+        # DOM discovery removed from automated flow. If you need dom_selectors, add them to the YAML manually.
 
         # Run LLM extraction for content (still useful to get names->description mapping)
-        extracted_content, normalized_content = asyncio.run(run_crawl(url, api_token, provider, combined_content_instruction))
+        extracted_content, normalized_content, content_metrics = asyncio.run(run_crawl(url, api_token, provider, combined_content_instruction))
 
         # Build a map from node name -> description from normalized_content
         if isinstance(normalized_content, list):
@@ -558,95 +586,33 @@ def main():
     if args.content:
         enriched_out = f"{output_prefix}_enriched.json"
         with open(enriched_out, 'w', encoding='utf-8') as f:
+            # keep original behaviour: write the enriched list (tests expect a list)
             json.dump(enriched, f, indent=2, ensure_ascii=False)
+        # write metrics to a separate file for backward compatibility
+        metrics_out = f"{output_prefix}_enriched_metrics.json"
+        try:
+            with open(metrics_out, 'w', encoding='utf-8') as mf:
+                json.dump(content_metrics, mf, indent=2, ensure_ascii=False)
+        except Exception:
+            pass
 
-        # If the LLM proposed DOM selectors and user asked to review them, print them and samples
-        if dom_proposed and review:
-            try:
-                print('\nProposed dom_selectors:\n')
-                print(json.dumps(dom_proposed, indent=2, ensure_ascii=False))
-
-                # show sample deterministic extraction for up to 5 nodes
-                node_selectors = dom_proposed.get('node_page_selectors') if isinstance(dom_proposed, dict) else None
-                if node_selectors and main_soup:
-                    print('\nSample deterministic extraction using proposed node_page_selectors:\n')
-                    samples = []
-                    from urllib.parse import urljoin
-                    for topic in normalized:
-                        for c in topic.get('categories', []):
-                            for n in c.get('nodes', []):
-                                name = n.get('name') if isinstance(n, dict) else n
-                                if not name:
-                                    continue
-                                # find link for this name
-                                try:
-                                    _, link = find_on_page_description(main_soup, name)
-                                except Exception:
-                                    link = None
-                                if link:
-                                    page_url = urljoin(url, link)
-                                    sample_txt = extract_by_dom_selectors(page_url, node_selectors)
-                                else:
-                                    sample_txt = None
-                                samples.append({'name': name, 'sample': sample_txt})
-                                if len(samples) >= 5:
-                                    break
-                            if len(samples) >= 5:
-                                break
-                        if len(samples) >= 5:
-                            break
-                    for s in samples:
-                        sample_preview = None
-                        if s.get('sample'):
-                            sample_preview = (s['sample'][:200] + '...') if len(s['sample']) > 200 else s['sample']
-                        print(f"- {s['name']}: {sample_preview}")
-            except Exception as e:
-                print('Error while reviewing dom_selectors:', e)
-
-            # optionally save proposed selectors to a file for manual inspection
-            if dom_proposed and args.review_file:
-                try:
-                    with open(args.review_file, 'w', encoding='utf-8') as rf:
-                        json.dump(dom_proposed, rf, indent=2, ensure_ascii=False)
-                    print('Saved proposed dom_selectors to', args.review_file)
-                except Exception as e:
-                    print('Failed to save proposed dom_selectors:', e)
-
-        # Approve and persist selectors into YAML. Support two modes:
-        # - if dom_proposed exists in this run and --approve is passed, write it
-        # - otherwise, if --approve and --review-file <file> provided, load selectors from file and write them
-        if approve:
-            try:
-                # Prefer a provided review file when approving (safer and deterministic)
-                selectors_to_write = None
-                if args.review_file and os.path.exists(args.review_file):
-                    try:
-                        with open(args.review_file, 'r', encoding='utf-8') as rf:
-                            selectors_to_write = json.load(rf)
-                    except Exception:
-                        selectors_to_write = None
-                # Fallback to the in-run proposed selectors if no review file provided
-                elif dom_proposed and isinstance(dom_proposed, dict):
-                    selectors_to_write = dom_proposed
-
-                # Validate selectors_to_write looks like a selector mapping
-                if not selectors_to_write or not isinstance(selectors_to_write, dict):
-                    print('No valid proposed selectors available to approve. Provide --review-file <file> containing the proposed selectors or run with --review and --approve together.')
-                elif not any(k in selectors_to_write for k in ('index_selectors', 'node_page_selectors')):
-                    print('Proposed selectors file does not look like a selector mapping (missing index_selectors/node_page_selectors). Not writing to YAML.')
-                else:
-                    with open(args.crawl_yaml, 'r', encoding='utf-8') as f:
-                        full_cfg = yaml.safe_load(f)
-                    full_cfg['dom_selectors'] = selectors_to_write
-                    with open(args.crawl_yaml, 'w', encoding='utf-8') as f:
-                        yaml.safe_dump(full_cfg, f)
-                    print('Wrote approved dom_selectors to', args.crawl_yaml)
-            except Exception as e:
-                print('Failed to write dom_selectors to config:', e)
+    # Review/approve flow removed. If you need to discover or approve dom_selectors, add them manually to the YAML
 
     print('\nCrawl Mode topics found:', len(normalized))
     for t in normalized:
         print('-', t.get('topic'), '->', len(t.get('categories', [])), 'categories')
+
+    # Print extraction metrics summary for structure (counts only)
+    try:
+        cm = struct_metrics
+        print('\nStructure extraction:')
+        print('- elapsed (s):', round(cm.get('elapsed_s', 0.0), 2))
+        cnts = cm.get('counts', {})
+        print('- topics:', cnts.get('topics', 0), 'categories:', cnts.get('categories', 0), 'nodes:', cnts.get('nodes', 0))
+        if cm.get('llm_usage'):
+            print('- llm_usage:', cm.get('llm_usage'))
+    except Exception:
+        pass
 
     # write outputs with the output_prefix
     raw_out = f"{output_prefix}_raw.json"
@@ -668,6 +634,36 @@ def main():
         json.dump(normalized, f, indent=2, ensure_ascii=False)
 
     # (enrichment already produced above when --content was requested)
+    if args.content:
+        try:
+            # derive nodes_with_description from the enriched data we just built
+            nd_desc = 0
+            total_nodes = 0
+            total_topics = 0
+            total_categories = 0
+            for t in enriched:
+                total_topics += 1
+                for c in t.get('categories', []):
+                    total_categories += 1
+                    for n in c.get('nodes', []):
+                        total_nodes += 1
+                        if isinstance(n, dict) and (n.get('description') or '').strip():
+                            nd_desc += 1
+
+            print('\nContent enrichment:')
+            # include elapsed if available
+            try:
+                print('- elapsed (s):', round(content_metrics.get('elapsed_s', 0.0), 2))
+            except Exception:
+                pass
+            print('- topics:', total_topics, 'categories:', total_categories, 'nodes:', total_nodes, 'nodes_with_description:', nd_desc)
+            try:
+                if content_metrics.get('llm_usage'):
+                    print('- llm_usage:', content_metrics.get('llm_usage'))
+            except Exception:
+                pass
+        except Exception:
+            pass
 
 
 if __name__ == '__main__':

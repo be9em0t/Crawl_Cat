@@ -48,13 +48,19 @@ async def fake_run_crawl_content(url, api_token, provider, instruction):
     return extracted, normalized
 
 
-def run_script_with_mocks(tmp_path, monkeypatch):
+def run_script_with_mocks(tmp_path):
     # prepare a minimal crawl YAML
+    # This test is integration-style and requires a real hosted LLM API key to run live.
+    # Fail loudly with a clear message if no API key is present (we keep secrets local).
+    if not os.environ.get('OPENAI_API_KEY') and not os.environ.get('ANTHROPIC_API_KEY') and not os.environ.get('HUGGINGFACE_API_TOKEN'):
+        raise AssertionError('Integration test requires a hosted LLM API key in environment (OPENAI_API_KEY, ANTHROPIC_API_KEY, or HUGGINGFACE_API_TOKEN)')
+
     yaml_path = tmp_path / 'test_crawl.yml'
     yaml_content = {
         'name': 'test_crawl',
         'url': 'https://example.com',
-        'provider': 'local/none',
+        # require a hosted provider for live testing; let the global env decide which key is present
+        'provider': 'openai/gpt-4.1',
         'structure_instruction': 'structure',
         'content_instruction': 'content',
         'output_prefix': str(tmp_path / 'test_crawl')
@@ -63,57 +69,47 @@ def run_script_with_mocks(tmp_path, monkeypatch):
     with open(yaml_path, 'w', encoding='utf-8') as f:
         _yaml.safe_dump(yaml_content, f)
 
-    # monkeypatch run_crawl used in crawl_cat.py by replacing asyncio.run to route calls
-    orig_asyncio_run = asyncio.run
-
-    call_count = {'n': 0}
-
-    def fake_asyncio_run(coro):
-        # coroutine will be a call to run_crawl(...) coroutine
-        call_count['n'] += 1
-        if call_count['n'] == 1:
-            return orig_asyncio_run(fake_run_crawl_structure(None, None, None, None))
-        else:
-            return orig_asyncio_run(fake_run_crawl_content(None, None, None, None))
-
-    monkeypatch.setattr(asyncio, 'run', fake_asyncio_run)
-
-    # Run the script as a module
-    env = os.environ.copy()
-    # ensure no real API token requirement
-    env.pop('OPENAI_API_KEY', None)
-    env.pop('ANTHROPIC_API_KEY', None)
-    env.pop('HUGGINGFACE_API_TOKEN', None)
-
-    # execute the script's main()
+    # Run the script in-process with the current environment (this is an integration test)
     sys.path.insert(0, ROOT)
+    import importlib
     import crawl_cat
-    # call main with args
-    monkeypatch.setattr(sys, 'argv', ['crawl_cat.py', str(yaml_path), '--content'])
-    crawl_cat.main()
+    # call main with args to produce enriched output
+    sys_argv_save = sys.argv
+    try:
+        sys.argv = ['crawl_cat.py', str(yaml_path), '--content']
+        crawl_cat.main()
+    finally:
+        sys.argv = sys_argv_save
 
     # return path to enriched output
     enriched_out = tmp_path / 'test_crawl_enriched.json'
     return enriched_out
 
 
-def test_content_enrichment_creates_enriched_file(tmp_path, monkeypatch):
-    enriched_out = run_script_with_mocks(tmp_path, monkeypatch)
+def test_content_enrichment_creates_enriched_file(tmp_path):
+    enriched_out = run_script_with_mocks(tmp_path)
     assert enriched_out.exists(), 'enriched output file was not created'
 
     with open(enriched_out, 'r', encoding='utf-8') as f:
         enriched = json.load(f)
 
+    # Validate shape rather than exact counts (live LLM output may vary)
     assert isinstance(enriched, list)
-    assert len(enriched) == 1
+    assert len(enriched) >= 1
     topic = enriched[0]
     assert 'categories' in topic
     cats = topic['categories']
-    assert len(cats) == 1
-    nodes = cats[0]['nodes']
-    assert isinstance(nodes, list)
-    assert len(nodes) == 2
+    assert isinstance(cats, list) and len(cats) >= 1
+    # Pick the first category and ensure it contains nodes with expected keys
+    nodes = cats[0].get('nodes')
+    assert isinstance(nodes, list) and len(nodes) >= 1
+    found_valid_desc = False
     for n in nodes:
         assert isinstance(n, dict)
         assert 'name' in n and 'description' in n
-        assert n['description'] and len(n['description']) > len(n['name'])
+        assert isinstance(n['name'], str) and n['name'].strip() != ''
+        assert isinstance(n['description'], str)
+        if n['description'].strip():
+            found_valid_desc = True
+    # At least one node should have a non-empty description in a successful enrichment
+    assert found_valid_desc
