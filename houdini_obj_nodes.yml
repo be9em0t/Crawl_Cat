@@ -6,13 +6,19 @@ type: "llm"
 provider: "openai/gpt-4.1"
 url: "https://www.sidefx.com/docs/houdini20.5/nodes/obj/index.html"
 output_prefix: "houdini_obj_nodes"
-instruction: |
+structure_instruction: |
   Return a strict JSON array of topic objects representing the Houdini OBJ nodes index.
   Each topic must have 'topic' (string) and 'categories' (array).
   Each category must have 'category' (string) and 'nodes' (array of node-name strings).
 
   For this page, treat each node family or grouping as a category under a topic named 'OBJ Nodes'.
   Only return the JSON array (no commentary). Ensure all node names are included.
+content_instruction: |
+  Extend the structure extraction with the descriptions provided for each node.
+  Each node may be returned either as a string (node name) or as an object with two fields:
+    - name: string (the node name)
+    - description: string (the description scraped from the same locatoin as the node name)
+  If a description is not available with the node name, crawl to the URL of the node name and try to fetech description there. If still unavailable log to command line as error.
 params:
   temperature: 0.0
   max_tokens: 3000

@@ -4,3 +4,6 @@ crawl4ai
 pydantic
 
 pytest
+
+requests
+beautifulsoup4

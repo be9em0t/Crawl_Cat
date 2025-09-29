@@ -1,18 +1,13 @@
 # Project description
-We are working on documentation extraction crawler that uses crawl4ai and it LLM capability.
+Documentation extraction crawler that uses crawl4ai and its LLM capability.
 
-Crawl4ai has been set and available in the local pyenv. Information about the available LLM and its API key can be found in folder .crawl4ai
-Also, the LLM model and API key can be found in extract_llm.yml. 
+# Prerequisits
+Crawl4ai has been set and available in the local pyenv. 
+YAML files store information about different craml modes, like name, LLM model, Instruction etc.  
 
-The documentation of crawl4ai is available here #fetch https://docs.crawl4ai.com/
+The documentation of crawl4ai is available here #fetch https://docs.crawl4ai.com/.
 
-The first task that we want to accomplish is query "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html" with LLM question "Extract all ShaderGraph nodes names without descriptions"
-
-The expected outcome can be achoved with CLI: 
-crwl https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html -q "Extract all shaderGraph node names"
-We need its equivalent via python.
-
-## Crawl Mode implementation guidelines
+## Example Crawl Mode implementation guidelines
 - Mode name is "Unity ShaderGraph"
 - URL is "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html" 
 - Capturing requirements:
@@ -57,30 +52,7 @@ UV topic = UV category:
   - ...
 
 ## Running the commands
-
-To run the `crawl_shadergraph.py` extractor locally and produce the Crawl Mode JSON output, follow these steps.
-
-1) Ensure your Python environment has Crawl4AI installed (the project assumes you use pyenv and an environment with `crawl4ai` available).
-
-2) Configure your LLM credentials. Preferred place: `extract_llm.yml` (already present). The script will also fallback to environment variables such as `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or `HUGGINGFACE_API_TOKEN`.
-
-3) Run the script from the repository root:
-
-```bash
-python3 crawl_shadergraph.py
-```
-
-What the script produces:
-
-- `shadergraph_nodes.json`: Raw extraction metadata and the LLM's `full_extraction` output.
-- `shadergraph_crawlmode.json`: Normalized Crawl Mode structure matching the README guidelines (array of topics, each with `categories` and `nodes`). This is the primary output for downstream ingestion.
-
-Notes & troubleshooting:
-
-- If you prefer to override the YAML instruction or provider temporarily, edit `extract_llm.yml` or set environment variables before running.
-- If the LLM returns unexpected formatting, increase `max_tokens` or set `temperature: 0.0` to make outputs deterministic (the current `extract_llm.yml` uses temperature 0.0).
-- If you see empty categories in the final JSON, they are filtered out during post-processing. The `shadergraph_crawlmode.json` contains only categories with at least one node.
-
-If you want me to add a CLI wrapper (for URL, output path, or provider overrides), I can implement that next.
-
-## Running
+Basic run:
+python3 crawl_cat.py <yaml file>
+Help:
+python3 crawl_cat.py --help

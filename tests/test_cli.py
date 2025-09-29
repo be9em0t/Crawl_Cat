@@ -4,7 +4,7 @@ import sys
 import json
 import tempfile
 
-SCRIPT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'crawl_shadergraph.py'))
+SCRIPT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'crawl_cat.py'))
 
 
 def run(cmd_args, env=None):
@@ -41,8 +41,8 @@ def test_run_with_minimal_yaml(tmp_path, monkeypatch):
     # We accept non-zero exit codes as long as our CLI started and printed resolved provider info.
     assert 'Resolved provider:' in out
     # If outputs were produced, check for the output prefix
-    nodes_file = os.path.join(os.getcwd(), 'test_minimal_nodes.json')
-    crawlmode_file = os.path.join(os.getcwd(), 'test_minimal_crawlmode.json')
+    nodes_file = os.path.join(os.getcwd(), 'test_minimal_raw.json')
+    crawlmode_file = os.path.join(os.getcwd(), 'test_minimal.json')
     # cleanup if any files were created
     if os.path.exists(nodes_file):
         os.remove(nodes_file)
