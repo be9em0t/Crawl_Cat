@@ -22,3 +22,13 @@ content_instruction: |
 params:
   temperature: 0.0
   max_tokens: 3000
+
+# Instruction for the LLM to discover DOM selectors that reliably locate node names and descriptions
+dom_discovery_instruction: |
+  Inspect the provided Houdini OBJ index page and the individual node pages. Return a JSON object with two fields:
+    - index_selectors: a list of CSS selectors (or anchor/text heuristics) that identify node links/names on the index page.
+    - node_page_selectors: a list of CSS selectors (or XPath) that locate the description paragraph or block on a node page (prefer the paragraph immediately following the main H1/H2 header).
+  The response must be a strict JSON object. Only return JSON.
+
+# After manual review/approval this mapping will be populated with the approved selectors for deterministic scraping.
+dom_selectors: {}

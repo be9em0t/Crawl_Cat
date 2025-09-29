@@ -4,6 +4,8 @@ Documentation extraction crawler that uses crawl4ai and its LLM capability.
 # Prerequisits
 Crawl4ai has been set and available in the local pyenv. 
 YAML files store information about different craml modes, like name, LLM model, Instruction etc.  
+There is always LLM available during crawl. If not - warn the user and exit.
+The testing is always done with live data and network access, as monkeypatching yields falso positive results.
 
 The documentation of crawl4ai is available here #fetch https://docs.crawl4ai.com/.
 
@@ -56,3 +58,22 @@ Basic run:
 python3 crawl_cat.py <yaml file>
 Help:
 python3 crawl_cat.py --help
+
+## Configuration and provider/token overrides
+This tool expects a single site-specific YAML file as the positional argument (the `crawl_yaml`).
+Each YAML contains site settings such as `url`, `provider` (optional), `structure_instruction`, and `content_instruction`.
+
+Provider and token resolution order:
+- The positional YAML can specify a `provider` (for example `openai/gpt-4.1`), but API tokens are read from the environment (never from the YAML).
+- To provide an API token, set one of the environment variables:
+  - `OPENAI_API_KEY` for OpenAI providers
+  - `ANTHROPIC_API_KEY` for Anthropic providers
+  - `HUGGINGFACE_API_TOKEN` for Hugging Face providers
+- You can also override the provider or token on the CLI:
+  - `--provider <provider-name>` to override the provider
+  - `--api-token <token>` to pass a token directly (useful for one-off runs)
+
+If a hosted provider is selected but no token is found in the environment or via `--api-token`, the script will refuse to run the LLM content pass. If you requested content but have no token, the script will fall back to DOM-based deterministic extraction and heuristics.
+
+## Default CLI crawl4ai implementatin:
+crwl https://www.sidefx.com/docs/houdini20.5/nodes/obj/index.html -q "Extract node names and attached node descriptions" --output json --output-file houdini_crwl.json

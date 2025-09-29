@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import yaml
 import pytest
+from dotenv import load_dotenv
 
 
 def load_houdini_config():
@@ -82,7 +83,7 @@ def find_nearby_description(index_soup, node_name):
 
 
 @pytest.mark.network
-def test_houdini_index_has_descriptions_for_sample_nodes():
+def test_houdini_index_has_descriptions_for_sample_nodes(capsys):
     cfg = load_houdini_config()
     url = cfg.get('url')
     assert url, 'houdini config must include url'
@@ -91,17 +92,17 @@ def test_houdini_index_has_descriptions_for_sample_nodes():
     sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
     import crawl_cat
     houdini_yaml = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'houdini_obj_nodes.yml')
-    # ensure hosted LLM env vars are cleared so the script falls back to DOM-based heuristics
+    # Load repository .env so hosted LLM API keys are available to the test (matches runtime)
+    repo_root = os.path.dirname(os.path.dirname(__file__))
+    dotenv_path = os.path.join(repo_root, '.env')
+    load_dotenv(dotenv_path)
+
     old_argv = sys.argv
-    old_env = os.environ.copy()
-    for k in ('OPENAI_API_KEY', 'ANTHROPIC_API_KEY', 'HUGGINGFACE_API_TOKEN'):
-        os.environ.pop(k, None)
     try:
         sys.argv = ['crawl_cat.py', houdini_yaml, '--content']
         crawl_cat.main()
     finally:
         sys.argv = old_argv
-        os.environ.clear(); os.environ.update(old_env)
 
     enriched_path = os.path.join(os.getcwd(), 'houdini_obj_nodes_enriched.json')
     assert os.path.exists(enriched_path), 'enriched output not produced by script'
