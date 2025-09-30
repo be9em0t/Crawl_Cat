@@ -1,16 +1,21 @@
 # Project description
-Documentation extraction crawler that uses crawl4ai and its LLM capability.
+Documentation extraction crawler that uses crawl4ai, LLM capability to analyze schema and select elements, then use DOM selectors for actual content extraction.
 
 # Prerequisits
 Crawl4ai has been set and available in the local pyenv. 
-YAML files store information about different craml modes, like name, LLM model, Instruction etc.  
-There is always LLM available during crawl. If not - warn the user and exit.
-The testing is always done with live data and network access, as monkeypatching yields falso positive results.
+YAML files store information about different crawl modes, like name, LLM model, prompt, schema and CSS elements.  
+There will always be LLM available during crawl. If not - warn the user and exit. Dont build extra code to run without llm.
+The testing is always done with live data and network access, as mock tests yield false positive results.
 
-The documentation of crawl4ai is available here #fetch https://docs.crawl4ai.com/.
+The documentation of crawl4ai is available at https://docs.crawl4ai.com/.
+Key examples are:
+https://github.com/unclecode/crawl4ai/blob/main/docs/examples/quickstart_examples_set_1.py
+https://github.com/unclecode/crawl4ai/blob/main/docs/examples/quickstart_examples_set_2.py
 
 ## Example Crawl Mode implementation guidelines
 - Mode name is "Unity ShaderGraph"
+- Unity ShaderGraph mapping note: the top-level "topics" correspond to the major sections of the ShaderGraph Node Library (e.g., "Artistic", "Channel"), categories are the sub-groups within those sections, and nodes are objects with `name` and `description` fields.
+
 - URL is "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html" 
 - Capturing requirements:
   - Node library has topics, categories and nodes
@@ -56,13 +61,16 @@ UV topic = UV category:
 ## Running the commands
 Basic run:
 python3 crawl_cat.py <yaml file>
+Only schema/elements capture:
+python3 crawl_cat.py <yaml file> --schema
 Help:
 python3 crawl_cat.py --help
+Provider settings if not availabe in the env: 
 
 ## Configuration and provider/token overrides
-This tool expects a single site-specific YAML file as the positional argument (the `crawl_yaml`).
-Each YAML contains site settings such as `url`, `provider` (optional), `structure_instruction`, and `content_instruction`.
-
+This tool expects a single site-specific YAML file as the positional argument (the `yaml_file`).
+Each YAML contains site settings such as `url`, `provider`, `schema_prompt`, and `content_prompt`.
+Token for the provider, if necessary, is supplied via environment or via cli with --provider <llm provider> --api-token <token>
 Provider and token resolution order:
 - The positional YAML can specify a `provider` (for example `openai/gpt-4.1`), but API tokens are read from the environment (never from the YAML).
 - To provide an API token, set one of the environment variables:
@@ -73,14 +81,12 @@ Provider and token resolution order:
   - `--provider <provider-name>` to override the provider
   - `--api-token <token>` to pass a token directly (useful for one-off runs)
 
-If a hosted provider is selected but no token is found in the environment or via `--api-token`, the script will refuse to run the LLM content pass. If you requested content but have no token, the script will fall back to DOM-based deterministic extraction and heuristics.
+If a hosted provider is selected but no llm is provided or no token is found in the environment or via `--api-token`, the script will refuse to run. 
 
-## Default CLI crawl4ai implementatin:
-crwl https://www.sidefx.com/docs/houdini20.5/nodes/obj/index.html -q "Extract node names and attached node descriptions" --output json --output-file houdini_crwl.json
 
 ## LLM tuning guidance (quick)
 
-When a crawl uses an LLM (`type: "llm"`), you can tune call behavior via the YAML `params` block. Keep these tips short and practical:
+You can tune LLM behavior via the YAML `params` block:
 
 - `temperature` (float): controls randomness. Use `0.0` for deterministic structure extraction. Small values like `0.0 - 0.2` are recommended.
 - `max_tokens` (int): budget for the LLM response. For structure-only JSON extracts 512–1024 is often enough. Large values (e.g. 3000) are only needed for very verbose outputs and can approach model context limits.
@@ -123,24 +129,7 @@ These conventions keep crawl4ai runs predictable and make downstream merging/heu
 
 ## Schema (quick)
 
-The project expects a simple Crawl Mode schema: a top-level JSON array of "topic" objects. Each topic has a `topic` string and a `categories` array. Each category has a `category` string and `nodes`, which is an array of node names (strings) or node objects when enriched.
-
-Minimal schema example (structure-only):
-
-```json
-[
-  {
-    "topic": "Artistic",
-    "categories": [
-      {"category": "Adjustment", "nodes": ["Channel Mixer", "Contrast"]},
-      {"category": "Blend", "nodes": ["Blend Node A", "Blend Node B"]}
-    ]
-  },
-  {"topic": "Channel", "categories": [{"category": "Channel", "nodes": ["Combine Channels", "Split Channels"]}]}
-]
-```
-
-Enriched output (nodes include descriptions):
+Nodes include descriptions:
 
 ```json
 [
@@ -159,4 +148,3 @@ Enriched output (nodes include descriptions):
 ]
 ```
 
-Unity ShaderGraph mapping note: the top-level "topics" correspond to the major sections of the ShaderGraph Node Library (e.g., "Artistic", "Channel"), categories are the sub-groups within those sections, and nodes are the individual node names. During enrichment, nodes become objects with `name` and `description` fields.
