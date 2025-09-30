@@ -130,6 +130,66 @@ def extract_by_dom_selectors(page_url, selectors):
     return extract_text_by_selectors_from_soup(s, selectors)
 
 
+def fallback_extract_structure_from_dom(page_url):
+    """Attempt a light-weight DOM-only extraction to produce the minimal Crawl Mode structure.
+    This is used as a fallback when LLM-based structure extraction returns nothing.
+    """
+    soup = get_soup(page_url)
+    if not soup:
+        return []
+
+    # Prefer anchors that look like node links (heuristic for Houdini: '/nodes/obj/')
+    anchors = soup.find_all('a')
+    candidates = []
+    for a in anchors:
+        href = a.get('href') or ''
+        txt = (a.get_text() or '').strip()
+        if not txt or len(txt) < 2:
+            continue
+        # Heuristic: link target contains nodes/obj or looks like a node page
+        href_low = href.lower()
+        if 'nodes/obj' in href_low or '/nodes/obj/' in href_low:
+            candidates.append(txt)
+        # also accept generic /nodes/ links or any .html link that looks like a node page
+        elif '/nodes/' in href_low or href_low.endswith('.html'):
+            # avoid external links or anchors that are navigation
+            if href_low.startswith('http') or href_low.startswith('/') or href_low.startswith('#') or href_low:
+                # accept likely node names (title-case or contains space)
+                if any(c.isupper() for c in txt[:3]) or ' ' in txt:
+                    candidates.append(txt)
+
+    # If none found, try finding anchors under an "All tags" heading or similar list
+    if not candidates:
+        for h in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5']):
+            if 'all tags' in (h.get_text() or '').lower() or 'all nodes' in (h.get_text() or '').lower():
+                sib = h.find_next_sibling()
+                if sib:
+                    for a in sib.select('a'):
+                        txt = (a.get_text() or '').strip()
+                        if txt and len(txt) > 1:
+                            candidates.append(txt)
+                break
+
+    # Deduplicate preserving order
+    seen = set()
+    nodes = []
+    for n in candidates:
+        if n not in seen:
+            seen.add(n)
+            nodes.append(n)
+
+    if not nodes:
+        return []
+
+    # Return a minimal normalized structure with a single topic/category
+    return [{
+        'topic': 'Houdini OBJ',
+        'categories': [
+            {'category': 'OBJ Nodes', 'nodes': nodes}
+        ]
+    }]
+
+
 def resolve_provider_and_token(config_path: Optional[str], provider_override: Optional[str], token_override: Optional[str]):
     """Resolve the LLM provider and API token.
 
@@ -411,6 +471,18 @@ def main():
 
     # Always run structure extraction first to get a canonical structure
     extracted_struct, normalized, struct_metrics = asyncio.run(run_crawl(url, api_token, provider, instruction, params=cfg.get('params')))
+
+    # If LLM returned nothing useful, attempt a deterministic DOM-only fallback
+    if (not normalized or len(normalized) == 0):
+        try:
+            dom_fallback = fallback_extract_structure_from_dom(url)
+            if dom_fallback:
+                print('\n[Fallback] Using DOM-only extraction as LLM returned no structure')
+                normalized = dom_fallback
+                # minimal struct_metrics for fallback
+                struct_metrics = {'elapsed_s': 0.0, 'counts': {'topics': len(normalized), 'categories': sum(len(t.get('categories', [])) for t in normalized), 'nodes': sum(len(c.get('nodes', [])) for t in normalized for c in t.get('categories', [])), 'nodes_with_description': 0}}
+        except Exception:
+            pass
 
     # If saving raw, write the structure extraction raw output
     if args.save_raw:

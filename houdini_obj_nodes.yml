@@ -3,7 +3,8 @@
 
 name: "houdini_obj_nodes"
 type: "llm"
-provider: "openai/gpt-4.1"
+# provider: "openai/gpt-4.1"
+provider: "ollama/gpt-oss:20b"
 url: "https://www.sidefx.com/docs/houdini20.5/nodes/obj/index.html"
 output_prefix: "houdini_obj_nodes"
 structure_instruction: |
