@@ -7,10 +7,11 @@ YAML files store information about different crawl modes, like name, LLM model, 
 There will always be LLM available during crawl. If not - warn the user and exit. Dont build extra code to run without llm.
 The testing is always done with live data and network access, as mock tests yield false positive results.
 
-The documentation of crawl4ai is available at https://docs.crawl4ai.com/.
+The online documentation of Crawl4AI is available at https://docs.crawl4ai.com/.
+All Crawl4AI examples are available locally in docs/crawl4ai/examples.
 Key examples are:
-https://github.com/unclecode/crawl4ai/blob/main/docs/examples/quickstart_examples_set_1.py
-https://github.com/unclecode/crawl4ai/blob/main/docs/examples/quickstart_examples_set_2.py
+docs/crawl4ai/examples/quickstart_examples_set_1.py
+docs/crawl4ai/examples/quickstart_examples_set_2.py
 
 ## Example Crawl Mode implementation guidelines
 - Mode name is "Unity ShaderGraph"

@@ -17,6 +17,7 @@ venv/
 images_temp/**
 backup/**
 *.zip
+SaveOutput/**
 
 # Keep .github and .clinerules tracked
 !.github/
