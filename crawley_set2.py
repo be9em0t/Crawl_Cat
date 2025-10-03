@@ -295,7 +295,7 @@ async def extract_structured_data_using_llm(
 
     browser_config = BrowserConfig(headless=True)
 
-    extra_args = {"temperature": 0, "top_p": 0.9, "max_tokens": 2000}
+    extra_args = {"temperature": 0, "top_p": 0.9, "max_tokens": 4000}
     if extra_headers:
         extra_args["extra_headers"] = extra_headers
 
@@ -307,10 +307,29 @@ async def extract_structured_data_using_llm(
             llm_config=LLMConfig(provider=provider,api_token=api_token),
             schema=OpenAIModelFee.model_json_schema(),
             extraction_type="schema",
+            # extraction_type="block",
             # instruction="""From the crawled content, extract all mentioned model names along with their fees for input and output tokens. 
             # Do not miss any models in the entire content.""",
-            instruction="""From the crawled content, extract all mentioned Graph node topics and decriptions along with their URLs. 
-            Do not miss any topics in the entire content.""",
+            # instruction="""From the crawled content, extract all mentioned Graph node topics, Graph node sub-topics and Graph nodes. Include their decriptions along with their URLs. Drill down through those topic and sub-topic URL until you reach Node page.
+            # Do not miss any topics, sub-topics and nodes in the entire content.""",
+            instruction="""From the crawled content, extract all mentioned Graph node topics, Graph node sub-topics and Graph nodes. Include their decriptions along with their URLs. Drill down through those topic and sub-topic URL until you reach Node page.
+            Do not miss any topics, sub-topics and nodes in the entire content.
+            Follow these DOM selectors to improve capture quality:
+            On each page the meaningful content is enclosed in <article class="content wrap" id="_content">.
+            On topic and sub-topic pages the topics are contained in a <table>, preceded by <h2> containing the table name.
+            Table body contains the topics or sub-topics, their URLs and descriptions.
+            On the node pages the first <h1> tag containes the node name. The following <p> contains the description.
+            """,
+            # instruction="""
+            # Return a JSON array of unique Graph node topics.
+            # Each object must include:
+            # {
+            # "topic": "...",
+            # "description": "...",
+            # "url": "..."
+            # }
+            # Do not repeat topics. Scan the entire content.
+            # """,
             extra_args=extra_args,
         ),
     )

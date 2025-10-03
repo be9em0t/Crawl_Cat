@@ -157,11 +157,11 @@ async def demo_css_structured_extraction_no_schema():
             llm_config=LLMConfig(
                 # provider="groq/qwen-2.5-32b",
                 # api_token="env:GROQ_API_KEY",
-                # provider="openai/gpt-4.1",
-                # api_token="env:OPENAI_API_KEY",
+                provider="openai/gpt-4.1",
+                api_token="env:OPENAI_API_KEY",
                 # provider="ollama/gpt-oss:20b"
                 # provider="phi4-mini:latest"
-                provider="ollama/phi3:3.8b"
+                # provider="ollama/phi3:3.8b"
             ),
             query="From https://thehackernews.com/, I have shared a sample of one news div with a title, date, and description. Please generate a schema for this news div.",
         )
@@ -179,6 +179,100 @@ async def demo_css_structured_extraction_no_schema():
     async with AsyncWebCrawler() as crawler:
         results: List[CrawlResult] = await crawler.arun(
             "https://thehackernews.com", config=config
+        )
+
+        for result in results:
+            print(f"URL: {result.url}")
+            print(f"Success: {result.success}")
+            if result.success:
+                data = json.loads(result.extracted_content)
+                print(json.dumps(data, indent=2))
+            else:
+                print("Failed to extract structured data")
+
+async def demo_css_structured_extraction_no_schema_Unity():
+    """Extract structured data using CSS selectors"""
+    print("\n=== Unity ShaderGraph CSS-Based Structured Extraction ===")
+    # Sample HTML for schema generation (one-time cost)
+    sample_html = """
+=== Topic page ===
+<article class="content wrap" id="_content" data-uid="">
+    <h1 id="artistic-nodes">Artistic nodes</h1>
+        <p>Adjust colors, blend layers, ...</p>
+
+    <h2 id="adjustment">Adjustment</h2>
+    <div class="table-responsive"><table class="table">
+        <tbody>
+            <tr>
+                <td ><a href="Channel-Mixer-Node.html">Channel Mixer</a></td>
+                <td>Controls the amount ...</td>
+            </tr>
+            <tr>
+                <td ><a href="Contrast-Node.html">Contrast</a></td>
+                <td>Adjusts the contrast ...</td>
+            </tr>
+            <tr>
+                <td ><a href="Hue-Node.html">Hue</a></td>
+                <td>Offsets the hue ...</td>
+            </tr>
+            ...
+        </tbody>
+    </table>
+    </div>
+    <h2 id="blend">Blend</h2>
+    <div class="table-responsive"><table class="table">
+        <tbody>
+            <tr>
+            <td ><a href="Blend-Node.html">Blend</a></td>
+            <td>Blends the value of...</td>
+            </tr>
+        </tbody>
+    </table></div>
+    ...
+</article>
+
+=== Node Page ===
+<article class="content wrap" id="_content" data-uid="">
+    <h1 id="channel-mixer-node">Channel Mixer Node</h1>
+    <h2 id="description">Description</h2>
+    <p>Controls the amount each of the channels ...</p>
+</article>
+"""
+
+    # Check if schema file exists
+    schema_file_path = f"{__cur_dir__}/tmp/schema_unity.json"
+    if os.path.exists(schema_file_path):
+        with open(schema_file_path, "r") as f:
+            schema = json.load(f)
+    else:
+        # Generate schema using LLM (one-time setup)
+        schema = JsonCssExtractionStrategy.generate_schema(
+            html=sample_html,
+            llm_config=LLMConfig(
+                # provider="groq/qwen-2.5-32b",
+                # api_token="env:GROQ_API_KEY",
+                provider="openai/gpt-4.1",
+                api_token="env:OPENAI_API_KEY",
+                # provider="ollama/gpt-oss:20b"
+                # provider="phi4-mini:latest"
+                # provider="ollama/phi3:3.8b"
+            ),
+            query="From https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html, I have shared a sample of multi-level documentation divs. The sample contains two types of pages: Topic page and Node page. The meaningful content on each page is enclosed in article tag. We need to capture complete hierarchical schema containing 'topic_name', 'URL' and 'description' for the Topic pages, and 'node_name', 'url' and 'description' for the Node pages. Please generate a multi-level schema for this documentation. Start at the root topic page, then drill down each topic until you reach a Node page. Describe correclty in the schema all hierarchical levels. Do not miss tables, topics or nodes.",
+        )
+
+    # print(f"Generated schema: {json.dumps(schema, indent=2)}")
+    # Save the schema to a file , and use it for future extractions, in result for such extraction you will call LLM once
+    with open(f"{__cur_dir__}/tmp/schema_unity.json", "w") as f:
+        json.dump(schema, f, indent=2)
+
+    # Create no-LLM extraction strategy with the generated schema
+    extraction_strategy = JsonCssExtractionStrategy(schema)
+    config = CrawlerRunConfig(extraction_strategy=extraction_strategy)
+
+    # Use the fast CSS extraction (no LLM calls during extraction)
+    async with AsyncWebCrawler() as crawler:
+        results: List[CrawlResult] = await crawler.arun(
+            "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html", config=config
         )
 
         for result in results:
@@ -407,9 +501,10 @@ async def main():
     # Run all demos
     # await demo_basic_crawl()
     # await demo_parallel_crawl()
-    await demo_fit_markdown()
+    # await demo_fit_markdown()
     # await demo_llm_structured_extraction_no_schema()
     # await demo_css_structured_extraction_no_schema()
+    await demo_css_structured_extraction_no_schema_Unity()
     # await demo_deep_crawl()
     # await demo_js_interaction()
     # await demo_media_and_links()
