@@ -1,0 +1,143 @@
+You are given the HTML content of a web page (URL: https://openai.com/api/pricing/).
+Analyze the content and propose a compact JSON Schema that describes the data a user would want to extract from this page (fields, nested objects, arrays).
+
+Guidance: Produce a JSON Schema (draft-like) describing the structured information present on the page. Return only the JSON Schema object as JSON (no commentary). Include required fields and types. Prefer simple types (string, number, boolean, array, object). Add a top-level `examples` key with one example instance.
+
+Page HTML (trimmed):
+<html>
+<head><title>Pricing | OpenAI</title></head>
+<body>
+<header><div>
+<a href="#main">Skip to main content</a><div><div><div><button>Log in</button></div></div></div>
+</div>
+<div><div><div><a href="/"></a></div></div></div></header><div>
+<div><div><div>
+<div>Switch to</div>
+<ul>
+<li><a href="https://chatgpt.com/?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">ChatGPT<span>(opens in a new window)</span></a></li>
+<li><a href="https://sora.com/">Sora<span>(opens in a new window)</span></a></li>
+<li><a href="https://platform.openai.com/">API Platform<span>(opens in a new window)</span></a></li>
+</ul>
+</div></div></div>
+<div>
+<nav><div><div><ul>
+<li><div><a href="/research/index/">Research</a></div></li>
+<li><div><a href="/safety/">Safety</a></div></li>
+<li><div><a href="/business/">For Business</a></div></li>
+<li><div><a href="/api/">For Developers</a></div></li>
+<li><div><a href="https://chatgpt.com/overview?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">ChatGPT</a></div></li>
+<li><div><a href="/sora/">Sora</a></div></li>
+<li><div><a href="/stories/">Stories</a></div></li>
+<li><div><a href="/about/">Company</a></div></li>
+<li><div><a href="/news/">News</a></div></li>
+</ul></div></div></nav><nav><div>
+<!--$--><!--/$--><ul>
+<li>
+<button>Research</button><div>
+<div><button><div><span>Back to main menu</span></div></button></div>
+<div><ul>
+<li><a href="/research/index/">Research Index</a></li>
+<li><a href="/research/">Research Overview</a></li>
+<li><a href="/residency/">Research Residency</a></li>
+<li><span>Latest Advancements</span></li>
+<li><a href="/index/sora-2/">Sora 2</a></li>
+<li><a href="/index/introducing-gpt-5/">GPT-5</a></li>
+<li><a href="/index/introducing-o3-and-o4-mini/">OpenAI o3 and o4-mini</a></li>
+<li><a href="/index/introducing-gpt-4-5/">GPT-4.5</a></li>
+<li><a href="/o1/">OpenAI o1</a></li>
+<li><a href="/index/gpt-4o-system-card/">GPT-4o</a></li>
+</ul></div>
+</div>
+</li>
+<li>
+<button>Safety</button><div>
+<div><button><div><span>Back to main menu</span></div></button></div>
+<div><ul>
+<li><a href="/safety/">Safety Approach</a></li>
+<li><a href="/security-and-privacy/">Security &amp; Privacy</a></li>
+</ul></div>
+</div>
+</li>
+<li>
+<a href="/business/">For Business</a><div>
+<div><button><div><span>Back to main menu</span></div></button></div>
+<div><ul>
+<li><a href="/business/">Business Overview</a></li>
+<li><a href="/startups/">Startups</a></li>
+<li><a href="/solutions/">Solutions</a></li>
+<li><a href="/business/chatgpt-pricing/">ChatGPT Pricing</a></li>
+<li><a href="/api/pricing/">API Pricing</a></li>
+<li><a href="/contact-sales/">Contact Sales</a></li>
+</ul></div>
+</div>
+</li>
+<li>
+<button>For Developers</button><div>
+<div><button><div><span>Back to main menu</span></div></button></div>
+<div><ul>
+<li><a href="/api/">API Platform</a></li>
+<li><a href="/api/pricing/">API Pricing</a></li>
+<li><a href="/codex/">Codex</a></li>
+<li><a href="/open-models/">Open Models</a></li>
+<li><a href="https://community.openai.com/">Community<span>(opens in a new window)</span></a></li>
+</ul></div>
+</div>
+</li>
+<li>
+<a href="https://chatgpt.com/overview?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">ChatGPT</a><div>
+<div><button><div><span>Back to main menu</span></div></button></div>
+<div><ul>
+<li><a href="https://chatgpt.com/overview?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">Explore ChatGPT</a></li>
+<li><a href="https://chatgpt.com/for-business/team?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">Business</a></li>
+<li><a href="https://chatgpt.com/for-business/enterprise?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">Enterprise</a></li>
+<li><a href="https://chatgpt.com/for-business/education?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">Education</a></li>
+<li><a href="https://chatgpt.com/pricing?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">Pricing</a></li>
+<li><a href="https://chatgpt.com/download?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">Download</a></li>
+</ul></div>
+</div>
+</li>
+<li>
+<button>Sora</button><div>
+<div><button><div><span>Back to main menu</span></div></button></div>
+<div><ul>
+<li><a href="/sora/">Sora Overview</a></li>
+<li><a href="/sora/#features">Features</a></li>
+<li><a href="/sora/#pricing">Pricing</a></li>
+<li><a href="https://help.openai.com/en/articles/9957612-generating-videos-on-sora">Help Center<span>(opens in a new window)</span></a></li>
+<li><a href="https://sora.com/">Sora Log in<span>(opens in a new window)</span></a></li>
+</ul></div>
+</div>
+</li>
+<li><a href="/stories/">Stories</a></li>
+<li>
+<button>Company</button><div>
+<div><button><div><span>Back to main menu</span></div></button></div>
+<div><ul>
+<li><a href="/about/">About Us</a></li>
+<li><a href="/charter/">Our Charter</a></li>
+<li><a href="/careers/">Careers</a></li>
+<li><a href="/brand/">Brand Guidelines</a></li>
+</ul></div>
+</div>
+</li>
+<li><a href="/news/">News</a></li>
+</ul>
+</div>
+<div><button>Log in</button></div></nav>
+</div>
+<div><div>
+<main><span>OpenAI</span><div>
+<!--$--><div><div><div><div><div>
+<h1>API Pricing</h1>
+<div><div><a href="/contact-sales/">Contact sales</a></div></div>
+</div></div></div></div></div>
+<!--/$--><!--$--><!--$--><div><div>
+<p><span>Pricing reflects standard processing rates. To optimize cost and performance for different use cases, we also offer:</span></p>
+<ul>
+<li>
+<a href="https://platform.openai.com/docs/guides/batch"><b><u><span>Batch API⁠</span></u></b>⁠<span>(opens in a new window)</span></a><span>: Save 50% on inputs and outputs with the Batch API and run tasks asynchronously over 24 hours.</span>
+</li>
+<li>
+<a href="/api-priority-processing/"><b><u><span>Priority processing</span></u></b><b><span>⁠</span></b>⁠</a><span>: offers reliable, high-speed performance w
+
+Return a single JSON object (the JSON Schema). Do not include any explanation.

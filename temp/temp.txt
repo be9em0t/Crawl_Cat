@@ -2,7 +2,3 @@ As I;m still working out the best approach, lets scaffold this:
 main.py - gui entry point to the individual scrapers that might use different strategies and target different docuentation sites
 openAI-cat.py - test scraper that will check the currently available openAI models and their parameters 
 
-# fetch OpenAI models and their parameters (token window, cost etc.)
-# the script can be run with python openAI.py or can be invoked from the main.py GUI
-# token should be imported from environment using dotenv.
-

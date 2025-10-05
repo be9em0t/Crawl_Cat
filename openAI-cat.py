@@ -12,6 +12,7 @@ from save_utils import save_json
 from dotenv import load_dotenv
 load_dotenv()
 import yaml
+from bs4 import BeautifulSoup
 
 from typing import Dict
 from types import SimpleNamespace
@@ -31,25 +32,46 @@ class OpenAIModelFee(BaseModel):
 	)
 
 async def extract_structured_data_using_llm(
-	provider: str, api_token: str = None, extra_headers: Dict[str, str] = None
+	provider: str,
+	api_token: str = None,
+	extra_headers: Dict[str, str] = None,
+	strategy: str = "llm",
+	css_selector: str = None,
 ) -> dict:
 	print(f"\n--- Extracting Structured Data with {provider} ---")
 
+	# TUNABLE: Provider/token selection
+	# - provider: provider string or registry key/alias (resolved in main)
+	# - api_token: token used for the chosen provider (from env or --token)
 	if api_token is None and provider != "ollama":
 		print(f"API token is required for {provider}. Skipping this example.")
 		return
 
 	browser_config = BrowserConfig(headless=True)
 
+	# TUNABLE: LLM call parameters
+	# - temperature/top_p: control randomness (use 0 for deterministic extraction)
+	# - max_tokens: maximum tokens allowed for the extraction response
 	extra_args = {"temperature": 0, "top_p": 0.9, "max_tokens": 2000}
 	if extra_headers:
 		extra_args["extra_headers"] = extra_headers
 
+	# TUNABLE: CrawlerRunConfig and extraction strategy
+	# - word_count_threshold / page_timeout: control crawling and time limits
+	# - css_selector: when provided, it narrows the DOM region to extract
 	crawler_config = CrawlerRunConfig(
 		cache_mode=CacheMode.BYPASS,
 		word_count_threshold=1,
 		page_timeout=80000,
-		extraction_strategy=LLMExtractionStrategy(
+		css_selector=css_selector if css_selector else None,
+		# extraction_strategy is None for 'css' flow; LLM flow sets it below
+	)
+
+	if strategy == "llm":
+		# TUNABLE: Schema and instruction
+		# - schema: Pydantic schema that tells the LLM what to output
+		# - instruction: the prompt that frames extraction behavior
+		llm_strategy = LLMExtractionStrategy(
 			# pass a simple object with attributes expected by crawl4ai
 			llm_config=SimpleNamespace(
 				provider=provider,
@@ -59,16 +81,33 @@ async def extract_structured_data_using_llm(
 			),
 			schema=OpenAIModelFee.model_json_schema(),
 			extraction_type="schema",
-			instruction="""From the crawled content, extract all mentioned model names along with their fees for input and output tokens. \nDo not miss any models in the entire content.""",
+			instruction=(
+				"""From the crawled content, extract all mentioned model names along with their fees for input and output tokens. \nDo not miss any models in the entire content."""
+			),
 			extra_args=extra_args,
-		),
-	)
+		)
+		# attach extraction strategy
+		crawler_config.extraction_strategy = llm_strategy
 
 	async with AsyncWebCrawler(config=browser_config) as crawler:
-		result = await crawler.arun(
-			url="https://openai.com/api/pricing/", config=crawler_config
-		)
-		# return parsed JSON if possible, otherwise raw string
+		# TUNABLE: URL
+		# - Change this URL to target a different page for extraction
+		result = await crawler.arun(url="https://openai.com/api/pricing/", config=crawler_config)
+
+		if strategy == "css":
+			# CSS-based extraction: use BeautifulSoup to select elements and return text
+			# TUNABLE: css_selector (passed in crawler_config / CLI)
+			html = result.cleaned_html or result.html or ""
+			soup = BeautifulSoup(html, "html.parser")
+			if css_selector:
+				elements = soup.select(css_selector)
+				parsed = [el.get_text(separator=" ", strip=True) for el in elements]
+			else:
+				# fallback: return full cleaned HTML as raw
+				parsed = {"raw_html": html}
+			return parsed
+
+		# default: LLM-based extraction
 		try:
 			parsed = json.loads(result.extracted_content)
 		except Exception:
@@ -85,6 +124,8 @@ if __name__ == "__main__":
 	parser.add_argument("--no-write", "-n", help="Do not write output to file; print to console instead", action="store_true")
 	parser.add_argument("--provider", "-p", help="LLM provider to use (e.g. openai/gpt-4o or ollama/phi4-mini:latest)", default="openai/gpt-4o")
 	parser.add_argument("--token", "-t", help="API token to use (overrides OPENAI_API_KEY from .env)")
+	parser.add_argument("--strategy", "-s", help="Extraction strategy: 'llm' (default) or 'css' for CSS selector based extraction", choices=["llm", "css"], default="llm")
+	parser.add_argument("--css-selector", "-c", help="When using --strategy css, narrow extraction to this CSS selector (e.g. '.pricing')", default=None)
 	parser.add_argument("--list-providers", "-lp", help="List known providers from providers.yaml", action="store_true")
 	args = parser.parse_args()
 
@@ -135,7 +176,12 @@ if __name__ == "__main__":
 		# 3) otherwise assume user passed a full provider string (like 'ollama/phi4-mini:latest')
 		if not found:
 			provider = provider_input
-	parsed = asyncio.run(extract_structured_data_using_llm(provider, api_token))
+	# wire strategy and css_selector from CLI to the extractor
+	parsed = asyncio.run(
+		extract_structured_data_using_llm(
+			provider, api_token, extra_headers=None, strategy=args.strategy, css_selector=args.css_selector
+		)
+	)
 
 	# Decide where to write
 	if args.no_write:
