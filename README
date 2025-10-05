@@ -13,6 +13,21 @@ Key examples are:
 docs/crawl4ai/examples/quickstart_examples_set_1.py
 docs/crawl4ai/examples/quickstart_examples_set_2.py
 
+## Verify Crawl4ai install:
+```
+# Install the package
+pip install -U crawl4ai
+
+# For pre release versions
+pip install crawl4ai --pre
+
+# Run post-installation setup
+crawl4ai-setup
+
+# Verify your installation
+crawl4ai-doctor
+```
+
 ## Example Crawl Mode implementation guidelines
 - Mode name is "Unity ShaderGraph"
 - Unity ShaderGraph mapping note: the top-level "topics" correspond to the major sections of the ShaderGraph Node Library (e.g., "Artistic", "Channel"), categories are the sub-groups within those sections, and nodes are objects with `name` and `description` fields.
