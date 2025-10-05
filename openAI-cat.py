@@ -8,6 +8,9 @@ import sys
 import asyncio
 import argparse
 import json
+import importlib
+import importlib.util
+import inspect
 from save_utils import save_json
 from dotenv import load_dotenv
 load_dotenv()
@@ -24,34 +27,36 @@ from crawl4ai import LLMExtractionStrategy
 OUTPUT_FOLDER = "output"
 OUTPUT_JSON = "openAI_prices.json"
 
-class PricingdetailsItem(BaseModel):
-	name: Optional[str] = Field(None, description="Name of the pricing option.", example="Batch API")
-	description: Optional[str] = Field(None, description="Short description of the pricing option.", example="Save 50% on inputs and outputs with the Batch API and run tasks asynchronously over 24 hours.")
-	link: Optional[str] = Field(None, description="URL to documentation or more info about this pricing option.", example="https://platform.openai.com/docs/guides/batch")
+# Attempt to import the emitted Pydantic model module at import time. This makes
+# the module available for schema generation and validation without requiring
+# runtime lazy imports. The environment variable PYMODEL_MODULE can override
+# the module path; default is 'schemas.openai_price_discovered_model'.
+DEFAULT_PYMODEL_MODULE = os.getenv("PYMODEL_MODULE", "schemas.openai_price_discovered_model")
+DEFAULT_PYMODEL_CLASS = None
+try:
+	_pymod = importlib.import_module(DEFAULT_PYMODEL_MODULE)
+	# prefer a class named DiscoveredModel
+	if hasattr(_pymod, 'DiscoveredModel'):
+		DEFAULT_PYMODEL_CLASS = getattr(_pymod, 'DiscoveredModel')
+	else:
+		# fall back to first BaseModel subclass
+		for _, obj in inspect.getmembers(_pymod, inspect.isclass):
+			try:
+				if issubclass(obj, BaseModel):
+					DEFAULT_PYMODEL_CLASS = obj
+					break
+			except Exception:
+				continue
+	if DEFAULT_PYMODEL_CLASS is None:
+		raise ImportError(f"No Pydantic BaseModel found in module {DEFAULT_PYMODEL_MODULE}")
+	print(f"Loaded default Pydantic model from {DEFAULT_PYMODEL_MODULE}: {DEFAULT_PYMODEL_CLASS.__name__}")
+except Exception as e:
+	raise RuntimeError(
+		f"Failed to import default Pydantic model module '{DEFAULT_PYMODEL_MODULE}'.\n"
+		"Run schema_discovery.py --emit-model to create the model first, or set PYMODEL_MODULE to the correct module path.\n"
+		f"Underlying error: {e}"
+	) from e
 
-class OpenAIModelFee(BaseModel):
-	# model_name: str = Field(..., description="Name of the OpenAI model.")
-	# input_fee: str = Field(..., description="Fee for input token for the OpenAI model.")
-	# output_fee: str = Field(
-	# 	..., description="Fee for output token for the OpenAI model."
-	# )
-
-	# model_name: str = Field(..., description="OpenAI model name")
-	# model_group: str = Field(..., description="API group the model belongs to")
-	# model_type: str = Field(..., description="The type of content (audio, text etc.)")
-	# model_input_fee: str = Field(..., description="The price per input tokens")
-	# model_cached_input_fee: str = Field(..., description="The price per cached input tokens")
-	# model_output_fee: str = Field(..., description="The price per output tokens")
-
-	# pageTitle: Optional[str] = Field(..., description="The title of the web page.")
-	# mainHeading: Optional[str] = Field(..., description="The main heading of the page.")
-	# contactSalesLink: Optional[str] = Field(..., description="URL to contact sales for more information.")
-	# pricingDescription: Optional[str] = Field(..., description="Description of the pricing strategy.")
-	# pricingOptions: Optional[List[dict]] = Field(..., description="List of available pricing options with descriptions.")
-
-	title: Optional[str] = Field(..., description="The main title of the page.", example="API Pricing")
-	contactSalesLink: Optional[str] = Field(..., description="URL to contact sales for more information.", example="/contact-sales/")
-	pricingDetails: Optional[List[PricingdetailsItem]] = Field(..., description="List of pricing options and descriptions.", example={"name": "Batch API", "description": "Save 50% on inputs and outputs with the Batch API and run tasks asynchronously over 24 hours.", "link": "https://platform.openai.com/docs/guides/batch"})
 
 async def extract_structured_data_using_llm(
 	provider: str,
@@ -59,6 +64,7 @@ async def extract_structured_data_using_llm(
 	extra_headers: Dict[str, str] = None,
 	strategy: str = "llm",
 	css_selector: str = None,
+	pymodel_class: type = None,
 ) -> dict:
 	print(f"\n--- Extracting Structured Data with {provider} ---")
 
@@ -93,6 +99,14 @@ async def extract_structured_data_using_llm(
 		# TUNABLE: Schema and instruction
 		# - schema: Pydantic schema that tells the LLM what to output
 		# - instruction: the prompt that frames extraction behavior
+		# choose schema from provided Pydantic model if available; default to imported model
+		schema_for_llm = DEFAULT_PYMODEL_CLASS.model_json_schema()
+		if pymodel_class is not None:
+			try:
+				schema_for_llm = pymodel_class.model_json_schema()
+			except Exception:
+				# fallback to default if provided model lacks model_json_schema
+				pass
 		llm_strategy = LLMExtractionStrategy(
 			# pass a simple object with attributes expected by crawl4ai
 			llm_config=SimpleNamespace(
@@ -101,7 +115,7 @@ async def extract_structured_data_using_llm(
 				base_url=None,
 				extra_headers=extra_headers or {},
 			),
-			schema=OpenAIModelFee.model_json_schema(),
+			schema=schema_for_llm,
 			extraction_type="schema",
 			instruction=(
 				"""From the crawled content, extract all mentioned model names along with their fees for input and output tokens. \nDo not miss any models in the entire content."""
@@ -134,6 +148,16 @@ async def extract_structured_data_using_llm(
 			parsed = json.loads(result.extracted_content)
 		except Exception:
 			parsed = {"raw": result.extracted_content}
+		# If a Pydantic model was provided, try to validate/parse the extracted content
+		if pymodel_class is not None and isinstance(parsed, dict):
+			try:
+				obj = pymodel_class.parse_obj(parsed)
+				# return a validated dict for downstream use
+				return obj.dict()
+			except Exception as e:
+				# validation failed: return raw parsed content and show error
+				print("Warning: validation against provided Pydantic model failed:", e)
+				return parsed
 		return parsed
 
 if __name__ == "__main__":
@@ -145,6 +169,7 @@ if __name__ == "__main__":
 	parser.add_argument("--write", "-w", help="Write output to default file (overrides OUTPUT_FOLDER/OUTPUT_JSON)", action="store_true")
 	parser.add_argument("--no-write", "-n", help="Do not write output to file; print to console instead", action="store_true")
 	parser.add_argument("--provider", "-p", help="LLM provider to use (e.g. openai/gpt-4o or ollama/phi4-mini:latest)", default="openai/gpt-4o")
+	parser.add_argument("--pymodel", help="Optional Python module path or .py file for an emitted Pydantic model (e.g. schemas.openai_price_discovered_model or ./schemas/openai_price_discovered_model.py)")
 	parser.add_argument("--token", "-t", help="API token to use (overrides OPENAI_API_KEY from .env)")
 	parser.add_argument("--strategy", "-s", help="Extraction strategy: 'llm' (default) or 'css' for CSS selector based extraction", choices=["llm", "css"], default="llm")
 	parser.add_argument("--css-selector", "-c", help="When using --strategy css, narrow extraction to this CSS selector (e.g. '.pricing')", default=None)
@@ -198,10 +223,37 @@ if __name__ == "__main__":
 		# 3) otherwise assume user passed a full provider string (like 'ollama/phi4-mini:latest')
 		if not found:
 			provider = provider_input
+	# load optional pymodel if requested; default to the module imported at top-level
+	pymodel_class = DEFAULT_PYMODEL_CLASS
+	if args.pymodel:
+		pymodel_path = args.pymodel
+		try:
+			if pymodel_path.endswith('.py'):
+				# load from filesystem path
+				spec = importlib.util.spec_from_file_location('pymodel_module', pymodel_path)
+				module = importlib.util.module_from_spec(spec)
+				spec.loader.exec_module(module)  # type: ignore
+			else:
+				module = importlib.import_module(pymodel_path)
+			# prefer a class named DiscoveredModel
+			if hasattr(module, 'DiscoveredModel'):
+				pymodel_class = getattr(module, 'DiscoveredModel')
+			else:
+				# pick the first class subclassing pydantic BaseModel
+				for _, obj in inspect.getmembers(module, inspect.isclass):
+					try:
+						if issubclass(obj, BaseModel):
+							pymodel_class = obj
+							break
+					except Exception:
+						continue
+		except Exception as e:
+			print('Failed to load pymodel', pymodel_path, e)
+
 	# wire strategy and css_selector from CLI to the extractor
 	parsed = asyncio.run(
 		extract_structured_data_using_llm(
-			provider, api_token, extra_headers=None, strategy=args.strategy, css_selector=args.css_selector
+			provider, api_token, extra_headers=None, strategy=args.strategy, css_selector=args.css_selector, pymodel_class=pymodel_class
 		)
 	)
 

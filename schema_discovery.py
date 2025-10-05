@@ -244,104 +244,29 @@ def create_pydantic_model_from_json_schema(jschema: Dict[str, Any], name: str = 
 
 
 def emit_model_py(model_name: str, jschema: Dict[str, Any], out_path: str):
-    """Emit a very simple Python file with a Pydantic model declaration (best-effort)."""
-    # We'll build nested classes first (if any) and then the top-level model
-    imports = set()
+    """Emit a Python file with nested Pydantic models for any nested objects/arrays.
+
+    Strategy:
+    - Walk the schema recursively and generate a class for any object with `properties`.
+    - For arrays whose `items` are objects with `properties`, generate item classes and use List[ItemClass].
+    - Name nested classes deterministically using the parent model name and the property name.
+    """
+
     lines: list[str] = []
-    props = jschema.get("properties", {})
-    required = set(jschema.get("required", []))
+    header_imports = {"from pydantic import BaseModel, Field", "from typing import Optional, Any"}
+    type_imports = set()
 
-    # helper to map jsonschema type -> python type string
-    def map_type(spec: Dict[str, Any], name_hint: str = "") -> str:
-        t = spec.get("type", "string")
-        if isinstance(t, list):
-            # prefer first non-null
-            if "null" in t and len(t) > 1:
-                t = [x for x in t if x != "null"][0]
-            else:
-                t = t[0]
-        if t == "string":
-            return "str"
-        if t == "integer":
-            return "int"
-        if t == "number":
-            return "float"
-        if t == "boolean":
-            return "bool"
-        if t == "array":
-            items = spec.get("items", {}) or {}
-            if items.get("type") == "object" and items.get("properties"):
-                nested_name = f"{name_hint}Item" if name_hint else "Item"
-                return f"List[{nested_name}]"
-            else:
-                item_type = map_type(items, name_hint)
-                return f"List[{item_type}]"
-        if t == "object":
-            if spec.get("properties"):
-                nested_name = name_hint or "Nested"
-                return nested_name
-            return "dict"
-        return "Any"
+    # store generated classes to avoid duplicates
+    generated: Dict[str, list[str]] = {}
 
-    # collect nested class definitions
-    nested_defs: list[str] = []
+    def safe_class_name(base: str, prop: str) -> str:
+        # build a deterministic class name
+        name = f"{base}_{prop.capitalize()}"
+        # remove invalid chars
+        return re.sub(r"[^0-9A-Za-z_]+", "", name)
 
-    for prop, spec in props.items():
-        if spec.get("type") == "object" and spec.get("properties"):
-            nested_name = f"{model_name}_{prop.capitalize()}"
-            # render nested class
-            nested_lines = [f"class {nested_name}(BaseModel):"]
-            nprops = spec.get("properties", {})
-            nrequired = set(spec.get("required", []))
-            if not nprops:
-                nested_lines.append("    pass")
-            for nk, nspec in nprops.items():
-                ntype = map_type(nspec, nk.capitalize())
-                imports.add("Optional")
-                if ntype.startswith("List["):
-                    imports.add("List")
-                # build Field args
-                default = "..." if nk in nrequired else "None"
-                desc = nspec.get("description", "")
-                example = nspec.get("examples")
-                field_args = f"{default}, description=\"{desc}\""
-                if example:
-                    # include first example as example=...
-                    try:
-                        ex = json.dumps(example[0], ensure_ascii=False)
-                        field_args = f"{default}, description=\"{desc}\", example={ex}"
-                    except Exception:
-                        pass
-                nested_lines.append(f"    {nk}: Optional[{ntype}] = Field({field_args})")
-            nested_defs.append("\n".join(nested_lines))
-
-    # header imports
-    header = ["from pydantic import BaseModel, Field", "from typing import Optional, Any"]
-    if any(d.find("List[") != -1 for d in nested_defs) or any(map_type(spec).startswith("List[") for spec in props.values()):
-        header.append("from typing import List")
-    # ensure Optional is present if used
-    # (we already include Optional in header as a precaution)
-
-    lines.extend(header)
-    lines.append("")
-
-    # add nested defs
-    if nested_defs:
-        for nd in nested_defs:
-            lines.append(nd)
-            lines.append("")
-
-    # top-level model
-    lines.append(f"class {model_name}(BaseModel):")
-    if not props:
-        lines.append("    pass")
-    for k, spec in props.items():
-        py = map_type(spec, k.capitalize())
-        # possibly add imports
-        if py.startswith("List["):
-            imports.add("List")
-        imports.add("Optional")
-        default = "..." if k in required else "None"
+    def render_field_args(spec: Dict[str, Any], required: bool) -> str:
+        default = "..." if required else "None"
         desc = spec.get("description", "")
         example = spec.get("examples")
         field_args = f"{default}, description=\"{desc}\""
@@ -351,9 +276,88 @@ def emit_model_py(model_name: str, jschema: Dict[str, Any], out_path: str):
                 field_args = f"{default}, description=\"{desc}\", example={ex}"
             except Exception:
                 pass
-        lines.append(f"    {k}: Optional[{py}] = Field({field_args})")
+        return field_args
 
-    # write file
+    def process_object(name: str, schema: Dict[str, Any]):
+        # name: class name
+        if name in generated:
+            return name
+        props = schema.get("properties", {})
+        required = set(schema.get("required", []))
+        class_lines = [f"class {name}(BaseModel):"]
+        if not props:
+            class_lines.append("    pass")
+        for k, spec in props.items():
+            # resolve type
+            t = spec.get("type", "string")
+            if isinstance(t, list):
+                t = [x for x in t if x != "null"][0] if "null" in t and len(t) > 1 else t[0]
+
+            # nested object
+            if t == "object" and spec.get("properties"):
+                nested_name = safe_class_name(name, k)
+                process_object(nested_name, spec)
+                pytype = nested_name
+            # array of objects
+            elif t == "array":
+                items = spec.get("items", {}) or {}
+                it = items.get("type")
+                if it == "object" and items.get("properties"):
+                    nested_name = safe_class_name(name, k + "Item")
+                    process_object(nested_name, items)
+                    pytype = f"List[{nested_name}]"
+                    type_imports.add("List")
+                else:
+                    # primitive array
+                    itype = items.get("type", "string")
+                    py_primitive = {
+                        "string": "str",
+                        "integer": "int",
+                        "number": "float",
+                        "boolean": "bool",
+                    }.get(itype, "Any")
+                    pytype = f"List[{py_primitive}]"
+                    type_imports.add("List")
+            else:
+                pytype = {
+                    "string": "str",
+                    "integer": "int",
+                    "number": "float",
+                    "boolean": "bool",
+                    "object": "dict",
+                }.get(t, "Any")
+
+            if pytype.startswith("List["):
+                type_imports.add("List")
+            type_imports.add("Optional")
+
+            field_args = render_field_args(spec, k in required)
+            class_lines.append(f"    {k}: Optional[{pytype}] = Field({field_args})")
+
+        generated[name] = class_lines
+        return name
+
+    # start processing top-level
+    root_name = model_name
+    process_object(root_name, jschema)
+
+    # compose header
+    lines.extend(sorted(header_imports))
+    if type_imports:
+        lines.append(f"from typing import {', '.join(sorted(type_imports))}")
+    lines.append("")
+
+    # emit classes in deterministic order (parents after nested types so nested classes are defined first)
+    # we'll emit generated classes sorted by name length (shorter names deeper?) — better: ensure dependencies exist
+    # simple approach: emit all classes except the root first, then root
+    for cname in sorted([c for c in generated.keys() if c != root_name]):
+        lines.extend(generated[cname])
+        lines.append("")
+
+    # finally emit root class
+    lines.extend(generated[root_name])
+
+    # write to file
     with open(out_path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
 
