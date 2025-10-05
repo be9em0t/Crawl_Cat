@@ -14,7 +14,7 @@ load_dotenv()
 import yaml
 from bs4 import BeautifulSoup
 
-from typing import Dict
+from typing import Dict, List, Optional
 from types import SimpleNamespace
 from pydantic import BaseModel, Field
 from crawl4ai import AsyncWebCrawler, BrowserConfig, CrawlerRunConfig, CacheMode
@@ -25,11 +25,24 @@ OUTPUT_FOLDER = "output"
 OUTPUT_JSON = "openAI_prices.json"
 
 class OpenAIModelFee(BaseModel):
-	model_name: str = Field(..., description="Name of the OpenAI model.")
-	input_fee: str = Field(..., description="Fee for input token for the OpenAI model.")
-	output_fee: str = Field(
-		..., description="Fee for output token for the OpenAI model."
-	)
+	# model_name: str = Field(..., description="Name of the OpenAI model.")
+	# input_fee: str = Field(..., description="Fee for input token for the OpenAI model.")
+	# output_fee: str = Field(
+	# 	..., description="Fee for output token for the OpenAI model."
+	# )
+
+	# model_name: str = Field(..., description="OpenAI model name")
+	# model_group: str = Field(..., description="API group the model belongs to")
+	# model_type: str = Field(..., description="The type of content (audio, text etc.)")
+	# model_input_fee: str = Field(..., description="The price per input tokens")
+	# model_cached_input_fee: str = Field(..., description="The price per cached input tokens")
+	# model_output_fee: str = Field(..., description="The price per output tokens")
+
+	pageTitle: Optional[str] = Field(..., description="The title of the web page.")
+	mainHeading: Optional[str] = Field(..., description="The main heading of the page.")
+	contactSalesLink: Optional[str] = Field(..., description="URL to contact sales for more information.")
+	pricingDescription: Optional[str] = Field(..., description="Description of the pricing strategy.")
+	pricingOptions: Optional[List[dict]] = Field(..., description="List of available pricing options with descriptions.")
 
 async def extract_structured_data_using_llm(
 	provider: str,

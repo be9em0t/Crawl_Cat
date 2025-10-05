@@ -7,11 +7,15 @@
 
 Usage examples:
 
-# write prompt only
+# write prompt only (fetch page and emit prompt to schemas/<base_name>_prompt.txt)
 python schema_discovery.py --emit-prompt --out <base_name>
 
-# discover schema using a provider configured in providers.yaml
-python schema_discovery.py --emit-schema --emit-model --out discovered_schema
+# discover schema from a prompt file (requires provider) and save discovered schema
+python schema_discovery.py --prompt my_prompt.txt --emit-schema --out <base_name>
+
+# provide a prompt file and directly emit a model: this will first discover the schema
+# from the prompt (equivalent to --emit-schema) and then emit a Pydantic model
+python schema_discovery.py --prompt my_prompt.txt --emit-model --out <base_name>
 
 # convert an existing JSON Schema file into a runtime Pydantic model
 python schema_discovery.py --schema discovered_schema.json --emit-model --out discovered_schema
@@ -60,9 +64,23 @@ async def fetch_url_html(url: str) -> str:
 
 def build_schema_prompt(url: str, html_snippet: str, guidance: str = None) -> str:
     guidance = guidance or (
-        "Produce a JSON Schema (draft-like) describing the structured information present on the page. "
-        "Return only the JSON Schema object as JSON (no commentary). Include required fields and types. "
-        "Prefer simple types (string, number, boolean, array, object). Add a top-level `examples` key with one example instance."
+        # "Produce a JSON Schema (draft-like) describing the structured information present on the page. "
+        # "Return only the JSON Schema object as JSON (no commentary). Include required fields and types. "
+        # "Prefer simple types (string, number, boolean, array, object). Add a top-level `examples` key with one example instance."
+"""Produce a compact JSON Schema (as a single JSON object) that describes the structured data present on the page. Requirements:
+
+Include top-level title and description keys summarizing the purpose of the object.
+For each property under properties include:
+type (string, integer, number, boolean, array, object)
+description: one concise human-readable sentence describing the field and when it appears
+examples: a short array with 1 example value (for objects/arrays include a representative instance)
+If the field is an object, provide its own properties, required, and description keys and include examples for nested fields.
+If the field is an array, specify items with a type and an examples array showing an example item.
+Set required at the top-level and at nested object levels for fields that are always present. Use optional fields only when truly optional.
+Keep the schema compact (avoid overly permissive additionalProperties: true unless necessary).
+Add a top-level examples array containing one representative complete instance of the object (matching the schema).
+Prefer concrete, narrow types (e.g., 'integer' for counts, 'number' for prices, 'string' for textual labels, 'boolean' for flags).
+Return only the raw JSON object (no explanation, no markdown/code fences)."""
     )
     # Make the instruction extra-explicit to avoid models wrapping JSON in markdown/code fences.
     guidance = guidance + " Do NOT wrap the JSON in markdown or code fences (e.g. ```json). Return the raw JSON object only, with no surrounding text or formatting."
@@ -253,7 +271,20 @@ def emit_model_py(model_name: str, jschema: Dict[str, Any], out_path: str):
 
 
 async def main():
-    parser = argparse.ArgumentParser()
+    from argparse import RawDescriptionHelpFormatter
+    examples = (
+        "Usage examples:\n\n"
+        "  # write prompt only (fetch page and emit prompt to schemas/<base_name>_prompt.txt)\n"
+        "  python schema_discovery.py --emit-prompt --out <base_name>\n\n"
+        "  # discover schema from a prompt file (requires provider) and save discovered schema\n"
+        "  python schema_discovery.py --prompt my_prompt.txt --emit-schema --out <base_name>\n\n"
+        "  # provide a prompt file and directly emit a model: this will first discover the schema\n"
+        "  # from the prompt (equivalent to --emit-schema) and then emit a Pydantic model\n"
+        "  python schema_discovery.py --prompt my_prompt.txt --emit-model --out <base_name>\n\n"
+        "  # convert an existing JSON Schema file into a runtime Pydantic model\n"
+        "  python schema_discovery.py --schema discovered_schema.json --emit-model --out discovered_schema\n"
+    )
+    parser = argparse.ArgumentParser(epilog=examples, formatter_class=RawDescriptionHelpFormatter)
     parser.add_argument("--url", "-u", default=DEFAULT_URL)
     parser.add_argument("--provider", "-p", help="Provider key or alias from providers.yaml (e.g. gpt4o). If omitted, no LLM will be used and LLM-required operations will abort.")
     parser.add_argument("--out", "-o", default="discovered_schema", help="Base name for outputs (no extension). Files will be placed under `schemas/` with suffixes")
@@ -265,6 +296,14 @@ async def main():
     # tolerant extraction is enabled by default; use --strict to disable it
     parser.add_argument("--strict", dest="tolerant", action="store_false", help="Run in strict mode: do not attempt tolerant JSON extraction (opposite of default tolerant behavior)")
     args = parser.parse_args()
+
+    # If the user supplied a prompt file and asked to emit a model, ensure we
+    # perform schema discovery first (emit the schema) so the model is created
+    # from the discovered schema. If an explicit --schema file was provided,
+    # respect that instead.
+    if args.prompt and args.emit_model and not args.schema:
+        args.emit_schema = True
+        print("Notice: --prompt + --emit-model detected. Auto-enabling --emit-schema so the model is generated from the discovered schema.")
 
     # load providers registry
     providers_path = os.path.join(os.path.dirname(__file__), "providers.yaml")
