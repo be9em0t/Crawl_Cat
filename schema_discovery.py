@@ -91,7 +91,10 @@ Return only the raw JSON object (no explanation, no markdown/code fences)."""
         f"Guidance: {guidance}\n\n"
         "Page HTML (trimmed):\n"
         f"{html_snippet}\n\n"
-        "Return a single JSON object (the JSON Schema). Do not include any explanation."
+        "Return a single JSON object (the JSON Schema). Do not include any explanation.\n\n"
+        "Additionally, provide a `glossary` object: a list of field entries where each entry contains `name`, `description` (one-line), and `examples` (an array with one example).\n"
+        "If you cannot provide all descriptions or examples, return empty strings or empty arrays but keep the fields.\n"
+        "Return a single JSON object that may contain both the schema and the glossary under keys `schema` and `glossary`, or return the schema alone - code will attempt to detect both formats."
     )
     return prompt
 
@@ -242,30 +245,115 @@ def create_pydantic_model_from_json_schema(jschema: Dict[str, Any], name: str = 
 
 def emit_model_py(model_name: str, jschema: Dict[str, Any], out_path: str):
     """Emit a very simple Python file with a Pydantic model declaration (best-effort)."""
-    lines = ["from pydantic import BaseModel, Field", "from typing import List, Optional"]
-    lines.append("")
-    lines.append(f"class {model_name}(BaseModel):")
+    # We'll build nested classes first (if any) and then the top-level model
+    imports = set()
+    lines: list[str] = []
     props = jschema.get("properties", {})
     required = set(jschema.get("required", []))
+
+    # helper to map jsonschema type -> python type string
+    def map_type(spec: Dict[str, Any], name_hint: str = "") -> str:
+        t = spec.get("type", "string")
+        if isinstance(t, list):
+            # prefer first non-null
+            if "null" in t and len(t) > 1:
+                t = [x for x in t if x != "null"][0]
+            else:
+                t = t[0]
+        if t == "string":
+            return "str"
+        if t == "integer":
+            return "int"
+        if t == "number":
+            return "float"
+        if t == "boolean":
+            return "bool"
+        if t == "array":
+            items = spec.get("items", {}) or {}
+            if items.get("type") == "object" and items.get("properties"):
+                nested_name = f"{name_hint}Item" if name_hint else "Item"
+                return f"List[{nested_name}]"
+            else:
+                item_type = map_type(items, name_hint)
+                return f"List[{item_type}]"
+        if t == "object":
+            if spec.get("properties"):
+                nested_name = name_hint or "Nested"
+                return nested_name
+            return "dict"
+        return "Any"
+
+    # collect nested class definitions
+    nested_defs: list[str] = []
+
+    for prop, spec in props.items():
+        if spec.get("type") == "object" and spec.get("properties"):
+            nested_name = f"{model_name}_{prop.capitalize()}"
+            # render nested class
+            nested_lines = [f"class {nested_name}(BaseModel):"]
+            nprops = spec.get("properties", {})
+            nrequired = set(spec.get("required", []))
+            if not nprops:
+                nested_lines.append("    pass")
+            for nk, nspec in nprops.items():
+                ntype = map_type(nspec, nk.capitalize())
+                imports.add("Optional")
+                if ntype.startswith("List["):
+                    imports.add("List")
+                # build Field args
+                default = "..." if nk in nrequired else "None"
+                desc = nspec.get("description", "")
+                example = nspec.get("examples")
+                field_args = f"{default}, description=\"{desc}\""
+                if example:
+                    # include first example as example=...
+                    try:
+                        ex = json.dumps(example[0], ensure_ascii=False)
+                        field_args = f"{default}, description=\"{desc}\", example={ex}"
+                    except Exception:
+                        pass
+                nested_lines.append(f"    {nk}: Optional[{ntype}] = Field({field_args})")
+            nested_defs.append("\n".join(nested_lines))
+
+    # header imports
+    header = ["from pydantic import BaseModel, Field", "from typing import Optional, Any"]
+    if any(d.find("List[") != -1 for d in nested_defs) or any(map_type(spec).startswith("List[") for spec in props.values()):
+        header.append("from typing import List")
+    # ensure Optional is present if used
+    # (we already include Optional in header as a precaution)
+
+    lines.extend(header)
+    lines.append("")
+
+    # add nested defs
+    if nested_defs:
+        for nd in nested_defs:
+            lines.append(nd)
+            lines.append("")
+
+    # top-level model
+    lines.append(f"class {model_name}(BaseModel):")
     if not props:
         lines.append("    pass")
     for k, spec in props.items():
-        jtype = spec.get("type", "string")
-        py = "str"
-        if jtype == "integer":
-            py = "int"
-        elif jtype == "number":
-            py = "float"
-        elif jtype == "boolean":
-            py = "bool"
-        elif jtype == "array":
-            items = spec.get("items", {})
-            itype = items.get("type", "string")
-            py = f"List[{ 'dict' if itype=='object' else ('str' if itype=='string' else itype) }]"
-        elif jtype == "object":
-            py = "dict"
+        py = map_type(spec, k.capitalize())
+        # possibly add imports
+        if py.startswith("List["):
+            imports.add("List")
+        imports.add("Optional")
         default = "..." if k in required else "None"
-        lines.append(f"    {k}: Optional[{py}] = Field({default}, description=\"{spec.get('description','')}\")")
+        desc = spec.get("description", "")
+        example = spec.get("examples")
+        field_args = f"{default}, description=\"{desc}\""
+        if example:
+            try:
+                ex = json.dumps(example[0], ensure_ascii=False)
+                field_args = f"{default}, description=\"{desc}\", example={ex}"
+            except Exception:
+                pass
+        lines.append(f"    {k}: Optional[{py}] = Field({field_args})")
+
+    # write file
     with open(out_path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
 
@@ -398,9 +486,9 @@ async def main():
             print("OpenAI call failed:", e)
             return
 
-        # try to parse returned JSON
+        # try to parse returned JSON (supporting either a raw schema or an object containing {schema, glossary})
         try:
-            jschema = json.loads(resp_text)
+            parsed = json.loads(resp_text)
         except Exception:
             # 1) Conservative single outer-fence stripper: if the whole response is a single
             #    fenced block (```json ... ``` or ``` ... ```), strip it and try parsing the inner text.
@@ -417,7 +505,7 @@ async def main():
                 jschema = None
 
             # 2) If outer-fence removal succeeded, proceed. Otherwise, offer tolerant extraction only if requested.
-            if jschema is not None:
+            if 'parsed' in locals() and parsed is not None:
                 pass
             else:
                 # optionally try to extract JSON from common LLM formats when --tolerant is set
@@ -428,7 +516,7 @@ async def main():
                         print(f"LLM returned non-JSON content and extraction failed. Raw output written to {schema_out}")
                         print("Hint: try inspecting the file for fenced blocks or adjust the prompt to return pure JSON.")
                         return
-                    jschema = repaired
+                    parsed = repaired
                     print("Extracted JSON from LLM response (tolerant mode). Proceeding with schema conversion.")
                 else:
                     # Save the raw LLM output for diagnostics
@@ -442,12 +530,55 @@ async def main():
                         print("Hint: response could not be parsed as JSON. Inspect the saved file to see what's returned by the LLM.")
                     return
 
+        # At this point `parsed` may be the schema object or a wrapper containing schema+glossary
+        jschema = None
+        glossary = None
+        if isinstance(parsed, dict):
+            # If parsed contains 'schema' key, use that; otherwise assume it's the schema itself
+            if 'schema' in parsed and isinstance(parsed['schema'], dict):
+                jschema = parsed['schema']
+            else:
+                # maybe the model returned the schema directly
+                # try to detect whether this dict looks like a JSON Schema (has 'properties' or '$schema')
+                if 'properties' in parsed or '$schema' in parsed:
+                    jschema = parsed
+            # glossary may be present under 'glossary' or 'field_glossary'
+            if 'glossary' in parsed:
+                glossary = parsed['glossary']
+            elif 'field_glossary' in parsed:
+                glossary = parsed['field_glossary']
+
+        # if jschema still None, try tolerant extraction for a top-level schema object
+        if jschema is None and isinstance(parsed, dict):
+            # try to find the first nested dict with 'properties'
+            for v in parsed.values():
+                if isinstance(v, dict) and 'properties' in v:
+                    jschema = v
+                    break
+
         # save schema if requested
         if args.emit_schema or args.emit_model:
-            save_json(schema_out, jschema)
-            print(f"Saved discovered JSON Schema to {schema_out}")
+            if jschema is None:
+                print("No JSON Schema could be extracted from the LLM response. Raw response saved for inspection.")
+                save_text(schema_out, resp_text)
+            else:
+                save_json(schema_out, jschema)
+                print(f"Saved discovered JSON Schema to {schema_out}")
+
+        # save glossary if present
+        if glossary is not None:
+            glossary_out = os.path.join(schemas_dir, f"{base}_field_glossary.json")
+            try:
+                save_json(glossary_out, glossary)
+                print(f"Saved field glossary to {glossary_out}")
+            except Exception:
+                # fallback: save raw text
+                save_text(glossary_out, json.dumps(glossary, ensure_ascii=False, indent=2))
 
         if args.emit_model:
+            if jschema is None:
+                print("Cannot build model: no parsed JSON Schema available.")
+                return
             print("Building runtime Pydantic model from schema...")
             Model = create_pydantic_model_from_json_schema(jschema, "DiscoveredModel")
             # set module name for nicer repr
@@ -459,6 +590,20 @@ async def main():
             print("Runtime model created:", Model)
             emit_model_py("DiscoveredModel", jschema, model_out)
             print(f"Emitted Python model to {model_out}")
+
+            # append glossary as a JSON comment at end of emitted model for easy editing
+            if glossary is not None:
+                try:
+                    with open(model_out, "a", encoding="utf-8") as mf:
+                        mf.write("\n\n# Field glossary (generated by LLM)\n# ````json\n")
+                        # write lines prefixed with # for safe inclusion
+                        gl_text = json.dumps(glossary, ensure_ascii=False, indent=2)
+                        for line in gl_text.splitlines():
+                            mf.write("# " + line + "\n")
+                        mf.write("# ````\n")
+                    print(f"Appended glossary to {model_out}")
+                except Exception as e:
+                    print("Failed to append glossary to model file:", e)
         return
 
     # If we reached here, no provider was requested. Prompts may have been emitted above.

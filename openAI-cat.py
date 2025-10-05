@@ -24,6 +24,11 @@ from crawl4ai import LLMExtractionStrategy
 OUTPUT_FOLDER = "output"
 OUTPUT_JSON = "openAI_prices.json"
 
+class PricingdetailsItem(BaseModel):
+	name: Optional[str] = Field(None, description="Name of the pricing option.", example="Batch API")
+	description: Optional[str] = Field(None, description="Short description of the pricing option.", example="Save 50% on inputs and outputs with the Batch API and run tasks asynchronously over 24 hours.")
+	link: Optional[str] = Field(None, description="URL to documentation or more info about this pricing option.", example="https://platform.openai.com/docs/guides/batch")
+
 class OpenAIModelFee(BaseModel):
 	# model_name: str = Field(..., description="Name of the OpenAI model.")
 	# input_fee: str = Field(..., description="Fee for input token for the OpenAI model.")
@@ -38,11 +43,15 @@ class OpenAIModelFee(BaseModel):
 	# model_cached_input_fee: str = Field(..., description="The price per cached input tokens")
 	# model_output_fee: str = Field(..., description="The price per output tokens")
 
-	pageTitle: Optional[str] = Field(..., description="The title of the web page.")
-	mainHeading: Optional[str] = Field(..., description="The main heading of the page.")
-	contactSalesLink: Optional[str] = Field(..., description="URL to contact sales for more information.")
-	pricingDescription: Optional[str] = Field(..., description="Description of the pricing strategy.")
-	pricingOptions: Optional[List[dict]] = Field(..., description="List of available pricing options with descriptions.")
+	# pageTitle: Optional[str] = Field(..., description="The title of the web page.")
+	# mainHeading: Optional[str] = Field(..., description="The main heading of the page.")
+	# contactSalesLink: Optional[str] = Field(..., description="URL to contact sales for more information.")
+	# pricingDescription: Optional[str] = Field(..., description="Description of the pricing strategy.")
+	# pricingOptions: Optional[List[dict]] = Field(..., description="List of available pricing options with descriptions.")
+
+	title: Optional[str] = Field(..., description="The main title of the page.", example="API Pricing")
+	contactSalesLink: Optional[str] = Field(..., description="URL to contact sales for more information.", example="/contact-sales/")
+	pricingDetails: Optional[List[PricingdetailsItem]] = Field(..., description="List of pricing options and descriptions.", example={"name": "Batch API", "description": "Save 50% on inputs and outputs with the Batch API and run tasks asynchronously over 24 hours.", "link": "https://platform.openai.com/docs/guides/batch"})
 
 async def extract_structured_data_using_llm(
 	provider: str,
