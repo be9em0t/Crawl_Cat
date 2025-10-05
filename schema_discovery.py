@@ -30,6 +30,9 @@ from typing import Any, Dict
 
 from pydantic import create_model
 from save_utils import ensure_dir_for_file, save_json, save_text
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from crawl4ai import AsyncWebCrawler, BrowserConfig, CrawlerRunConfig, CacheMode
 from types import SimpleNamespace
@@ -234,55 +237,59 @@ def emit_model_py(model_name: str, jschema: Dict[str, Any], out_path: str):
 
 async def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--url", default=DEFAULT_URL)
-    parser.add_argument("--provider", "-p", default="gpt4o", help="Provider key or alias from providers.yaml (e.g. gpt4o)")
-    parser.add_argument("--token", "-t", help="API token (overrides env)")
-    parser.add_argument("--no-call", action="store_true", help="Do not call LLM; just write prompt to --out")
-    parser.add_argument("--call", action="store_true", help="Attempt to call provider (OpenAI only implemented)")
-    parser.add_argument("--out", default="discovered_schema", help="Base name for outputs (no extension). Files will be placed under `schemas/` with suffixes")
-    parser.add_argument("--schema-file", help="If provided, read JSON Schema from this file and build a runtime Pydantic model")
-    parser.add_argument("--emit-py", help="Emit a best-effort Python model file from the schema")
+    parser.add_argument("--url", "-u", default=DEFAULT_URL)
+    parser.add_argument("--provider", "-p", help="Provider key or alias from providers.yaml (e.g. gpt4o). If omitted, no LLM will be used and only prompt/schema/model emission flags are valid for local processing.")
+    parser.add_argument("--out", "-o", default="discovered_schema", help="Base name for outputs (no extension). Files will be placed under `schemas/` with suffixes")
+    parser.add_argument("--schema", "-is", help="If provided, read JSON Schema from this file and build a runtime Pydantic model")
+    parser.add_argument("--prompt", "-ip", help="If provided, read a prompt from this file instead of generating one from a fetched URL/html snippet")
+    parser.add_argument("--emit-prompt", "-ep", action="store_true", help="Emit prompt to --out_prompt.txt")
+    parser.add_argument("--emit-schema", "-es", action="store_true", help="Emit discovered JSON Schema to --out_discovered_schema.json (requires --provider)")
+    parser.add_argument("--emit-model", "-em", action="store_true", help="Create runtime Pydantic model from schema or emitted schema and write Python model file to schemas/<out>_discovered_model.py")
     args = parser.parse_args()
 
-    # load providers registry and resolve provider/token (allow short aliases)
+    # load providers registry
     providers_path = os.path.join(os.path.dirname(__file__), "providers.yaml")
     providers_registry = load_providers(providers_path)
-    # allow passing short alias like 'gpt4o' which maps in providers.yaml
-    provider_input = args.provider
     regs = providers_registry.get("providers", {})
-    provider = provider_input
-    api_token = args.token or os.getenv("OPENAI_API_KEY")
-    if provider_input in regs:
-        entry = regs[provider_input]
-        provider = entry.get("provider") or provider
-        env_var = entry.get("env_var")
-        if env_var and not args.token:
-            api_token = os.getenv(env_var) or api_token
-    else:
-        found = False
-        for k, entry in regs.items():
-            aliases = entry.get("aliases") or []
-            if provider_input in aliases:
-                provider = entry.get("provider") or provider_input
-                env_var = entry.get("env_var")
-                if env_var and not args.token:
-                    api_token = os.getenv(env_var) or api_token
-                found = True
-                break
-        if not found:
-            provider = provider_input
+    provider = None
+    api_token = None
+    if args.provider:
+        # provider must exist in providers.yaml (by key or alias). Fail if not found.
+        provider_input = args.provider
+        if provider_input in regs:
+            entry = regs[provider_input]
+            provider = entry.get("provider") or provider_input
+            env_var = entry.get("env_var")
+            if env_var:
+                api_token = os.getenv(env_var)
+        else:
+            # try aliases
+            found = False
+            for k, entry in regs.items():
+                aliases = entry.get("aliases") or []
+                if provider_input in aliases:
+                    provider = entry.get("provider") or k
+                    env_var = entry.get("env_var")
+                    if env_var:
+                        api_token = os.getenv(env_var)
+                    found = True
+                    break
+            if not found:
+                print(f"Provider '{provider_input}' not found in providers.yaml. Aborting.")
+                return
 
-    if args.schema_file:
-        if not os.path.exists(args.schema_file):
-            print(f"Schema file {args.schema_file} not found")
+    if args.schema:
+        if not os.path.exists(args.schema):
+            print(f"Schema file {args.schema} not found")
             return
-        with open(args.schema_file, "r", encoding="utf-8") as f:
+        with open(args.schema, "r", encoding="utf-8") as f:
             jschema = json.load(f)
         Model = create_pydantic_model_from_json_schema(jschema, "DiscoveredModel")
         print("Created runtime Pydantic model: ", Model)
-        if args.emit_py:
-            emit_model_py("DiscoveredModel", jschema, args.emit_py)
-            print(f"Emitted Python model to {args.emit_py}")
+        if args.emit_model:
+            out_py = os.path.join(os.path.dirname(__file__), "schemas", f"{args.out}_discovered_model.py")
+            emit_model_py("DiscoveredModel", jschema, out_py)
+            print(f"Emitted Python model to {out_py}")
         return
 
     # prepare outputs under schemas/ using base name from --out
@@ -292,114 +299,75 @@ async def main():
     ensure_dir_for_file(os.path.join(schemas_dir, base + "_placeholder"))
     prompt_out = os.path.join(schemas_dir, f"{base}_prompt.txt")
     schema_out = os.path.join(schemas_dir, f"{base}_discovered_schema.json")
-    model_out = args.emit_py or os.path.join(schemas_dir, f"{base}_discovered_model.py")
+    model_out = os.path.join(schemas_dir, f"{base}_discovered_model.py")
 
-    # fetch page html
-    print(f"Fetching {args.url} ...")
-    html = await fetch_url_html(args.url)
-    snippet = html[:6000]  # trim to avoid huge prompts
+    # If provider present we will call the LLM to produce a schema from the fetched HTML or provided prompt.
+    # If no provider is given, this script only supports local operations (emit prompt from fetched URL, or convert existing schema to model).
 
-    prompt = build_schema_prompt(args.url, snippet)
+    # generate or read prompt
+    if args.prompt:
+        if not os.path.exists(args.prompt):
+            print(f"Prompt file {args.prompt} not found")
+            return
+        with open(args.prompt, "r", encoding="utf-8") as f:
+            prompt = f.read()
+    else:
+        # fetch page html and build prompt
+        print(f"Fetching {args.url} ...")
+        html = await fetch_url_html(args.url)
+        snippet = html[:6000]
+        prompt = build_schema_prompt(args.url, snippet)
 
-    if args.no_call:
-        # save prompt for manual use under schemas/
+    # write prompt if requested
+    if args.emit_prompt:
         save_text(prompt_out, prompt)
-        print(f"Prompt written to {prompt_out} (no LLM call performed)")
-        return
+        print(f"Prompt written to {prompt_out}")
 
-    if args.call:
-        # only OpenAI implemented here for explicit calls
+    # If provider requested, call LLM to get schema and emit schema/model as requested
+    if provider:
+        # currently only OpenAI provider interface implemented
         if not provider.startswith("openai"):
-            print("Automatic call currently only implemented for OpenAI providers. Use --no-call to write prompt instead.")
+            print("Automatic call currently only implemented for OpenAI providers. Aborting.")
             return
         model_name = provider.split("/", 1)[-1]
         if not api_token:
-            print("No API token available for provider. Set via --token or env.")
+            print("No API token configured for provider in providers.yaml (env var may be missing). Aborting.")
             return
         print(f"Calling OpenAI model {model_name} ...")
         try:
             resp_text = await asyncio.to_thread(call_openai, prompt, model_name, api_token)
         except Exception as e:
             print("OpenAI call failed:", e)
-            # write prompt for manual use
-            save_text(prompt_out, prompt)
-            print(f"Prompt written to {prompt_out} for manual use")
             return
+
         # try to parse returned JSON
         try:
             jschema = json.loads(resp_text)
         except Exception:
-            # try to heuristically extract JSON from the LLM response (code fences, surrounding text)
-            def extract_json_from_text(text: str):
-                # 1) try fenced code blocks (``` or ```json)
-                fence_pattern = re.compile(r"```(?:json)?\s*(.*?)\s*```", re.DOTALL | re.IGNORECASE)
-                for m in fence_pattern.finditer(text):
-                    candidate = m.group(1).strip()
-                    try:
-                        return json.loads(candidate)
-                    except Exception:
-                        continue
+            print("LLM returned non-JSON content. Aborting.")
+            return
 
-                # 2) try to find the first { ... } block (greedy to last })
-                first_brace = text.find("{")
-                last_brace = text.rfind("}")
-                if first_brace != -1 and last_brace != -1 and last_brace > first_brace:
-                    candidate = text[first_brace:last_brace+1]
-                    try:
-                        return json.loads(candidate)
-                    except Exception:
-                        pass
+        # save schema if requested
+        if args.emit_schema or args.emit_model:
+            save_json(schema_out, jschema)
+            print(f"Saved discovered JSON Schema to {schema_out}")
 
-                # 3) try to find a top-level array [ ... ]
-                first_sq = text.find("[")
-                last_sq = text.rfind("]")
-                if first_sq != -1 and last_sq != -1 and last_sq > first_sq:
-                    candidate = text[first_sq:last_sq+1]
-                    try:
-                        return json.loads(candidate)
-                    except Exception:
-                        pass
-
-                return None
-
-            repaired = extract_json_from_text(resp_text)
-            if repaired is None:
-                # save raw response for inspection (under schemas/)
-                save_text(schema_out, resp_text)
-                print(f"LLM returned non-JSON content. Saved raw output to {schema_out}")
-                return
-            jschema = repaired
-            print("Extracted JSON from LLM response (heuristic). Proceeding with schema conversion.")
-        # build runtime model first, then save schema
-        print("Building runtime Pydantic model from schema...")
-        Model = create_pydantic_model_from_json_schema(jschema, "DiscoveredModel")
-        # set a friendly __module__ so printed class references a reasonable module name
-        if args.emit_py:
-            # derive module path from emit path, e.g. schemas/discovered_model.py -> schemas.discovered_model
-            rel = os.path.relpath(args.emit_py, os.path.dirname(__file__))
-            parts = rel.split(os.sep)
-            parts[-1] = os.path.splitext(parts[-1])[0]
-            module_name = ".".join(parts)
-        else:
+        if args.emit_model:
+            print("Building runtime Pydantic model from schema...")
+            Model = create_pydantic_model_from_json_schema(jschema, "DiscoveredModel")
+            # set module name for nicer repr
             module_name = "schemas.discovered_model"
-        try:
-            Model.__module__ = module_name
-        except Exception:
-            pass
-        print("Runtime model created:", Model)
-
-        # save schema and optional emitted python file under schemas/
-        save_json(schema_out, jschema)
-        print(f"Saved discovered JSON Schema to {schema_out}")
-
-        if args.emit_py:
-            emit_model_py("DiscoveredModel", jschema, args.emit_py)
-            print(f"Emitted Python model to {args.emit_py}")
+            try:
+                Model.__module__ = module_name
+            except Exception:
+                pass
+            print("Runtime model created:", Model)
+            emit_model_py("DiscoveredModel", jschema, model_out)
+            print(f"Emitted Python model to {model_out}")
         return
 
-    # default: write prompt and exit
-    save_text(prompt_out, prompt)
-    print(f"Prompt written to {prompt_out}. Use --call to attempt an OpenAI call (experimental).")
+    # If we reached here, no provider was requested. Prompts may have been emitted above.
+    print("No provider requested. Done.")
 
 
 if __name__ == "__main__":
