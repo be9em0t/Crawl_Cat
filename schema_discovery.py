@@ -1,23 +1,20 @@
-"""
-Schema discovery helper
+"""Schema discovery helper
 
-- Fetches a target URL using AsyncWebCrawler
-- Builds a prompt asking an LLM to propose a JSON Schema for the page's extracted data
-- Optionally calls OpenAI (when --provider is given)
-- Provider options, aliases and keys are in providers.yaml.
-- Provides a safe runtime converter that builds a Pydantic model from a simple JSON Schema using pydantic.create_model
-- uses base name for output, to which a suffix is added to reflect the output of each stage
+- Fetch a target URL and build a schema-generation prompt
+- Providers are configured in `providers.yaml`; this script selects a provider
+    automatically from that registry (preferring entries with configured env vars).
+- Converts JSON Schema to a runtime Pydantic model and optionally emits a Python model file.
 
 Usage examples:
 
-# write prompt only (no network calls)
-python schema_discovery.py --no-call --out <base_name>
+# write prompt only
+python schema_discovery.py --emit-prompt --out <base_name>
 
-# call OpenAI (if openai package installed and OPENAI_API_KEY set or --token provided)
-python schema_discovery.py --call --provider openai/gpt-4o --token $OPENAI_API_KEY --out discovered_schema.json
+# discover schema using a provider configured in providers.yaml
+python schema_discovery.py --emit-schema --emit-model --out discovered_schema
 
 # convert an existing JSON Schema file into a runtime Pydantic model
-python schema_discovery.py --schema-file discovered_schema.json --emit-py schemas/discovered_model.py
+python schema_discovery.py --schema discovered_schema.json --emit-model --out discovered_schema
 
 """
 
@@ -35,7 +32,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from crawl4ai import AsyncWebCrawler, BrowserConfig, CrawlerRunConfig, CacheMode
-from types import SimpleNamespace
 import yaml
 import re
 
@@ -49,30 +45,9 @@ def load_providers(providers_path: str) -> Dict[str, Any]:
         return yaml.safe_load(f) or {}
 
 
-def resolve_provider(provider_input: str, providers_registry: Dict[str, Any], token_arg: str = None):
-    api_token = token_arg or os.getenv("OPENAI_API_KEY")
-    regs = providers_registry.get("providers", {})
-    provider = provider_input
-    if provider_input in regs:
-        entry = regs[provider_input]
-        provider = entry.get("provider") or provider
-        env_var = entry.get("env_var")
-        if env_var and not token_arg:
-            api_token = os.getenv(env_var) or api_token
-    else:
-        found = False
-        for k, entry in regs.items():
-            aliases = entry.get("aliases") or []
-            if provider_input in aliases:
-                provider = entry.get("provider") or provider_input
-                env_var = entry.get("env_var")
-                if env_var and not token_arg:
-                    api_token = os.getenv(env_var) or api_token
-                found = True
-                break
-        if not found:
-            provider = provider_input
-    return provider, api_token
+# Provider resolution is handled by scanning providers.yaml. The script no longer
+# accepts provider/token via CLI. See providers.yaml for provider entries and
+# the env_var key which names an environment variable containing the token.
 
 
 async def fetch_url_html(url: str) -> str:
@@ -89,6 +64,8 @@ def build_schema_prompt(url: str, html_snippet: str, guidance: str = None) -> st
         "Return only the JSON Schema object as JSON (no commentary). Include required fields and types. "
         "Prefer simple types (string, number, boolean, array, object). Add a top-level `examples` key with one example instance."
     )
+    # Make the instruction extra-explicit to avoid models wrapping JSON in markdown/code fences.
+    guidance = guidance + " Do NOT wrap the JSON in markdown or code fences (e.g. ```json). Return the raw JSON object only, with no surrounding text or formatting."
     prompt = (
         f"You are given the HTML content of a web page (URL: {url}).\n"
         "Analyze the content and propose a compact JSON Schema that describes the "
@@ -99,6 +76,46 @@ def build_schema_prompt(url: str, html_snippet: str, guidance: str = None) -> st
         "Return a single JSON object (the JSON Schema). Do not include any explanation."
     )
     return prompt
+
+
+def extract_json_candidate(text: str):
+    """Try a few conservative extraction strategies and return a parsed JSON object or None.
+
+    Strategies (in order):
+    - Each fenced code block (```json or ```)
+    - The first {...} block
+    - The first [...] block
+    """
+    # fenced code blocks (may be multiple) - try each
+    fence_pattern = re.compile(r"```(?:json)?\s*(.*?)\s*```", re.DOTALL | re.IGNORECASE)
+    for m in fence_pattern.finditer(text):
+        candidate = m.group(1).strip()
+        try:
+            return json.loads(candidate)
+        except Exception:
+            continue
+
+    # first {...} object
+    first_brace = text.find("{")
+    last_brace = text.rfind("}")
+    if first_brace != -1 and last_brace != -1 and last_brace > first_brace:
+        candidate = text[first_brace:last_brace+1]
+        try:
+            return json.loads(candidate)
+        except Exception:
+            pass
+
+    # first [...] array
+    first_sq = text.find("[")
+    last_sq = text.rfind("]")
+    if first_sq != -1 and last_sq != -1 and last_sq > first_sq:
+        candidate = text[first_sq:last_sq+1]
+        try:
+            return json.loads(candidate)
+        except Exception:
+            pass
+
+    return None
 
 
 def call_openai(prompt: str, model: str, api_key: str) -> str:
@@ -238,45 +255,43 @@ def emit_model_py(model_name: str, jschema: Dict[str, Any], out_path: str):
 async def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", "-u", default=DEFAULT_URL)
-    parser.add_argument("--provider", "-p", help="Provider key or alias from providers.yaml (e.g. gpt4o). If omitted, no LLM will be used and only prompt/schema/model emission flags are valid for local processing.")
+    parser.add_argument("--provider", "-p", help="Provider key or alias from providers.yaml (e.g. gpt4o). If omitted, no LLM will be used and LLM-required operations will abort.")
     parser.add_argument("--out", "-o", default="discovered_schema", help="Base name for outputs (no extension). Files will be placed under `schemas/` with suffixes")
     parser.add_argument("--schema", "-is", help="If provided, read JSON Schema from this file and build a runtime Pydantic model")
     parser.add_argument("--prompt", "-ip", help="If provided, read a prompt from this file instead of generating one from a fetched URL/html snippet")
     parser.add_argument("--emit-prompt", "-ep", action="store_true", help="Emit prompt to --out_prompt.txt")
     parser.add_argument("--emit-schema", "-es", action="store_true", help="Emit discovered JSON Schema to --out_discovered_schema.json (requires --provider)")
     parser.add_argument("--emit-model", "-em", action="store_true", help="Create runtime Pydantic model from schema or emitted schema and write Python model file to schemas/<out>_discovered_model.py")
+    # tolerant extraction is enabled by default; use --strict to disable it
+    parser.add_argument("--strict", dest="tolerant", action="store_false", help="Run in strict mode: do not attempt tolerant JSON extraction (opposite of default tolerant behavior)")
     args = parser.parse_args()
 
     # load providers registry
     providers_path = os.path.join(os.path.dirname(__file__), "providers.yaml")
     providers_registry = load_providers(providers_path)
     regs = providers_registry.get("providers", {})
+
     provider = None
     api_token = None
     if args.provider:
-        # provider must exist in providers.yaml (by key or alias). Fail if not found.
         provider_input = args.provider
         if provider_input in regs:
             entry = regs[provider_input]
-            provider = entry.get("provider") or provider_input
-            env_var = entry.get("env_var")
-            if env_var:
-                api_token = os.getenv(env_var)
         else:
             # try aliases
-            found = False
-            for k, entry in regs.items():
-                aliases = entry.get("aliases") or []
+            entry = None
+            for k, v in regs.items():
+                aliases = v.get("aliases") or []
                 if provider_input in aliases:
-                    provider = entry.get("provider") or k
-                    env_var = entry.get("env_var")
-                    if env_var:
-                        api_token = os.getenv(env_var)
-                    found = True
+                    entry = v
                     break
-            if not found:
+            if entry is None:
                 print(f"Provider '{provider_input}' not found in providers.yaml. Aborting.")
                 return
+        provider = entry.get("provider") or provider_input
+        env_var = entry.get("env_var")
+        if env_var:
+            api_token = os.getenv(env_var)
 
     if args.schema:
         if not os.path.exists(args.schema):
@@ -323,16 +338,20 @@ async def main():
         save_text(prompt_out, prompt)
         print(f"Prompt written to {prompt_out}")
 
-    # If provider requested, call LLM to get schema and emit schema/model as requested
-    if provider:
+    # If user requested discovery (emit_schema or emit_model), ensure we have a provider to call
+    if args.emit_schema or args.emit_model:
+        if not provider:
+            print("No usable provider found in providers.yaml. To run schema discovery you must configure a provider and token in providers.yaml and .env. Aborting.")
+            return
         # currently only OpenAI provider interface implemented
         if not provider.startswith("openai"):
-            print("Automatic call currently only implemented for OpenAI providers. Aborting.")
+            print("Automatic discovery currently only implemented for OpenAI providers. Aborting.")
             return
         model_name = provider.split("/", 1)[-1]
         if not api_token:
-            print("No API token configured for provider in providers.yaml (env var may be missing). Aborting.")
+            print(f"Provider '{provider}' requires an API token set via the env var referenced in providers.yaml. Aborting.")
             return
+
         print(f"Calling OpenAI model {model_name} ...")
         try:
             resp_text = await asyncio.to_thread(call_openai, prompt, model_name, api_token)
@@ -344,8 +363,45 @@ async def main():
         try:
             jschema = json.loads(resp_text)
         except Exception:
-            print("LLM returned non-JSON content. Aborting.")
-            return
+            # 1) Conservative single outer-fence stripper: if the whole response is a single
+            #    fenced block (```json ... ``` or ``` ... ```), strip it and try parsing the inner text.
+            outer_fence = re.compile(r"^\s*```(?:json)?\s*(.*?)\s*```\s*$", re.DOTALL | re.IGNORECASE)
+            m = outer_fence.match(resp_text)
+            if m:
+                candidate = m.group(1).strip()
+                try:
+                    jschema = json.loads(candidate)
+                    print("Parsed JSON after removing a single outer code fence. Proceeding.")
+                except Exception:
+                    jschema = None
+            else:
+                jschema = None
+
+            # 2) If outer-fence removal succeeded, proceed. Otherwise, offer tolerant extraction only if requested.
+            if jschema is not None:
+                pass
+            else:
+                # optionally try to extract JSON from common LLM formats when --tolerant is set
+                if args.tolerant:
+                    repaired = extract_json_candidate(resp_text)
+                    if repaired is None:
+                        save_text(schema_out, resp_text)
+                        print(f"LLM returned non-JSON content and extraction failed. Raw output written to {schema_out}")
+                        print("Hint: try inspecting the file for fenced blocks or adjust the prompt to return pure JSON.")
+                        return
+                    jschema = repaired
+                    print("Extracted JSON from LLM response (tolerant mode). Proceeding with schema conversion.")
+                else:
+                    # Save the raw LLM output for diagnostics
+                    save_text(schema_out, resp_text)
+                    print(f"LLM returned non-JSON content. Raw output written to {schema_out}")
+                    # give a helpful hint if the JSON is inside fenced code blocks
+                    fence_pattern = re.compile(r"```(?:json)?\s*(.*?)\s*```", re.DOTALL | re.IGNORECASE)
+                    if fence_pattern.search(resp_text):
+                        print("Hint: response contains fenced code blocks (```json ... ```). Inspect the saved file and extract the JSON inside the fences.")
+                    else:
+                        print("Hint: response could not be parsed as JSON. Inspect the saved file to see what's returned by the LLM.")
+                    return
 
         # save schema if requested
         if args.emit_schema or args.emit_model:
