@@ -1,0 +1,22 @@
+sources:
+  - id: openai_pricing_v1
+    title: "OpenAI pricing schema guidance"
+    description: "Prompt and settings to extract model pricing and glossary from pricing pages. Require models array with model_name, input_cost, output_cost, units, notes; require glossary listing all fields"
+    guidance_file: guidance_OpenAI_fees_gpt4o.md
+    # optional: path to a prepared prompt file (relative to the sources/ directory)
+    prompt_file: null
+    model: gpt-4o
+    temperature: 0.0
+    top_p: 0.9
+    max_tokens: 4000
+
+  - id: unity_shadergraph_v1
+    title: "Unity Shadergraph Node Documentation"
+    description: "Extract Graph node topics from Unity Shadergraph documentation"
+    # small guidance may be embedded directly in a prompt file; prefer using prompt files for long multi-line guidance
+    guidance_file: prompt_Unity_Shadergraph_gpt41.md
+    prompt_file: prompt_Unity_Shadergraph_gpt41.md
+    model: oss
+    temperature: 0.0
+    top_p: 0.9
+    max_tokens: 4000

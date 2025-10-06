@@ -175,3 +175,19 @@ investigate GPT-5 compatibility and implement a compatibility wrapper,
 add reproducibility tests and examples.
 When you're ready tomorrow, tell me which item to start with (I recommend starting with adding --guidance and CLI LLM parameters together), and I'll implement and verify it.
 
+--
+
+├── schema_discovery.py 
+├── crawl_cat.py
+├── save_utils.py
+├── requirements.txt
+├── .env
+├── sources
+│   ├── providers.yaml
+│   ├── prompt_Unity_Shadergraph_gpt41.md
+│   ├── prompt_Unity_Shadergraph_oss.md
+│   └── guidance_OpenAI_fees_gpt4o.md
+├── schemas
+│   ├── openai_price_discovered_model.py
+│   └── openai_price_prompt.txt
+└── output

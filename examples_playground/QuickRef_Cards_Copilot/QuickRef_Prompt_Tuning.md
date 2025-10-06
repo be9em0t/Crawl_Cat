@@ -1,33 +1,3 @@
-# Project description
-Documentation extraction crawler that uses crawl4ai, LLM capability to analyze schema and select elements, then use DOM selectors for actual content extraction.
-
-# Prerequisits
-Crawl4ai has been set and available in the local pyenv. 
-YAML files store information about different crawl modes, like name, LLM model, prompt, schema and CSS elements.  
-There will always be LLM available during crawl. If not - warn the user and exit. Dont build extra code to run without llm.
-The testing is always done with live data and network access, as mock tests yield false positive results.
-
-The online documentation of Crawl4AI is available at https://docs.crawl4ai.com/.
-All Crawl4AI examples are available locally in docs/crawl4ai/examples.
-Key examples are:
-docs/crawl4ai/examples/quickstart_examples_set_1.py
-docs/crawl4ai/examples/quickstart_examples_set_2.py
-
-## Verify Crawl4ai install:
-```
-# Install the package
-pip install -U crawl4ai
-
-# For pre release versions
-pip install crawl4ai --pre
-
-# Run post-installation setup
-crawl4ai-setup
-
-# Verify your installation
-crawl4ai-doctor
-```
-
 ## Example Crawl Mode implementation guidelines
 - Mode name is "Unity ShaderGraph"
 - Unity ShaderGraph mapping note: the top-level "topics" correspond to the major sections of the ShaderGraph Node Library (e.g., "Artistic", "Channel"), categories are the sub-groups within those sections, and nodes are objects with `name` and `description` fields.
@@ -73,31 +43,6 @@ Utility topic = Utility category:
   - ...
 UV topic = UV category:
   - ...
-
-## Running the commands
-Basic run:
-python3 crawl_cat.py <yaml file>
-Only schema/elements capture:
-python3 crawl_cat.py <yaml file> --schema
-Help:
-python3 crawl_cat.py --help
-Provider settings if not availabe in the env: 
-
-## Configuration and provider/token overrides
-This tool expects a single site-specific YAML file as the positional argument (the `yaml_file`).
-Each YAML contains site settings such as `url`, `provider`, `schema_prompt`, and `content_prompt`.
-Token for the provider, if necessary, is supplied via environment or via cli with --provider <llm provider> --api-token <token>
-Provider and token resolution order:
-- The positional YAML can specify a `provider` (for example `openai/gpt-4.1`), but API tokens are read from the environment (never from the YAML).
-- To provide an API token, set one of the environment variables:
-  - `OPENAI_API_KEY` for OpenAI providers
-  - `ANTHROPIC_API_KEY` for Anthropic providers
-  - `HUGGINGFACE_API_TOKEN` for Hugging Face providers
-- You can also override the provider or token on the CLI:
-  - `--provider <provider-name>` to override the provider
-  - `--api-token <token>` to pass a token directly (useful for one-off runs)
-
-If a hosted provider is selected but no llm is provided or no token is found in the environment or via `--api-token`, the script will refuse to run. 
 
 
 ## LLM tuning guidance (quick)
