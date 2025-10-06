@@ -5,27 +5,15 @@ Guidance: Produce a compact JSON Schema (as a single JSON object) that describes
 
 Include top-level title and description keys summarizing the purpose of the object.
 For each property under properties include:
-- type (string, integer, number, boolean, array, object)
-- description: one concise human-readable sentence describing the field and when it appears
-- examples: a short array with 1 example value (for objects/arrays include a representative instance)
+type (string, integer, number, boolean, array, object)
+description: one concise human-readable sentence describing the field and when it appears
+examples: a short array with 1 example value (for objects/arrays include a representative instance)
 If the field is an object, provide its own properties, required, and description keys and include examples for nested fields.
 If the field is an array, specify items with a type and an examples array showing an example item.
 Set required at the top-level and at nested object levels for fields that are always present. Use optional fields only when truly optional.
 Keep the schema compact (avoid overly permissive additionalProperties: true unless necessary).
 Add a top-level examples array containing one representative complete instance of the object (matching the schema).
 Prefer concrete, narrow types (e.g., 'integer' for counts, 'number' for prices, 'string' for textual labels, 'boolean' for flags).
-
-Important: this page contains pricing and model names. Do NOT omit any pricing or model-related information. Specifically ensure the schema includes a top-level `models` array (or equivalent) describing each model found on the page. For each model entry include at minimum the following fields when present on the page:
-- `model_name` (string)
-- `input_cost` (number or string, e.g. 0.03)
-- `output_cost` (number or string)
-- `units` (string, e.g. "USD per 1K tokens")
-- `notes` (string, optional: additional tier/availability notes)
-
-Also extract other fee entries (realtime, image generation, responses API, assistants, subscription tiers, priority processing), and include them under explicit properties (e.g. `realtime`, `image_generation`, `responses`, `assistants`, `subscription`) with structured subfields for costs and units.
-
-Glossary requirement: produce a `glossary` object that lists every field name you put in the schema, with a one-line description and one example for each. The glossary must not omit fields that appear on the page.
-
 Return only the raw JSON object (no explanation, no markdown/code fences). Do NOT wrap the JSON in markdown or code fences (e.g. ```json). Return the raw JSON object only, with no surrounding text or formatting.
 
 Page HTML (trimmed):
@@ -39,7 +27,7 @@ Page HTML (trimmed):
 <div><div><div>
 <div>Switch to</div>
 <ul>
-<li><a href="https://chatgpt.com/?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">ChatGPT<span>(opens in a new window)</span></a></li>
+<li><a href="https://chatgpt.com/?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">ChatGPT<span>(opens in a new window)</span></a></li>
 <li><a href="https://sora.com/">Sora<span>(opens in a new window)</span></a></li>
 <li><a href="https://platform.openai.com/">API Platform<span>(opens in a new window)</span></a></li>
 </ul>
@@ -50,7 +38,7 @@ Page HTML (trimmed):
 <li><div><a href="/safety/">Safety</a></div></li>
 <li><div><a href="/business/">For Business</a></div></li>
 <li><div><a href="/api/">For Developers</a></div></li>
-<li><div><a href="https://chatgpt.com/overview?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">ChatGPT</a></div></li>
+<li><div><a href="https://chatgpt.com/overview?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">ChatGPT</a></div></li>
 <li><div><a href="/sora/">Sora</a></div></li>
 <li><div><a href="/stories/">Stories</a></div></li>
 <li><div><a href="/about/">Company</a></div></li>
@@ -109,15 +97,15 @@ Page HTML (trimmed):
 </div>
 </li>
 <li>
-<a href="https://chatgpt.com/overview?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">ChatGPT</a><div>
+<a href="https://chatgpt.com/overview?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">ChatGPT</a><div>
 <div><button><div><span>Back to main menu</span></div></button></div>
 <div><ul>
-<li><a href="https://chatgpt.com/overview?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">Explore ChatGPT</a></li>
-<li><a href="https://chatgpt.com/for-business/team?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">Business</a></li>
-<li><a href="https://chatgpt.com/for-business/enterprise?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">Enterprise</a></li>
-<li><a href="https://chatgpt.com/for-business/education?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">Education</a></li>
-<li><a href="https://chatgpt.com/pricing?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">Pricing</a></li>
-<li><a href="https://chatgpt.com/download?openaicom-did=2342b8e5-555b-43b3-beac-c53714e3dadc&amp;openaicom_referred=true">Download</a></li>
+<li><a href="https://chatgpt.com/overview?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">Explore ChatGPT</a></li>
+<li><a href="https://chatgpt.com/for-business/team?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">Business</a></li>
+<li><a href="https://chatgpt.com/for-business/enterprise?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">Enterprise</a></li>
+<li><a href="https://chatgpt.com/for-business/education?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">Education</a></li>
+<li><a href="https://chatgpt.com/pricing?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">Pricing</a></li>
+<li><a href="https://chatgpt.com/download?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">Download</a></li>
 </ul></div>
 </div>
 </li>

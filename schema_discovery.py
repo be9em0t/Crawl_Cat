@@ -71,15 +71,27 @@ def build_schema_prompt(url: str, html_snippet: str, guidance: str = None) -> st
 
 Include top-level title and description keys summarizing the purpose of the object.
 For each property under properties include:
-type (string, integer, number, boolean, array, object)
-description: one concise human-readable sentence describing the field and when it appears
-examples: a short array with 1 example value (for objects/arrays include a representative instance)
+- type (string, integer, number, boolean, array, object)
+- description: one concise human-readable sentence describing the field and when it appears
+- examples: a short array with 1 example value (for objects/arrays include a representative instance)
 If the field is an object, provide its own properties, required, and description keys and include examples for nested fields.
 If the field is an array, specify items with a type and an examples array showing an example item.
 Set required at the top-level and at nested object levels for fields that are always present. Use optional fields only when truly optional.
 Keep the schema compact (avoid overly permissive additionalProperties: true unless necessary).
 Add a top-level examples array containing one representative complete instance of the object (matching the schema).
 Prefer concrete, narrow types (e.g., 'integer' for counts, 'number' for prices, 'string' for textual labels, 'boolean' for flags).
+
+Important: this page contains pricing and model names. Do NOT omit any pricing or model-related information. Specifically ensure the schema includes a top-level `models` array (or equivalent) describing each model found on the page. For each model entry include at minimum the following fields when present on the page:
+- `model_name` (string)
+- `input_cost` (number or string, e.g. 0.03)
+- `output_cost` (number or string)
+- `units` (string, e.g. "USD per 1K tokens")
+- `notes` (string, optional: additional tier/availability notes)
+
+Also extract other fee entries (realtime, image generation, responses API, assistants, subscription tiers, priority processing), and include them under explicit properties (e.g. `realtime`, `image_generation`, `responses`, `assistants`, `subscription`) with structured subfields for costs and units.
+
+Glossary requirement: produce a `glossary` object that lists every field name you put in the schema, with a one-line description and one example for each. The glossary must not omit fields that appear on the page.
+
 Return only the raw JSON object (no explanation, no markdown/code fences)."""
     )
     # Make the instruction extra-explicit to avoid models wrapping JSON in markdown/code fences.
@@ -392,14 +404,15 @@ async def main():
     parser.add_argument("--strict", dest="tolerant", action="store_false", help="Run in strict mode: do not attempt tolerant JSON extraction (opposite of default tolerant behavior)")
     args = parser.parse_args()
 
-    # If the user supplied a prompt file and asked to emit a model, ensure we
-    # perform schema discovery first (emit the schema) so the model is created
-    # from the discovered schema. If an explicit --schema file was provided,
-    # respect that instead.
+    # If the user supplied a prompt file and asked to emit a model without providing
+    # an explicit schema file, we WILL run schema discovery, but we must not silently
+    # drop or alter intermediate artifacts. To ensure reproducibility between the
+    # two-step (--emit-schema then --emit-model) and the one-step (--emit-model),
+    # we always save the raw LLM response and the discovered schema to `schemas/`
+    # when emit-model is requested. This makes outputs comparable and debuggable.
     if args.prompt and args.emit_model and not args.schema:
-        # We still need to run discovery so the model can be generated from the discovered schema,
-        # but do not save the schema to disk unless the user explicitly requests --emit-schema.
-        print("Notice: --prompt + --emit-model detected. Schema discovery will run to build the model. The schema will not be saved unless you pass --emit-schema.")
+        print("Notice: --prompt + --emit-model detected. Schema discovery will run to build the model.")
+        print("For reproducibility we will save the raw LLM response and discovered schema to the schemas/ directory even if --emit-schema is not explicitly set.")
 
     # load providers registry
     providers_path = os.path.join(os.path.dirname(__file__), "providers.yaml")
@@ -492,6 +505,9 @@ async def main():
             resp_text = await asyncio.to_thread(call_openai, prompt, model_name, api_token)
         except Exception as e:
             print("OpenAI call failed:", e)
+            # Save the prompt and any partial response for debugging
+            save_text(prompt_out, prompt)
+            print(f"Saved prompt to {prompt_out} for debugging.")
             return
 
         # try to parse returned JSON (supporting either a raw schema or an object containing {schema, glossary})
@@ -520,6 +536,7 @@ async def main():
                 if args.tolerant:
                     repaired = extract_json_candidate(resp_text)
                     if repaired is None:
+                        # Save raw LLM output explicitly to help compare one-step vs two-step
                         save_text(schema_out, resp_text)
                         print(f"LLM returned non-JSON content and extraction failed. Raw output written to {schema_out}")
                         print("Hint: try inspecting the file for fenced blocks or adjust the prompt to return pure JSON.")
@@ -564,15 +581,21 @@ async def main():
                     jschema = v
                     break
 
-        # save schema only when explicitly requested via --emit-schema. If user asked only
-        # for --emit-model, discovery will still run (above) but we won't persist the schema.
-        if args.emit_schema:
-            if jschema is None:
-                print("No JSON Schema could be extracted from the LLM response. Raw response saved for inspection.")
-                save_text(schema_out, resp_text)
-            else:
-                save_json(schema_out, jschema)
-                print(f"Saved discovered JSON Schema to {schema_out}")
+        # save schema and raw LLM output. Per the reproducibility principle, when
+        # --emit-model is requested we save both the raw LLM response and the discovered
+        # schema even if --emit-schema was not explicitly set. This ensures one-step vs
+        # two-step model generation can be compared.
+        # Save raw response first
+        raw_out = os.path.join(schemas_dir, f"{base}_raw_llm_output.txt")
+        save_text(raw_out, resp_text)
+        print(f"Saved raw LLM response to {raw_out}")
+
+        if jschema is None:
+            print("No JSON Schema could be extracted from the LLM response. Raw response saved for inspection.")
+            # ensure the raw response is available to the user (already saved)
+        else:
+            save_json(schema_out, jschema)
+            print(f"Saved discovered JSON Schema to {schema_out}")
 
         # Optionally write a separate glossary file if the user explicitly requests it.
         # By default we only append the glossary to the emitted model file for convenience.
@@ -588,6 +611,7 @@ async def main():
         if args.emit_model:
             if jschema is None:
                 print("Cannot build model: no parsed JSON Schema available.")
+                print(f"Raw LLM output saved to {raw_out} for debugging.")
                 return
             print("Building runtime Pydantic model from schema...")
             Model = create_pydantic_model_from_json_schema(jschema, "DiscoveredModel")

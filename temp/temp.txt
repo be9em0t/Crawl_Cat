@@ -151,3 +151,27 @@ class DiscoveredModel(BaseModel):
 #   }
 # ]
 # ````
+
+
+---- next steps:
+
+Ok, we have improvement, thanks you!
+
+This is enough for now, tomorrow we'll continue.
+
+So, our next step, tomorrow, will be to improve modularity: --guidance will also become external argument to the schema_discovery.py
+
+1. We'll have to discus the best way to store information about the guidane, and what other parameters (lie temperature) we need there
+
+2. we'll have to see why gpt5 models do not work with the current scripts (old API)
+
+---
+
+I created a tracked plan for tomorrow with four concrete tasks:
+
+add --guidance support and a guidance store,
+expose LLM parameters via CLI,
+investigate GPT-5 compatibility and implement a compatibility wrapper,
+add reproducibility tests and examples.
+When you're ready tomorrow, tell me which item to start with (I recommend starting with adding --guidance and CLI LLM parameters together), and I'll implement and verify it.
+
