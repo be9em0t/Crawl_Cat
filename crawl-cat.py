@@ -27,35 +27,11 @@ from crawl4ai import LLMExtractionStrategy
 OUTPUT_FOLDER = "output"
 OUTPUT_JSON = "openAI_prices.json"
 
-# Attempt to import the emitted Pydantic model module at import time. This makes
-# the module available for schema generation and validation without requiring
-# runtime lazy imports. The environment variable PYMODEL_MODULE can override
-# the module path; default is 'schemas.openai_price_discovered_model'.
+# Defer importing any emitted Pydantic model until after CLI parsing.
+# The user may pass a path via --pymodel or rely on the PYMODEL_MODULE env var.
+# We'll attempt to load a model later and provide clear errors if it is missing.
 DEFAULT_PYMODEL_MODULE = os.getenv("PYMODEL_MODULE", "schemas.openai_price_discovered_model")
 DEFAULT_PYMODEL_CLASS = None
-try:
-	_pymod = importlib.import_module(DEFAULT_PYMODEL_MODULE)
-	# prefer a class named DiscoveredModel
-	if hasattr(_pymod, 'DiscoveredModel'):
-		DEFAULT_PYMODEL_CLASS = getattr(_pymod, 'DiscoveredModel')
-	else:
-		# fall back to first BaseModel subclass
-		for _, obj in inspect.getmembers(_pymod, inspect.isclass):
-			try:
-				if issubclass(obj, BaseModel):
-					DEFAULT_PYMODEL_CLASS = obj
-					break
-			except Exception:
-				continue
-	if DEFAULT_PYMODEL_CLASS is None:
-		raise ImportError(f"No Pydantic BaseModel found in module {DEFAULT_PYMODEL_MODULE}")
-	print(f"Loaded default Pydantic model from {DEFAULT_PYMODEL_MODULE}: {DEFAULT_PYMODEL_CLASS.__name__}")
-except Exception as e:
-	raise RuntimeError(
-		f"Failed to import default Pydantic model module '{DEFAULT_PYMODEL_MODULE}'.\n"
-		"Run schema_discovery.py --emit-model to create the model first, or set PYMODEL_MODULE to the correct module path.\n"
-		f"Underlying error: {e}"
-	) from e
 
 
 async def extract_structured_data_using_llm(
@@ -99,14 +75,20 @@ async def extract_structured_data_using_llm(
 		# TUNABLE: Schema and instruction
 		# - schema: Pydantic schema that tells the LLM what to output
 		# - instruction: the prompt that frames extraction behavior
-		# choose schema from provided Pydantic model if available; default to imported model
-		schema_for_llm = DEFAULT_PYMODEL_CLASS.model_json_schema()
+		# choose schema from provided Pydantic model if available; otherwise try default env module
+		schema_for_llm = None
 		if pymodel_class is not None:
+			# prefer the model provided by the caller (from --pymodel)
 			try:
 				schema_for_llm = pymodel_class.model_json_schema()
 			except Exception:
-				# fallback to default if provided model lacks model_json_schema
-				pass
+				# model doesn't expose model_json_schema(); continue without schema
+				print("Note: provided Pydantic model does not support model_json_schema(); proceeding without structured schema for LLM.")
+		elif DEFAULT_PYMODEL_CLASS is not None:
+			try:
+				schema_for_llm = DEFAULT_PYMODEL_CLASS.model_json_schema()
+			except Exception:
+				print("Note: default Pydantic model does not support model_json_schema(); proceeding without structured schema for LLM.")
 		llm_strategy = LLMExtractionStrategy(
 			# pass a simple object with attributes expected by crawl4ai
 			llm_config=SimpleNamespace(
@@ -223,32 +205,66 @@ if __name__ == "__main__":
 		# 3) otherwise assume user passed a full provider string (like 'ollama/phi4-mini:latest')
 		if not found:
 			provider = provider_input
-	# load optional pymodel if requested; default to the module imported at top-level
-	pymodel_class = DEFAULT_PYMODEL_CLASS
-	if args.pymodel:
-		pymodel_path = args.pymodel
+	# load optional pymodel if requested; try explicit --pymodel first, then PYMODEL_MODULE
+	pymodel_class = None
+	pymodel_path = args.pymodel
+	tried_sources = []
+
+	def _load_module_from_path(path: str):
+		"""Load a python module from a filesystem path or import path."""
+		if path.endswith('.py'):
+			spec = importlib.util.spec_from_file_location('pymodel_module', path)
+			module = importlib.util.module_from_spec(spec)
+			spec.loader.exec_module(module)  # type: ignore
+			return module
+		else:
+			return importlib.import_module(path)
+
+	if pymodel_path:
+		tried_sources.append(pymodel_path)
 		try:
-			if pymodel_path.endswith('.py'):
-				# load from filesystem path
-				spec = importlib.util.spec_from_file_location('pymodel_module', pymodel_path)
-				module = importlib.util.module_from_spec(spec)
-				spec.loader.exec_module(module)  # type: ignore
-			else:
-				module = importlib.import_module(pymodel_path)
-			# prefer a class named DiscoveredModel
-			if hasattr(module, 'DiscoveredModel'):
-				pymodel_class = getattr(module, 'DiscoveredModel')
-			else:
-				# pick the first class subclassing pydantic BaseModel
-				for _, obj in inspect.getmembers(module, inspect.isclass):
-					try:
-						if issubclass(obj, BaseModel):
-							pymodel_class = obj
-							break
-					except Exception:
-						continue
+			module = _load_module_from_path(pymodel_path)
 		except Exception as e:
-			print('Failed to load pymodel', pymodel_path, e)
+			print(f"Failed to load --pymodel '{pymodel_path}': {e}")
+			module = None
+	else:
+		# try environment default later
+		module = None
+
+	if module is None and not pymodel_path:
+		# try the default module from env var
+		tried_sources.append(DEFAULT_PYMODEL_MODULE)
+		try:
+			module = importlib.import_module(DEFAULT_PYMODEL_MODULE)
+			print(f"Loaded default Pydantic model module from {DEFAULT_PYMODEL_MODULE}")
+		except Exception as e:
+			module = None
+
+	if module:
+		# prefer a class named DiscoveredModel
+		if hasattr(module, 'DiscoveredModel'):
+			pymodel_class = getattr(module, 'DiscoveredModel')
+		else:
+			for _, obj in inspect.getmembers(module, inspect.isclass):
+				try:
+					if issubclass(obj, BaseModel):
+						pymodel_class = obj
+						break
+				except Exception:
+					continue
+
+	if pymodel_class is None:
+		# clear error: user wanted schema validation but none provided/found
+		msg = (
+			"No Pydantic model provided or found.\n"
+			"Provide a model via --pymodel <module-or-path> or set PYMODEL_MODULE to a module that contains a Pydantic BaseModel.\n"
+			"You can generate a model using schema_discovery.py --emit-model if available.\n"
+			f"Tried sources: {', '.join(tried_sources)}"
+		)
+		# If the user explicitly asked for no schema, we could continue, but current flow
+		# expects a model for schema-guided extraction. Exit with non-zero code.
+		print(msg)
+		sys.exit(2)
 
 	# wire strategy and css_selector from CLI to the extractor
 	parsed = asyncio.run(

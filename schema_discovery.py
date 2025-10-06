@@ -347,10 +347,12 @@ def emit_model_py(model_name: str, jschema: Dict[str, Any], out_path: str):
         lines.append(f"from typing import {', '.join(sorted(type_imports))}")
     lines.append("")
 
-    # emit classes in deterministic order (parents after nested types so nested classes are defined first)
-    # we'll emit generated classes sorted by name length (shorter names deeper?) — better: ensure dependencies exist
-    # simple approach: emit all classes except the root first, then root
-    for cname in sorted([c for c in generated.keys() if c != root_name]):
+    # Emit nested classes before classes that reference them to avoid NameError on import.
+    # Heuristic: nested/generated helper classes tend to have longer names (e.g. Parent_Child_Item).
+    # Sort non-root classes by descending name length (then alphabetically) so dependencies are defined
+    # before the classes that reference them. Emit the root class last.
+    non_root = [c for c in generated.keys() if c != root_name]
+    for cname in sorted(non_root, key=lambda x: (-len(x), x)):
         lines.extend(generated[cname])
         lines.append("")
 
@@ -366,15 +368,15 @@ async def main():
     from argparse import RawDescriptionHelpFormatter
     examples = (
         "Usage examples:\n\n"
-        "  # write prompt only (fetch page and emit prompt to schemas/<base_name>_prompt.txt)\n"
-        "  python schema_discovery.py --emit-prompt --out <base_name>\n\n"
-        "  # discover schema from a prompt file (requires provider) and save discovered schema\n"
-        "  python schema_discovery.py --prompt my_prompt.txt --emit-schema --out <base_name>\n\n"
-        "  # provide a prompt file and directly emit a model: this will first discover the schema\n"
-        "  # from the prompt (equivalent to --emit-schema) and then emit a Pydantic model\n"
-        "  python schema_discovery.py --prompt my_prompt.txt --emit-model --out <base_name>\n\n"
-        "  # convert an existing JSON Schema file into a runtime Pydantic model\n"
-        "  python schema_discovery.py --schema discovered_schema.json --emit-model --out discovered_schema\n"
+        "# write prompt only\n"
+        "python schema_discovery.py --emit-prompt --out <base_name>\n"
+        "# discover schema from a prompt file and save discovered JSON schema\n"
+        "python schema_discovery.py --prompt my_prompt.txt --emit-schema --out <base_name>\n"
+        "# convert an existing JSON Schema file into a runtime Pydantic model\n"
+        "python schema_discovery.py --schema discovered_schema.json --emit-model --out discovered_schema\n"
+        "# provide a prompt file and directly emit a Pydantic model\n"
+        "python schema_discovery.py --prompt my_prompt.txt --emit-model --out <base_name>\n"
+        " \n"
     )
     parser = argparse.ArgumentParser(epilog=examples, formatter_class=RawDescriptionHelpFormatter)
     parser.add_argument("--url", "-u", default=DEFAULT_URL)
@@ -385,6 +387,7 @@ async def main():
     parser.add_argument("--emit-prompt", "-ep", action="store_true", help="Emit prompt to --out_prompt.txt")
     parser.add_argument("--emit-schema", "-es", action="store_true", help="Emit discovered JSON Schema to --out_discovered_schema.json (requires --provider)")
     parser.add_argument("--emit-model", "-em", action="store_true", help="Create runtime Pydantic model from schema or emitted schema and write Python model file to schemas/<out>_discovered_model.py")
+    parser.add_argument("--emit-glossary", action="store_true", help="If set, also save the discovered field glossary to --out_field_glossary.json in addition to appending it to the emitted model.")
     # tolerant extraction is enabled by default; use --strict to disable it
     parser.add_argument("--strict", dest="tolerant", action="store_false", help="Run in strict mode: do not attempt tolerant JSON extraction (opposite of default tolerant behavior)")
     args = parser.parse_args()
@@ -394,8 +397,9 @@ async def main():
     # from the discovered schema. If an explicit --schema file was provided,
     # respect that instead.
     if args.prompt and args.emit_model and not args.schema:
-        args.emit_schema = True
-        print("Notice: --prompt + --emit-model detected. Auto-enabling --emit-schema so the model is generated from the discovered schema.")
+        # We still need to run discovery so the model can be generated from the discovered schema,
+        # but do not save the schema to disk unless the user explicitly requests --emit-schema.
+        print("Notice: --prompt + --emit-model detected. Schema discovery will run to build the model. The schema will not be saved unless you pass --emit-schema.")
 
     # load providers registry
     providers_path = os.path.join(os.path.dirname(__file__), "providers.yaml")
@@ -560,8 +564,9 @@ async def main():
                     jschema = v
                     break
 
-        # save schema if requested
-        if args.emit_schema or args.emit_model:
+        # save schema only when explicitly requested via --emit-schema. If user asked only
+        # for --emit-model, discovery will still run (above) but we won't persist the schema.
+        if args.emit_schema:
             if jschema is None:
                 print("No JSON Schema could be extracted from the LLM response. Raw response saved for inspection.")
                 save_text(schema_out, resp_text)
@@ -569,8 +574,9 @@ async def main():
                 save_json(schema_out, jschema)
                 print(f"Saved discovered JSON Schema to {schema_out}")
 
-        # save glossary if present
-        if glossary is not None:
+        # Optionally write a separate glossary file if the user explicitly requests it.
+        # By default we only append the glossary to the emitted model file for convenience.
+        if glossary is not None and args.emit_glossary:
             glossary_out = os.path.join(schemas_dir, f"{base}_field_glossary.json")
             try:
                 save_json(glossary_out, glossary)

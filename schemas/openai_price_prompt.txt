@@ -1,7 +1,20 @@
 You are given the HTML content of a web page (URL: https://openai.com/api/pricing/).
-Analyze the content and propose a compact JSON Schema that lists openAI models, the API group they belong to, the type of content (audio, text etc.), their price per input tokens, cached input tokens and output tokens.
+Analyze the content and propose a compact JSON Schema that describes the data a user would want to extract from this page (fields, nested objects, arrays).
 
-Guidance: Produce a JSON Schema (draft-like) describing the requested structured information. Return only the JSON Schema object as JSON (no commentary). Include required fields and types. Prefer simple types (string, number, boolean, array, object). Add a top-level `examples` key with one example instance. Do NOT wrap the JSON in markdown or code fences (e.g. ```json). Return the raw JSON object only, with no surrounding text or formatting.
+Guidance: Produce a compact JSON Schema (as a single JSON object) that describes the structured data present on the page. Requirements:
+
+Include top-level title and description keys summarizing the purpose of the object.
+For each property under properties include:
+type (string, integer, number, boolean, array, object)
+description: one concise human-readable sentence describing the field and when it appears
+examples: a short array with 1 example value (for objects/arrays include a representative instance)
+If the field is an object, provide its own properties, required, and description keys and include examples for nested fields.
+If the field is an array, specify items with a type and an examples array showing an example item.
+Set required at the top-level and at nested object levels for fields that are always present. Use optional fields only when truly optional.
+Keep the schema compact (avoid overly permissive additionalProperties: true unless necessary).
+Add a top-level examples array containing one representative complete instance of the object (matching the schema).
+Prefer concrete, narrow types (e.g., 'integer' for counts, 'number' for prices, 'string' for textual labels, 'boolean' for flags).
+Return only the raw JSON object (no explanation, no markdown/code fences). Do NOT wrap the JSON in markdown or code fences (e.g. ```json). Return the raw JSON object only, with no surrounding text or formatting.
 
 Page HTML (trimmed):
 <html>
@@ -14,21 +27,24 @@ Page HTML (trimmed):
 <div><div><div>
 <div>Switch to</div>
 <ul>
-<li><a href="https://chatgpt.com/?openaicom-did=b655900f-e94a-4c09-9498-3c3aaa337721&amp;openaicom_referred=true">ChatGPT<span>(opens in a new window)</span></a></li>
+<li><a href="https://chatgpt.com/?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">ChatGPT<span>(opens in a new window)</span></a></li>
 <li><a href="https://sora.com/">Sora<span>(opens in a new window)</span></a></li>
 <li><a href="https://platform.openai.com/">API Platform<span>(opens in a new window)</span></a></li>
 </ul>
 </div></div></div>
 <div>
-<nav><div><div>
-<a href="/"><div><span>Home</span></div></a><ul>
-<li><div><a href="/api/">API Platform</a></div></li>
-<li><div><a href="/api/pricing/">API Pricing</a></div></li>
-<li><div><a href="/codex/">Codex</a></div></li>
-<li><div><a href="/open-models/">Open Models</a></div></li>
-<li><div><a href="https://community.openai.com/">Community<span>(opens in a new window)</span></a></div></li>
-</ul>
-</div></div></nav><nav><div><ul>
+<nav><div><div><ul>
+<li><div><a href="/research/index/">Research</a></div></li>
+<li><div><a href="/safety/">Safety</a></div></li>
+<li><div><a href="/business/">For Business</a></div></li>
+<li><div><a href="/api/">For Developers</a></div></li>
+<li><div><a href="https://chatgpt.com/overview?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">ChatGPT</a></div></li>
+<li><div><a href="/sora/">Sora</a></div></li>
+<li><div><a href="/stories/">Stories</a></div></li>
+<li><div><a href="/about/">Company</a></div></li>
+<li><div><a href="/news/">News</a></div></li>
+</ul></div></div></nav><nav><div>
+<!--$--><!--/$--><ul>
 <li>
 <button>Research</button><div>
 <div><button><div><span>Back to main menu</span></div></button></div>
@@ -81,15 +97,15 @@ Page HTML (trimmed):
 </div>
 </li>
 <li>
-<a href="https://chatgpt.com/overview?openaicom-did=b655900f-e94a-4c09-9498-3c3aaa337721&amp;openaicom_referred=true">ChatGPT</a><div>
+<a href="https://chatgpt.com/overview?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">ChatGPT</a><div>
 <div><button><div><span>Back to main menu</span></div></button></div>
 <div><ul>
-<li><a href="https://chatgpt.com/overview?openaicom-did=b655900f-e94a-4c09-9498-3c3aaa337721&amp;openaicom_referred=true">Explore ChatGPT</a></li>
-<li><a href="https://chatgpt.com/for-business/team?openaicom-did=b655900f-e94a-4c09-9498-3c3aaa337721&amp;openaicom_referred=true">Business</a></li>
-<li><a href="https://chatgpt.com/for-business/enterprise?openaicom-did=b655900f-e94a-4c09-9498-3c3aaa337721&amp;openaicom_referred=true">Enterprise</a></li>
-<li><a href="https://chatgpt.com/for-business/education?openaicom-did=b655900f-e94a-4c09-9498-3c3aaa337721&amp;openaicom_referred=true">Education</a></li>
-<li><a href="https://chatgpt.com/pricing?openaicom-did=b655900f-e94a-4c09-9498-3c3aaa337721&amp;openaicom_referred=true">Pricing</a></li>
-<li><a href="https://chatgpt.com/download?openaicom-did=b655900f-e94a-4c09-9498-3c3aaa337721&amp;openaicom_referred=true">Download</a></li>
+<li><a href="https://chatgpt.com/overview?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">Explore ChatGPT</a></li>
+<li><a href="https://chatgpt.com/for-business/team?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">Business</a></li>
+<li><a href="https://chatgpt.com/for-business/enterprise?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">Enterprise</a></li>
+<li><a href="https://chatgpt.com/for-business/education?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">Education</a></li>
+<li><a href="https://chatgpt.com/pricing?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">Pricing</a></li>
+<li><a href="https://chatgpt.com/download?openaicom-did=c5342aed-3c21-40dd-a0e7-eb75f37e4fc6&amp;openaicom_referred=true">Download</a></li>
 </ul></div>
 </div>
 </li>
@@ -118,29 +134,27 @@ Page HTML (trimmed):
 </div>
 </li>
 <li><a href="/news/">News</a></li>
-</ul></div>
+</ul>
+</div>
 <div><button>Log in</button></div></nav>
 </div>
 <div><div>
-<main><span>Pricing | OpenAI</span><div>
-<div><div><div><div><div>
+<main><span>OpenAI</span><div>
+<!--$--><div><div><div><div><div>
 <h1>API Pricing</h1>
 <div><div><a href="/contact-sales/">Contact sales</a></div></div>
 </div></div></div></div></div>
-<div><div>
+<!--/$--><!--$--><!--$--><div><div>
 <p><span>Pricing reflects standard processing rates. To optimize cost and performance for different use cases, we also offer:</span></p>
 <ul>
 <li>
 <a href="https://platform.openai.com/docs/guides/batch"><b><u><span>Batch API⁠</span></u></b>⁠<span>(opens in a new window)</span></a><span>: Save 50% on inputs and outputs with the Batch API and run tasks asynchronously over 24 hours.</span>
 </li>
 <li>
-<a href="/api-priority-processing/"><b><u><span>Priority processing</span></u></b><b><span>⁠</span></b>⁠</a><span>: offers reliable, high-speed performance with the flexibility to pay-as-you-go.</span>
-</li>
-</ul>
-</div></div>
-<section><div><div>
-<div><div><div>
-<h2>Flagship models</h2>
-<div><p>Our frontier models designed to spend more time thinking before producing a response, making 
+<a href="/api-priority-processing/"><b><u><span>Priority processing</span></u></b><b><span>⁠</span></b>⁠</a><span>: offers reliable, high-speed performance w
 
 Return a single JSON object (the JSON Schema). Do not include any explanation.
+
+Additionally, provide a `glossary` object: a list of field entries where each entry contains `name`, `description` (one-line), and `examples` (an array with one example).
+If you cannot provide all descriptions or examples, return empty strings or empty arrays but keep the fields.
+Return a single JSON object that may contain both the schema and the glossary under keys `schema` and `glossary`, or return the schema alone - code will attempt to detect both formats.
