@@ -3,15 +3,10 @@ main.py - gui entry point to the individual scrapers that might use different st
 openAI-cat.py - test scraper that will check the currently available openAI models and their parameters 
 
 ---
-do also this:
-I can make emit_model_py even more aggressive in generating nested classes for any nested object or array of object.
----
 
-python schema_discovery.py --emit-prompt --out openai_price
+python schema_discovery.py --provider gpt4o --url 'https://openai.com/api/pricing/' --out price_discovery
 
-python schema_discovery.py --url https://openai.com/api/pricing/ --provider gpt4o --emit-model --prompt schemas/openai_price_prompt.txt --out openai_price
-
-python openAI-cat.py -p gpt4o
+py crawl-cat.py -p gpt4o --pymodel schemas/openai_price_discovered_model.py
 
 
 ------
@@ -191,3 +186,15 @@ When you're ready tomorrow, tell me which item to start with (I recommend starti
 │   ├── openai_price_discovered_model.py
 │   └── openai_price_prompt.txt
 └── output
+
+--
+
+I love the you now set edge cases to fail clearly, keep it that way.
+
+So prompt in this case is the place where we bring together guidance wtih some extra instructions and html, declared as placeholders in it? If this is going to work with the yaml its fine.
+
+1. lets refactor the build_schema_prompt
+2. we only pass --source <id> that will get necessary data from sources.yaml, lets not add more attibutts, it  is already pretty complicated. Dont touch other attributes for now, once we get the prompts running we'll clean them up.
+3. I've added both guidance and prompt to the #file:sources.yaml , under id:openai_fees_v1
+
+So thats the task - dont go into any extra work, lets only make the guidance and prompt work at this stage
