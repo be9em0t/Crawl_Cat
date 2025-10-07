@@ -9,10 +9,12 @@ sys.path.append(
 )
 
 import asyncio
+import json
 from typing import Dict
 from pydantic import BaseModel, Field
 from crawl4ai import AsyncWebCrawler, CacheMode, BrowserConfig, CrawlerRunConfig
 from crawl4ai import LLMExtractionStrategy
+import save_utils
 
 print("Crawl4AI: Advanced Web Crawling and Data Extraction")
 print("GitHub Repository: https://github.com/unclecode/crawl4ai")
@@ -22,6 +24,7 @@ print("Website: https://crawl4ai.com")
 
 # LLM Extraction Example
 class OpenAIModelFee(BaseModel):
+    # replace with pydantic_model from guidance_fees_gpt.yaml
     model_name: str = Field(..., description="Name of the OpenAI model.")
     input_fee: str = Field(..., description="Fee for input token for the OpenAI model.")
     output_fee: str = Field(..., description="Fee for output token for the OpenAI model.")
@@ -50,6 +53,7 @@ async def extract_structured_data_using_llm(
             llm_config=LLMConfig(provider=provider,api_token=api_token),
             schema=OpenAIModelFee.model_json_schema(),
             extraction_type="schema",
+            # replace with instruction from guidance_fees_gpt.yaml
             instruction="""From the crawled content, extract all mentioned model names along with their fees for input and output tokens. 
             Do not miss any models in the entire content.""",
             extra_args=extra_args,
@@ -58,18 +62,23 @@ async def extract_structured_data_using_llm(
 
     async with AsyncWebCrawler(config=browser_config) as crawler:
         result = await crawler.arun(
+            # replace with URL from guidance_fees_gpt.yaml
             url="https://openai.com/api/pricing/", config=crawler_config
         )
         print(result.extracted_content)
+        save_utils.save_json("output/extracted_fees.json", json.loads(result.extracted_content))
 
 
 # Main execution
 async def main():
     await extract_structured_data_using_llm(
+        # replace with llm from guidance_fees_gpt.yaml
+        "openrouter/openai/gpt-oss-20b:free", os.getenv("OPENROUTER_API_KEY")
+        # "openrouter/openai/gpt-4o-mini", os.getenv("OPENROUTER_API_KEY")
         # "openai/gpt-4o", os.getenv("OPENAI_API_KEY")
         # "ollama/gpt-oss:20b", None
+        # "ollama/phi4-mini:latest", None
         # "ollama/phi3:3.8b", None
-        "ollama/phi4-mini:latest", None
     )
 
 

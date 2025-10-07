@@ -1,0 +1,24 @@
+sources:
+  - id: openrouter_fees_v1
+    url: "https://openai.com/api/pricing/"
+    title: "OpenAI pricing schema guidance"
+    description: "Prompt and settings to extract model pricing and glossary from pricing pages. Require models array with model_name, input_cost, output_cost, units, notes; require glossary listing all fields"
+    instruction: """
+      From the crawled content, extract all mentioned model names along with their fees for input and output tokens. 
+      Do not miss any models in the entire content
+      """
+    prompt_file: none
+    pydantic_model: """    
+      model_name: str = Field(..., description="Name of the OpenAI model.")
+      input_fee: str = Field(..., description="Fee for input token for the OpenAI model.")
+      output_fee: str = Field(..., description="Fee for output token for the OpenAI model.")
+      """
+    llm: openrouter_gpt4o-mini
+    temperature: 0.0
+    top_p: 0.9
+    max_tokens: 4000
+    out_file: openai_fees
+
+
+
+
