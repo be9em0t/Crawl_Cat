@@ -14,24 +14,22 @@ Page HTML (trimmed):
 <div><div><div>
 <div>Switch to</div>
 <ul>
-<li><a href="https://chatgpt.com/?openaicom-did=fbd0eedb-53ab-44c9-a028-f199387e6169&amp;openaicom_referred=true">ChatGPT<span>(opens in a new window)</span></a></li>
+<li><a href="https://chatgpt.com/?openaicom-did=d0501e70-c58b-47d5-be71-1ac9d6a5d5a4&amp;openaicom_referred=true">ChatGPT<span>(opens in a new window)</span></a></li>
 <li><a href="https://sora.com/">Sora<span>(opens in a new window)</span></a></li>
 <li><a href="https://platform.openai.com/">API Platform<span>(opens in a new window)</span></a></li>
 </ul>
 </div></div></div>
 <div>
-<nav><div><div><ul>
-<li><div><a href="/research/index/">Research</a></div></li>
-<li><div><a href="/safety/">Safety</a></div></li>
-<li><div><a href="/business/">For Business</a></div></li>
-<li><div><a href="/api/">For Developers</a></div></li>
-<li><div><a href="https://chatgpt.com/overview?openaicom-did=fbd0eedb-53ab-44c9-a028-f199387e6169&amp;openaicom_referred=true">ChatGPT</a></div></li>
-<li><div><a href="/sora/">Sora</a></div></li>
-<li><div><a href="/stories/">Stories</a></div></li>
-<li><div><a href="/about/">Company</a></div></li>
-<li><div><a href="/news/">News</a></div></li>
-</ul></div></div></nav><nav><div>
-<!--$--><!--/$--><ul>
+<nav><div><div>
+<a href="/"><div><span>Home</span></div></a><ul>
+<li><div><a href="/api/">API Platform</a></div></li>
+<li><div><a href="/api/pricing/">API Pricing</a></div></li>
+<li><div><a href="/agent-platform/">Agents</a></div></li>
+<li><div><a href="/codex/">Codex</a></div></li>
+<li><div><a href="/open-models/">Open Models</a></div></li>
+<li><div><a href="https://community.openai.com/">Community<span>(opens in a new window)</span></a></div></li>
+</ul>
+</div></div></nav><nav><div><ul>
 <li>
 <button>Research</button><div>
 <div><button><div><span>Back to main menu</span></div></button></div>
@@ -85,15 +83,15 @@ Page HTML (trimmed):
 </div>
 </li>
 <li>
-<a href="https://chatgpt.com/overview?openaicom-did=fbd0eedb-53ab-44c9-a028-f199387e6169&amp;openaicom_referred=true">ChatGPT</a><div>
+<a href="https://chatgpt.com/overview?openaicom-did=d0501e70-c58b-47d5-be71-1ac9d6a5d5a4&amp;openaicom_referred=true">ChatGPT</a><div>
 <div><button><div><span>Back to main menu</span></div></button></div>
 <div><ul>
-<li><a href="https://chatgpt.com/overview?openaicom-did=fbd0eedb-53ab-44c9-a028-f199387e6169&amp;openaicom_referred=true">Explore ChatGPT</a></li>
-<li><a href="https://chatgpt.com/for-business/team?openaicom-did=fbd0eedb-53ab-44c9-a028-f199387e6169&amp;openaicom_referred=true">Business</a></li>
-<li><a href="https://chatgpt.com/for-business/enterprise?openaicom-did=fbd0eedb-53ab-44c9-a028-f199387e6169&amp;openaicom_referred=true">Enterprise</a></li>
-<li><a href="https://chatgpt.com/for-business/education?openaicom-did=fbd0eedb-53ab-44c9-a028-f199387e6169&amp;openaicom_referred=true">Education</a></li>
-<li><a href="https://chatgpt.com/pricing?openaicom-did=fbd0eedb-53ab-44c9-a028-f199387e6169&amp;openaicom_referred=true">Pricing</a></li>
-<li><a href="https://chatgpt.com/download?openaicom-did=fbd0eedb-53ab-44c9-a028-f199387e6169&amp;openaicom_referred=true">Download</a></li>
+<li><a href="https://chatgpt.com/overview?openaicom-did=d0501e70-c58b-47d5-be71-1ac9d6a5d5a4&amp;openaicom_referred=true">Explore ChatGPT</a></li>
+<li><a href="https://chatgpt.com/for-business/team?openaicom-did=d0501e70-c58b-47d5-be71-1ac9d6a5d5a4&amp;openaicom_referred=true">Business</a></li>
+<li><a href="https://chatgpt.com/for-business/enterprise?openaicom-did=d0501e70-c58b-47d5-be71-1ac9d6a5d5a4&amp;openaicom_referred=true">Enterprise</a></li>
+<li><a href="https://chatgpt.com/for-business/education?openaicom-did=d0501e70-c58b-47d5-be71-1ac9d6a5d5a4&amp;openaicom_referred=true">Education</a></li>
+<li><a href="https://chatgpt.com/pricing?openaicom-did=d0501e70-c58b-47d5-be71-1ac9d6a5d5a4&amp;openaicom_referred=true">Pricing</a></li>
+<li><a href="https://chatgpt.com/download?openaicom-did=d0501e70-c58b-47d5-be71-1ac9d6a5d5a4&amp;openaicom_referred=true">Download</a></li>
 </ul></div>
 </div>
 </li>
@@ -122,30 +120,28 @@ Page HTML (trimmed):
 </div>
 </li>
 <li><a href="/news/">News</a></li>
-</ul>
-</div>
+</ul></div>
 <div><button>Log in</button></div></nav>
 </div>
 <div><div>
-<main><span>OpenAI</span><div>
-<!--$--><div><div><div><div><div>
+<main><span>Pricing | OpenAI</span><div>
+<div><div><div><div><div>
 <h1>API Pricing</h1>
 <div><div><a href="/contact-sales/">Contact sales</a></div></div>
 </div></div></div></div></div>
-<!--/$--><!--$--><!--$--><section><div><div>
-<!--$--><div><div><div>
-<h2>Flagship models</h2>
-<div><p>Our frontier models designed to spend more time thinking before producing a response, making them ideal for complex, multi-step problems.</p></div>
-</div></div></div>
-<!--/$--><!--$--><div><div><div>
-<div>
-<div>
-<h2>GPT-5</h2>
-<p>The best model for coding and agentic tasks across industries</p>
-</div>
 <div><div>
-<h3>Price</h3>
-<div><div><span>Input:<br>$1.250 / 1M tokens</span></div></div>
-<div><div><span>Cached input:<br>$0.125 / 1M tokens<
+<p><span>Pricing reflects standard processing rates. To optimize cost and performance for different use cases, we also offer:</span></p>
+<ul>
+<li>
+<a href="https://platform.openai.com/docs/guides/batch"><b><u><span>Batch API⁠</span></u></b>⁠<span>(opens in a new window)</span></a><span>: Save 50% on inputs and outputs with the Batch API and run tasks asynchronously over 24 hours.</span>
+</li>
+<li>
+<a href="/api-priority-processing/"><b><u><span>Priority processing</span></u></b><b><span>⁠</span></b>⁠</a><span>: offers reliable, high-speed performance with the flexibility to pay-as-you-go.</span>
+</li>
+</ul>
+</div></div>
+<section><div><div>
+<div><div><div>
+<h2>Flagship models</
 
 Return a single JSON object (the JSON Schema). Do not include any explanation.

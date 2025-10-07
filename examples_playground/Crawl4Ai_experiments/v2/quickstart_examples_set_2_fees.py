@@ -2,7 +2,7 @@ import os, sys
 from dotenv import load_dotenv
 load_dotenv()  # Loads from .env by default
 
-from crawl4ai.types import LLMConfig
+from crawl4ai import LLMConfig
 
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -188,9 +188,7 @@ async def capture_and_save_screenshot(url: str, output_path: str):
 class OpenAIModelFee(BaseModel):
     model_name: str = Field(..., description="Name of the OpenAI model.")
     input_fee: str = Field(..., description="Fee for input token for the OpenAI model.")
-    output_fee: str = Field(
-        ..., description="Fee for output token for the OpenAI model."
-    )
+    output_fee: str = Field(..., description="Fee for output token for the OpenAI model.")
 
 
 async def extract_structured_data_using_llm(
@@ -198,7 +196,7 @@ async def extract_structured_data_using_llm(
 ):
     print(f"\n--- Extracting Structured Data with {provider} ---")
 
-    if api_token is None and provider != "ollama":
+    if api_token is None and not provider.startswith("ollama"):
         print(f"API token is required for {provider}. Skipping this example.")
         return
 
@@ -545,7 +543,10 @@ async def main():
     # # Advanced examples
     # await extract_structured_data_using_css_extractor()
     await extract_structured_data_using_llm(
-        "openai/gpt-4o", os.getenv("OPENAI_API_KEY")
+        # "openai/gpt-4o", os.getenv("OPENAI_API_KEY")
+        # "ollama/gpt-oss:20b", None
+        # "ollama/phi3:3.8b", None
+        "ollama/phi4-mini:latest", None
     )
     # await crawl_dynamic_content_pages_method_1()
     # await crawl_dynamic_content_pages_method_2()
