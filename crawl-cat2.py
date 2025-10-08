@@ -45,18 +45,28 @@ def get_provider_info(llm_alias, providers_file='providers.yaml'):
 
 
 def create_dynamic_model(model_str):
-    indented_model_str = '\n'.join('    ' + line for line in model_str.split('\n') if line.strip())
-    model_code = f"""
+    if model_str.strip().startswith('from'):
+        # Model string defines classes, exec it and return the last defined class
+        exec(model_str, globals())
+        lines = model_str.strip().split('\n')
+        for line in reversed(lines):
+            if line.strip().startswith('class '):
+                class_name = line.split()[1].split('(')[0]
+                return globals()[class_name]
+    else:
+        # Original logic for simple field definitions
+        indented_model_str = '\n'.join('    ' + line for line in model_str.split('\n') if line.strip())
+        model_code = f"""
 class DynamicModel(BaseModel):
 {indented_model_str}
 """
-    exec(model_code, globals())
-    return DynamicModel
+        exec(model_code, globals())
+        return DynamicModel
 
 
 async def extract_structured_data_using_llm(
     provider: str, api_token: str = None, url: str = None, instruction: str = None, schema_model = None, extra_args: Dict[str, any] = None,
-    headless: bool = True, cache_mode: str = "BYPASS", word_count_threshold: int = 1, page_timeout: int = 80000, output_file: str = "extracted_fees.json"
+    headless: bool = True, cache_mode: str = "BYPASS", word_count_threshold: int = 1, page_timeout: int = 80000, output_file: str = "extracted_fees.json", css_selector: str = None
 ):
     print(f"\n--- Extracting Structured Data with {provider} ---")
 
@@ -75,6 +85,8 @@ async def extract_structured_data_using_llm(
         cache_mode=cache_mode_enum,
         word_count_threshold=word_count_threshold,
         page_timeout=page_timeout,
+        css_selector=css_selector,
+        verbose=True,
         extraction_strategy=LLMExtractionStrategy(
             llm_config=LLMConfig(provider=provider,api_token=api_token),
             schema=schema_model.model_json_schema(),
@@ -86,10 +98,15 @@ async def extract_structured_data_using_llm(
 
     async with AsyncWebCrawler(config=browser_config) as crawler:
         result = await crawler.arun(
-            url=url, config=crawler_config
+            url=url, config=crawler_config, crawler_depth=5, url_match="https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/.*"
         )
         print(result.extracted_content)
-        save_utils.save_json(f"output/{output_file}", json.loads(result.extracted_content))
+        extracted_list = json.loads(result.extracted_content)
+        merged = {"graph_nodes": [], "block_nodes": []}
+        for item in extracted_list:
+            merged["graph_nodes"].extend(item.get("graph_nodes", []))
+            merged["block_nodes"].extend(item.get("block_nodes", []))
+        save_utils.save_json(f"output/{output_file}", merged)
 
 
 # Main execution
@@ -119,6 +136,7 @@ async def main(config_file, config_id=None):
     page_timeout = source.get('page_timeout', 80000)
     out_file = source.get('out_file', 'extracted_fees')
     output_file = f"{out_file}.json"
+    css_selector = source.get('css_selector', None)
     
     provider, env_var = get_provider_info(llm_alias)
     api_token = os.getenv(env_var) if env_var else None
@@ -142,7 +160,8 @@ async def main(config_file, config_id=None):
         cache_mode=cache_mode,
         word_count_threshold=word_count_threshold,
         page_timeout=page_timeout,
-        output_file=output_file
+        output_file=output_file,
+        css_selector=css_selector
     )
 
 

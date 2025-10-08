@@ -1,37 +1,41 @@
 sources:
   - id: "shadergraph_nodes_or-gpt4o-mini"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
-    title: "Unity Shadergraph node descriptions"
-    description: "Require glossary listing all fields"
+    title: "Unity Shadergraph node library structure"
+    description: "Extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes and block_nodes arrays with nested categories and nodes."
     instruction: |
-      From the crawled content, extract all mentioned model names along with their fees for input and output tokens.
-      Do not miss any models in the entire content
+      From the crawled content of this page, extract any Unity ShaderGraph nodes, categories, or subcategories present.
+      - If this page is the main Node Library page, extract the top-level categories for graph_nodes and block_nodes (without nodes).
+      - If this page is a category page (e.g., Artistic Nodes, Channel Nodes), extract the category with its subcategories (if any) and direct nodes (if any), including names and descriptions.
+      - If this page is an individual node page (h1 contains 'Node'), extract the node with its name (from h1) and description (first <p> after h2#description).
+      Output in the NodeLibrary format, populating graph_nodes and block_nodes with what is found on this page. Do not invent data not present on the page.
     prompt_file: "none"
     pydantic_model: |
-      root: Shadergraph Node Library
-      ├── Graph nodes (9 categories in total)
-      │   │   ├── Sub-category: Adjustment
-      │   │   │   ├── Node: Channel Mixer Node; Description: Controls the amount each of the channels of...
-      │   │   │   ├── Node: Contrast Node; Description: Adjusts the contrast of...
-      │   │   │   └── (... other nodes with descriptions)
-      │   │   ├── Sub-category: Blend
-      │   │   │   └── Blend Node; Description: Blends the value of...
-      │   │   ├── Sub-category: Filter
-      │   │   │   └── (... other nodes with descriptions)
-      │   │   └── (... other sub-categories, containing nodes with descriptions)
-      │   ├── Topic: Channel
-      │   │   ├── Node: Append Node; Description: Creates a new vector Out by... 
-      │   │   ├── Node: Combine Node; Description: Creates new vectors from... 
-      │   │   └── (... other nodes with descriptions)
-      │   ├── Topic: Custom Render Texture nodes
-      │   │   └── (... other sub-categories OR nodes)
-      │   └── (...9 topics in total)
-      └── Block nodes
+      from pydantic import BaseModel, Field
+      from typing import List, Optional
+
+      class ShaderNode(BaseModel):
+          name: str = Field(..., description="Name of the shader node.")
+          description: str = Field(..., description="Description of the shader node.")
+
+      class Subcategory(BaseModel):
+          name: str = Field(..., description="Name of the subcategory.")
+          nodes: List[ShaderNode] = Field(..., description="List of nodes in this subcategory.")
+
+      class Category(BaseModel):
+          name: str = Field(..., description="Name of the category.")
+          subcategories: Optional[List[Subcategory]] = Field(None, description="List of subcategories, if any.")
+          nodes: Optional[List[ShaderNode]] = Field(None, description="List of nodes directly in this category, if no subcategories.")
+
+      class NodeLibrary(BaseModel):
+          graph_nodes: List[Category] = Field(..., description="List of graph node categories.")
+          block_nodes: List[Category] = Field(..., description="List of block node categories.")
     llm: "openrouter_gpt4o-mini"
     temperature: 0.0
     top_p: 0.9
-    max_tokens: 4000
+    max_tokens: 8000
     out_file: "shadergraph_gpt4o-mini"
+    css_selector: null
     headless: true
     cache_mode: "BYPASS"
     word_count_threshold: 1
