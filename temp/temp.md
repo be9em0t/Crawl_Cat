@@ -4,7 +4,43 @@ python schema_discovery.py --provider gpt4o --url 'https://openai.com/api/pricin
 py crawl-cat.py -p gpt4o --pymodel schemas/openai_price_discovered_model.py
 
 ---
-old guidance + prompt:
+# Pydantic schema generation prompt:
+
+pydantic_model: |
+	root: Shadergraph Node Library
+	├── Graph nodes (9 categories in total)
+	│   │   ├── Sub-category: Adjustment
+	│   │   │   ├── Node: Channel Mixer Node; Description: Controls the amount each of the channels of...
+	│   │   │   ├── Node: Contrast Node; Description: Adjusts the contrast of...
+	│   │   │   └── (... other nodes with descriptions)
+	│   │   ├── Sub-category: Blend
+	│   │   │   └── Blend Node; Description: Blends the value of...
+	│   │   ├── Sub-category: Filter
+	│   │   │   └── (... other nodes with descriptions)
+	│   │   └── (... other sub-categories, containing nodes with descriptions)
+	│   ├── Topic: Channel
+	│   │   ├── Node: Append Node; Description: Creates a new vector Out by... 
+	│   │   ├── Node: Combine Node; Description: Creates new vectors from... 
+	│   │   └── (... other nodes with descriptions)
+	│   ├── Topic: Custom Render Texture nodes
+	│   │   └── (... other sub-categories OR nodes)
+	│   └── (...9 topics in total)
+	└── Block nodes
+
+in our documentation crawler we need to set up documentation extraction for Unity ShaderGrpah Nodes:
+https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html
+
+To that end, we need to provide in #file:config_unity_shadergraph.yaml a correct pydantic model for Crawl4ai to consume .
+
+In the yaml file, In the pydantic_model key I have stored a tree graph of the structure. Please work out a correct Pydantic model that reflects these requrements: 
+1. follows the provided structure in pydantic_model key. Replace the structure with the correct pydantic model
+2. reflects the Unity ShaderGrpah Nodes pages at https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html 
+3. is similar to the models in #file:config_openai_fees.yaml 
+4. works with multi-page source: the provided URL contains links to sub-pages, that contain either another sub-categories or shadergraph nodes. 
+5. each branch should end in one or more nodes!
+
+---
+# old guidance + prompt:
 
 def build_schema_prompt(url: str, html_snippet: str) -> str:
     guidance = (

@@ -8,9 +8,25 @@ sources:
       Do not miss any models in the entire content
     prompt_file: "none"
     pydantic_model: |
-      model_name: str = Field(..., description="Name of the OpenAI model.")
-      input_fee: str = Field(..., description="Fee for input token for the OpenAI model.")
-      output_fee: str = Field(..., description="Fee for output token for the OpenAI model.")
+      root: Shadergraph Node Library
+      ├── Graph nodes (9 categories in total)
+      │   │   ├── Sub-category: Adjustment
+      │   │   │   ├── Node: Channel Mixer Node; Description: Controls the amount each of the channels of...
+      │   │   │   ├── Node: Contrast Node; Description: Adjusts the contrast of...
+      │   │   │   └── (... other nodes with descriptions)
+      │   │   ├── Sub-category: Blend
+      │   │   │   └── Blend Node; Description: Blends the value of...
+      │   │   ├── Sub-category: Filter
+      │   │   │   └── (... other nodes with descriptions)
+      │   │   └── (... other sub-categories, containing nodes with descriptions)
+      │   ├── Topic: Channel
+      │   │   ├── Node: Append Node; Description: Creates a new vector Out by... 
+      │   │   ├── Node: Combine Node; Description: Creates new vectors from... 
+      │   │   └── (... other nodes with descriptions)
+      │   ├── Topic: Custom Render Texture nodes
+      │   │   └── (... other sub-categories OR nodes)
+      │   └── (...9 topics in total)
+      └── Block nodes
     llm: "openrouter_gpt4o-mini"
     temperature: 0.0
     top_p: 0.9
