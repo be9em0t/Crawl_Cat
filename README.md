@@ -45,27 +45,23 @@ python crawl_cat.py --help
 ```
 
 # What the script does
-- Crawls the OpenAI pricing page (`https://openai.com/api/pricing/`)
-- Uses crawl4ai's LLM extraction strategy to extract structured model fee information
+- Crawls a page(s)
+- With user-supplied LLM assisted pythonic model
+- Uses crawl4ai's LLM extraction strategy to extract structured information
 - Prints the extracted JSON to stdout
+- Saves to JSON file
 
 
 # Internal structure
 ```text
 Root
-├── main.py
-├── schema_discovery.py 
-├── crawl_cat.py
-├── save_utils.py
-├── requirements.txt
 ├── .env
-├── sources
-│   ├── providers.yaml
-│   ├── prompt_Unity_Shadergraph_gpt41.md
-│   ├── prompt_Unity_Shadergraph_oss.md
-│   └── guidance_OpenAI_fees_gpt4o.md
-├── schemas
-│   ├── openai_price_discovered_model.py
-│   └── openai_price_prompt.txt
+├── requirements.txt
+├── <source_convig_1>.yaml 
+├── <source_convig_2>.yaml 
+├── providers.yaml
+├── crawl_cat2.py
+├── save_utils.py
+├── main.py
 └── output
 ```

@@ -1,5 +1,5 @@
 sources:
-  - id: "openrouter_fees_v1-4o-mini"
+  - id: "openai_fees_or-gpt4o-mini"
     url: "https://openai.com/api/pricing/"
     title: "OpenAI pricing schema guidance"
     description: "Prompt and settings to extract model pricing and glossary from pricing pages. Require models array with model_name, input_cost, output_cost, units, notes; require glossary listing all fields"
@@ -21,7 +21,7 @@ sources:
     word_count_threshold: 1
     page_timeout: 80000
 
-  - id: "openrouter_fees_v1-oss"
+  - id: "openai_fees_or-oss"
     url: "https://openai.com/api/pricing/"
     title: "OpenAI pricing schema guidance"
     description: "Prompt and settings to extract model pricing and glossary from pricing pages. Require models array with model_name, input_cost, output_cost, units, notes; require glossary listing all fields"

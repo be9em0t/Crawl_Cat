@@ -151,8 +151,8 @@ if __name__ == "__main__":
         description="Crawl and extract structured data using LLM",
         epilog="""
 Usage examples:
-  python crawl-cat2.py -cfg guidance_fees_gpt.yaml
-  python crawl-cat2.py -cfg guidance_fees_gpt.yaml -id openrouter_fees_v1
+  python crawl-cat2.py -cfg config_openai_fees.yaml
+  python crawl-cat2.py -cfg config_openai_fees.yaml -id openai_fees_or-gpt4o-mini
 
 Required files:
 - guidance_fees_gpt.yaml: Configuration file with sources, URLs, models, etc.

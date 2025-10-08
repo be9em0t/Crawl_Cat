@@ -1,0 +1,27 @@
+sources:
+  - id: "shadergraph_nodes_or-gpt4o-mini"
+    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+    title: "Unity Shadergraph node descriptions"
+    description: "Require glossary listing all fields"
+    instruction: |
+      From the crawled content, extract all mentioned model names along with their fees for input and output tokens.
+      Do not miss any models in the entire content
+    prompt_file: "none"
+    pydantic_model: |
+      model_name: str = Field(..., description="Name of the OpenAI model.")
+      input_fee: str = Field(..., description="Fee for input token for the OpenAI model.")
+      output_fee: str = Field(..., description="Fee for output token for the OpenAI model.")
+    llm: "openrouter_gpt4o-mini"
+    temperature: 0.0
+    top_p: 0.9
+    max_tokens: 4000
+    out_file: "shadergraph_gpt4o-mini"
+    headless: true
+    cache_mode: "BYPASS"
+    word_count_threshold: 1
+    page_timeout: 80000
+
+
+
+
+
