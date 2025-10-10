@@ -4,11 +4,12 @@ sources:
     title: "Unity Shadergraph node library structure"
     description: "Extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes and block_nodes arrays with nested categories and nodes."
     instruction: |
-      From the crawled content of this page, extract any Unity ShaderGraph nodes, categories, or subcategories present.
-      - If this page is the main Node Library page, extract the top-level categories for graph_nodes and block_nodes (without nodes).
-      - If this page is a category page (e.g., Artistic Nodes, Channel Nodes), extract the category with its subcategories (if any) and direct nodes (if any), including names and descriptions.
-      - If this page is an individual node page (h1 contains 'Node'), extract the node with its name (from h1) and description (first <p> after h2#description).
-      Output in the NodeLibrary format, populating graph_nodes and block_nodes with what is found on this page. Do not invent data not present on the page.
+      From the crawled content of this page, extract Unity ShaderGraph nodes, categories, or subcategories present.
+      Output a single NodeLibrary object.
+      - If this page is the main Node Library page, populate graph_nodes with category objects (name only, no subcategories or nodes), and block_nodes similarly.
+      - If this page is a category page (e.g., Artistic Nodes), populate graph_nodes with a single category object containing its name, and either subcategories (if the page has sections like Adjustment, Blend) with their nodes, or direct nodes if no subcategories.
+      - Do not output multiple objects or empty categories. Ensure subcategories are nested under their parent category.
+      - Only include data actually present on the page.
     prompt_file: "none"
     pydantic_model: |
       from pydantic import BaseModel, Field
