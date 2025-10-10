@@ -35,6 +35,7 @@ sources:
     top_p: 0.9
     max_tokens: 8000
     out_file: "shadergraph_gpt4o-mini"
+    extraction_type: "schema"
     css_selector: null
     headless: true
     cache_mode: "BYPASS"

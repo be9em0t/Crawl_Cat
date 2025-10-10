@@ -12,7 +12,7 @@ import asyncio
 import json
 import yaml
 import argparse
-from typing import Dict
+from typing import Dict, List
 from pydantic import BaseModel, Field
 from crawl4ai import AsyncWebCrawler, CacheMode, BrowserConfig, CrawlerRunConfig
 from crawl4ai import LLMExtractionStrategy
@@ -65,8 +65,8 @@ class DynamicModel(BaseModel):
 
 
 async def extract_structured_data_using_llm(
-    provider: str, api_token: str = None, url: str = None, instruction: str = None, schema_model = None, extra_args: Dict[str, any] = None,
-    headless: bool = True, cache_mode: str = "BYPASS", word_count_threshold: int = 1, page_timeout: int = 80000, output_file: str = "extracted_fees.json", css_selector: str = None
+    provider: str, api_token: str = None, urls: List[str] = None, instruction: str = None, schema_model = None, extra_args: Dict[str, any] = None,
+    headless: bool = True, cache_mode: str = "BYPASS", word_count_threshold: int = 1, page_timeout: int = 80000, output_file: str = "extracted_fees.json", css_selector: str = None, extraction_type: str = "schema"
 ):
     print(f"\n--- Extracting Structured Data with {provider} ---")
 
@@ -81,31 +81,47 @@ async def extract_structured_data_using_llm(
 
     cache_mode_enum = getattr(CacheMode, cache_mode.upper(), CacheMode.BYPASS)
 
-    crawler_config = CrawlerRunConfig(
-        cache_mode=cache_mode_enum,
-        word_count_threshold=word_count_threshold,
-        page_timeout=page_timeout,
-        css_selector=css_selector,
-        verbose=True,
-        extraction_strategy=LLMExtractionStrategy(
-            llm_config=LLMConfig(provider=provider,api_token=api_token),
-            schema=schema_model.model_json_schema(),
-            extraction_type="schema",
-            instruction=instruction,
-            extra_args=extra_args,
-        ),
-    )
+    all_extracted = []
 
-    async with AsyncWebCrawler(config=browser_config) as crawler:
-        result = await crawler.arun(
-            url=url, config=crawler_config, crawler_depth=5, url_match="https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/.*"
+    for url in urls:
+        print(f"Processing {url}")
+        crawler_config = CrawlerRunConfig(
+            cache_mode=cache_mode_enum,
+            word_count_threshold=word_count_threshold,
+            page_timeout=page_timeout,
+            css_selector=css_selector,
+            verbose=True,
+            extraction_strategy=LLMExtractionStrategy(
+                llm_config=LLMConfig(provider=provider,api_token=api_token),
+                schema=schema_model.model_json_schema() if extraction_type == "schema" else None,
+                extraction_type=extraction_type,
+                instruction=instruction,
+                extra_args=extra_args,
+            ),
         )
-        print(result.extracted_content)
-        extracted_list = json.loads(result.extracted_content)
+
+        async with AsyncWebCrawler(config=browser_config) as crawler:
+            result = await crawler.arun(
+                url=url, config=crawler_config
+            )
+            print(f"Extracted from {url}: {len(result.extracted_content)} items")
+            extracted = json.loads(result.extracted_content)
+            if isinstance(extracted, list):
+                all_extracted.extend(extracted)
+            else:
+                all_extracted.append(extracted)
+
+    print(f"Total extracted: {len(all_extracted)} items")
+    if extraction_type == "block":
+        save_utils.save_json(f"output/{output_file}", all_extracted)
+    else:
         merged = {"graph_nodes": [], "block_nodes": []}
-        for item in extracted_list:
-            merged["graph_nodes"].extend(item.get("graph_nodes", []))
-            merged["block_nodes"].extend(item.get("block_nodes", []))
+        for item in all_extracted:
+            if isinstance(item, dict):
+                merged["graph_nodes"].extend(item.get("graph_nodes", []))
+                merged["block_nodes"].extend(item.get("block_nodes", []))
+            else:
+                print(f"Skipping non-dict item: {type(item)} - {item}")
         save_utils.save_json(f"output/{output_file}", merged)
 
 
@@ -137,6 +153,7 @@ async def main(config_file, config_id=None):
     out_file = source.get('out_file', 'extracted_fees')
     output_file = f"{out_file}.json"
     css_selector = source.get('css_selector', None)
+    extraction_type = source.get('extraction_type', 'schema')
     
     provider, env_var = get_provider_info(llm_alias)
     api_token = os.getenv(env_var) if env_var else None
@@ -149,10 +166,26 @@ async def main(config_file, config_id=None):
         "max_tokens": max_tokens
     }
     
+    # Define URLs to crawl
+    base_url = "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/"
+    urls = [
+        base_url + "Node-Library.html",
+        base_url + "Artistic-Nodes.html",
+        base_url + "Channel-Nodes.html",
+        base_url + "Custom-Render-Texture-Nodes.html",
+        base_url + "Input-Nodes.html",
+        base_url + "Math-Nodes.html",
+        base_url + "Procedural-Nodes.html",
+        base_url + "ui-nodes.html",
+        base_url + "Utility-Nodes.html",
+        base_url + "UV-Nodes.html",
+        base_url + "Block-Node.html"
+    ]
+    
     await extract_structured_data_using_llm(
         provider=provider,
         api_token=api_token,
-        url=url,
+        urls=urls,
         instruction=instruction,
         schema_model=schema_model,
         extra_args=extra_args,
@@ -161,7 +194,8 @@ async def main(config_file, config_id=None):
         word_count_threshold=word_count_threshold,
         page_timeout=page_timeout,
         output_file=output_file,
-        css_selector=css_selector
+        css_selector=css_selector,
+        extraction_type=extraction_type
     )
 
 
