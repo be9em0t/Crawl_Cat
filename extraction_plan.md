@@ -69,7 +69,7 @@ From Crawl4ai examples (`quickstart.py` and `quickstart_examples_set_1.py`):
 - Optional format filters (clear fences, UTF charecters etc.)
 - Save as JSON (via save_utils.py module)
 
-### Remarks for Future Implementation (Prioritized)
+### Remarks for Future Implementation (workflows explore, llm, dom, html)
 - **Feasibility**: All workflows are fully feasible with Crawl4Ai (e.g., LLM via LLMExtractionStrategy, DOM via JsonCssExtractionStrategy, Explore via BFSDeepCrawlStrategy). No major gaps identified.
 - **Efficiency Priority**: Pure DOM > Full HTML > LLM + DOM > Pure LLM > Explore (speed/cost). Prioritize DOM-based for production; use LLM only for setup or complex cases.
 - **Modularity**: Implement each workflow as a separate async function (e.g., `workflow_llm`, `workflow_explore`) in `crawl-cat2.py` or separate modules if code grows >400 lines. Call from `main()` based on `workflow` key.

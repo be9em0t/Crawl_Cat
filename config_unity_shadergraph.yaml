@@ -12,9 +12,8 @@ sources:
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/ui-nodes.html"
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Utility-Nodes.html"
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/UV-Nodes.html"
-      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Block-Node.html"
     title: "Unity Shadergraph node library structure"
-    description: "Extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes and block_nodes arrays with nested categories and nodes."
+    description: "Extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes arrays with nested categories and nodes."
     instruction: |
       From the crawled content of this page, extract Unity ShaderGraph nodes, categories, or subcategories present.
       Output a single NodeLibrary object.
@@ -55,6 +54,32 @@ sources:
     word_count_threshold: 1
     page_timeout: 80000
     workflow: "llm"
+
+
+  - id: "shadergraph_explore_or-gpt4o-mini"
+    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+    urls:
+    title: "Unity Shadergraph node library structure based on sidebar"
+    description: "Extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes arrays with nested categories and nodes."
+    instruction: |
+      From the URL focus on the sidebar. It represents structure of the topics in Shadergaph documentation.
+      - Extract the entire sidebar structure, starting with "About Shadergraph" and ending with Samples/Terrain Shaders/Performance Comparison
+      - Save as well structured Markdown, preserving nested hierarchy.
+    prompt_file: "none"
+    pydantic_model: null
+    llm: "openrouter_gpt4o-mini"
+    temperature: 0.0
+    top_p: 0.9
+    max_tokens: 8000
+    out_file: "shadergraph_gpt4o-mini"
+    out_format: "markdown"
+    extraction_type: "block"
+    css_selector: "#toc"
+    headless: true
+    cache_mode: "BYPASS"
+    word_count_threshold: 1
+    page_timeout: 80000
+    workflow: "explore"
 
 
 

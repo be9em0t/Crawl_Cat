@@ -166,7 +166,46 @@ async def extract_structured_data_using_llm(
                 'nodes': cat_data['nodes'] if cat_data['nodes'] else None
             })
         
-        save_utils.save_json(f"output/{output_file}", {"graph_nodes": final_graph, "block_nodes": final_block})
+async def workflow_explore(source, urls):
+    llm_alias = source['llm']  # Not used, but keep for consistency
+    headless = source.get('headless', True)
+    cache_mode = source.get('cache_mode', 'BYPASS')
+    word_count_threshold = source.get('word_count_threshold', 1)
+    page_timeout = source.get('page_timeout', 80000)
+    out_file = source.get('out_file', 'explore_output')
+    out_format = source.get('out_format', 'json')
+    output_file = f"{out_file}.md" if out_format == 'markdown' else f"{out_file}.json"
+    css_selector = source.get('css_selector', None)
+    
+    # For explore, we expect only one URL (the main page)
+    if len(urls) != 1:
+        print(f"Warning: Explore workflow expects 1 URL, got {len(urls)}. Using first URL.")
+    url = urls[0]
+    
+    print(f"\n--- Exploring structure from {url} ---")
+    
+    browser_config = BrowserConfig(headless=headless)
+    
+    cache_mode_enum = getattr(CacheMode, cache_mode.upper(), CacheMode.BYPASS)
+    
+    crawler_config = CrawlerRunConfig(
+        cache_mode=cache_mode_enum,
+        word_count_threshold=word_count_threshold,
+        page_timeout=page_timeout,
+        css_selector=css_selector,
+        verbose=True,
+    )
+    
+    async with AsyncWebCrawler(config=browser_config) as crawler:
+        result = await crawler.arun(url=url, config=crawler_config)
+    
+    # Save the markdown content
+    if out_format == 'markdown':
+        save_utils.save_data(f"output/{output_file}", result.markdown.raw_markdown, 'markdown')
+    else:
+        # For json, save the markdown as string
+        save_utils.save_json(f"output/{output_file}", {"content": result.markdown.raw_markdown})
+    print(f"Saved explore output to output/{output_file}")
 
 
 async def workflow_llm(source, urls):
@@ -229,10 +268,12 @@ async def main(config_file, config_id=None):
         source = sources[0]  # default to first source
     
     workflow = source.get('workflow', 'llm')
-    urls = source.get('urls', [source['url']])
+    urls = source.get('urls') or [source['url']]
     
     if workflow == 'llm':
         await workflow_llm(source, urls)
+    elif workflow == 'explore':
+        await workflow_explore(source, urls)
     else:
         raise NotImplementedError(f"Workflow '{workflow}' not implemented yet.")
 
