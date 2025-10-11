@@ -1,6 +1,18 @@
 sources:
   - id: "shadergraph_nodes_or-gpt4o-mini"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+    urls:
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Artistic-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Channel-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Custom-Render-Texture-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Input-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Math-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Procedural-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/ui-nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Utility-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/UV-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Block-Node.html"
     title: "Unity Shadergraph node library structure"
     description: "Extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes and block_nodes arrays with nested categories and nodes."
     instruction: |
@@ -42,6 +54,7 @@ sources:
     cache_mode: "BYPASS"
     word_count_threshold: 1
     page_timeout: 80000
+    workflow: "llm"
 
 
 

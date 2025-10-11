@@ -169,21 +169,7 @@ async def extract_structured_data_using_llm(
         save_utils.save_json(f"output/{output_file}", {"graph_nodes": final_graph, "block_nodes": final_block})
 
 
-# Main execution
-async def main(config_file, config_id=None):
-    config = load_config(config_file)
-    sources = config.get('sources', [])
-    if not sources:
-        raise ValueError("No sources found in config file")
-    
-    if config_id:
-        source = next((s for s in sources if s.get('id') == config_id), None)
-        if not source:
-            available_ids = [s.get('id') for s in sources if s.get('id')]
-            raise ValueError(f"Config ID '{config_id}' not found. Available IDs: {available_ids}")
-    else:
-        source = sources[0]  # default to first source
-    url = source['url']
+async def workflow_llm(source, urls):
     instruction = source['instruction']
     pydantic_model_str = source['pydantic_model']
     llm_alias = source['llm']
@@ -210,22 +196,6 @@ async def main(config_file, config_id=None):
         "max_tokens": max_tokens
     }
     
-    # Define URLs to crawl
-    base_url = "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/"
-    urls = [
-        base_url + "Node-Library.html",
-        base_url + "Artistic-Nodes.html",
-        base_url + "Channel-Nodes.html",
-        base_url + "Custom-Render-Texture-Nodes.html",
-        base_url + "Input-Nodes.html",
-        base_url + "Math-Nodes.html",
-        base_url + "Procedural-Nodes.html",
-        base_url + "ui-nodes.html",
-        base_url + "Utility-Nodes.html",
-        base_url + "UV-Nodes.html",
-        base_url + "Block-Node.html"
-    ]
-    
     await extract_structured_data_using_llm(
         provider=provider,
         api_token=api_token,
@@ -241,6 +211,30 @@ async def main(config_file, config_id=None):
         css_selector=css_selector,
         extraction_type=extraction_type
     )
+
+
+# Main execution
+async def main(config_file, config_id=None):
+    config = load_config(config_file)
+    sources = config.get('sources', [])
+    if not sources:
+        raise ValueError("No sources found in config file")
+    
+    if config_id:
+        source = next((s for s in sources if s.get('id') == config_id), None)
+        if not source:
+            available_ids = [s.get('id') for s in sources if s.get('id')]
+            raise ValueError(f"Config ID '{config_id}' not found. Available IDs: {available_ids}")
+    else:
+        source = sources[0]  # default to first source
+    
+    workflow = source.get('workflow', 'llm')
+    urls = source.get('urls', [source['url']])
+    
+    if workflow == 'llm':
+        await workflow_llm(source, urls)
+    else:
+        raise NotImplementedError(f"Workflow '{workflow}' not implemented yet.")
 
 
 if __name__ == "__main__":
