@@ -1,10 +1,13 @@
+# Name
+crawl-cat2.py
+
 # Crawl-cat Crawl4Ai-based documentation extractor
 Documentation extraction crawler that uses crawl4ai, LLM capability to analyze schema and select elements, then use DOM selectors for actual content extraction.
 
 # Prerequisites
-- pyenv (optional but recommended) to match the project's Python version (see `.python-version` if present)
+- pyenv to match the project's Python version (see `.python-version` if present)
 - Python 3.11+ (the project was tested with pyenv Python 3.13.x)
-- An OpenAI API key stored in a `.env` file at the project root as `OPENAI_API_KEY=sk-...`
+- An API keys stored in a `.env` file at the project root
 - Crawl4Ai installed and verified.
 
 ## Verify Crawl4ai install:
@@ -38,18 +41,26 @@ pyenv shell $(cat .python-version)
 
 # Running the script
 
-```bash
-# main.py will contain minimal GUI in the future
-python schema_discovery.py --help
-python crawl_cat.py --help
-```
+Usage examples:
+  python crawl-cat2.py -cfg config_openai_fees.yaml
+  python crawl-cat2.py -cfg config_openai_fees.yaml -id openai_fees_or-gpt4o-mini
+
+Required files:
+- config_<name>.yaml: Configuration file with sources, URLs, models, etc.
+- providers.yaml: Provider definitions with LLM aliases and API keys reference
+
 
 # What the script does
-- Crawls a page(s)
-- With user-supplied LLM assisted pythonic model
-- Uses crawl4ai's LLM extraction strategy to extract structured information
-- Prints the extracted JSON to stdout
-- Saves to JSON file
+- Crawls page(s)
+- May use user-supplied pythonic model
+- Uses crawl4ai's extraction strategies to extract structured information
+- Supports different workflows
+    - explore (explore the structure using CSS selectors)
+    - llm (ai-assisted extraction)
+    - dom (or css) - non-ai extraction
+    - html - page extraction for loacal processing
+- Prints the extracted information to stdout
+- Saves to JSON, markdown, HTML (depending on yaml settings)
 
 
 # Internal structure
@@ -57,8 +68,8 @@ python crawl_cat.py --help
 Root
 ├── .env
 ├── requirements.txt
-├── <source_convig_1>.yaml 
-├── <source_convig_2>.yaml 
+├── config_<1>.yaml 
+├── config_<2>.yaml 
 ├── providers.yaml
 ├── crawl_cat2.py
 ├── save_utils.py

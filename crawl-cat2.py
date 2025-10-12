@@ -21,7 +21,7 @@ import save_utils
 print("Crawl4AI: Advanced Web Crawling and Data Extraction")
 print("GitHub Repository: https://github.com/unclecode/crawl4ai")
 print("Twitter: @unclecode")
-print("Website: https://crawl4ai.com")
+print("Website: https://crawl4ai.com \n")
 
 
 # LLM Extraction Example
@@ -167,6 +167,8 @@ async def extract_structured_data_using_llm(
             })
         
 async def workflow_explore(source, urls):
+    from urllib.parse import urlparse
+    
     llm_alias = source['llm']  # Not used, but keep for consistency
     headless = source.get('headless', True)
     cache_mode = source.get('cache_mode', 'BYPASS')
@@ -176,6 +178,9 @@ async def workflow_explore(source, urls):
     out_format = source.get('out_format', 'json')
     output_file = f"{out_file}.md" if out_format == 'markdown' else f"{out_file}.json"
     css_selector = source.get('css_selector', None)
+    deep_crawl = source.get('deep_crawl', False)
+    max_depth = source.get('max_depth', 3)
+    max_pages = source.get('max_pages', 10)
     
     # For explore, we expect only one URL (the main page)
     if len(urls) != 1:
@@ -188,23 +193,53 @@ async def workflow_explore(source, urls):
     
     cache_mode_enum = getattr(CacheMode, cache_mode.upper(), CacheMode.BYPASS)
     
-    crawler_config = CrawlerRunConfig(
-        cache_mode=cache_mode_enum,
-        word_count_threshold=word_count_threshold,
-        page_timeout=page_timeout,
-        css_selector=css_selector,
-        verbose=True,
-    )
+    if deep_crawl:
+        from crawl4ai import BFSDeepCrawlStrategy, DomainFilter, FilterChain
+        domain = urlparse(url).netloc
+        filter_chain = FilterChain([DomainFilter(allowed_domains=[domain])])
+        deep_crawl_strategy = BFSDeepCrawlStrategy(
+            max_depth=max_depth,
+            max_pages=max_pages,
+            filter_chain=filter_chain
+        )
+        crawler_config = CrawlerRunConfig(
+            cache_mode=cache_mode_enum,
+            word_count_threshold=word_count_threshold,
+            page_timeout=page_timeout,
+            css_selector=css_selector,
+            verbose=True,
+            deep_crawl_strategy=deep_crawl_strategy
+        )
+    else:
+        crawler_config = CrawlerRunConfig(
+            cache_mode=cache_mode_enum,
+            word_count_threshold=word_count_threshold,
+            page_timeout=page_timeout,
+            css_selector=css_selector,
+            verbose=True,
+        )
     
     async with AsyncWebCrawler(config=browser_config) as crawler:
-        result = await crawler.arun(url=url, config=crawler_config)
+        results = await crawler.arun(url=url, config=crawler_config)
     
-    # Save the markdown content
+    # Handle results: single page or list
+    if not isinstance(results, list):
+        results = [results]
+    
+    print(f"Explored {len(results)} pages")
+    
     if out_format == 'markdown':
-        save_utils.save_data(f"output/{output_file}", result.markdown.raw_markdown, 'markdown')
+        # Concatenate all markdowns with separators
+        combined_content = ""
+        for i, result in enumerate(results):
+            combined_content += f"\n--- Page {i+1}: {result.url} ---\n\n"
+            combined_content += result.markdown.raw_markdown + "\n"
+        save_utils.save_data(f"output/{output_file}", combined_content, 'markdown')
     else:
-        # For json, save the markdown as string
-        save_utils.save_json(f"output/{output_file}", {"content": result.markdown.raw_markdown})
+        # Save as JSON list
+        pages_data = [{"url": result.url, "content": result.markdown.raw_markdown} for result in results]
+        save_utils.save_json(f"output/{output_file}", pages_data)
+    
     print(f"Saved explore output to output/{output_file}")
 
 
@@ -259,23 +294,29 @@ async def main(config_file, config_id=None):
     if not sources:
         raise ValueError("No sources found in config file")
     
-    if config_id:
-        source = next((s for s in sources if s.get('id') == config_id), None)
-        if not source:
-            available_ids = [s.get('id') for s in sources if s.get('id')]
-            raise ValueError(f"Config ID '{config_id}' not found. Available IDs: {available_ids}")
-    else:
-        source = sources[0]  # default to first source
+    if not config_id:
+        available_ids = [s.get('id') for s in sources if s.get('id')]
+        raise ValueError(f"Config ID is required. Available IDs: {available_ids}")
     
-    workflow = source.get('workflow', 'llm')
+    source = next((s for s in sources if s.get('id') == config_id), None)
+    if not source:
+        available_ids = [s.get('id') for s in sources if s.get('id')]
+        raise ValueError(f"Config ID '{config_id}' not found. \nAvailable IDs: {available_ids}")
+    
+    if 'workflow' not in source:
+        raise ValueError("Workflow key missing")
+    
+    workflow = source['workflow']
+    allowed_workflows = ['llm', 'explore']
+    if workflow not in allowed_workflows:
+        raise ValueError("Workflow key invalid")
+    
     urls = source.get('urls') or [source['url']]
     
     if workflow == 'llm':
         await workflow_llm(source, urls)
     elif workflow == 'explore':
         await workflow_explore(source, urls)
-    else:
-        raise NotImplementedError(f"Workflow '{workflow}' not implemented yet.")
 
 
 if __name__ == "__main__":
@@ -293,7 +334,11 @@ Required files:
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument('-cfg', '--config', type=str, required=True, help='Path to the configuration YAML file')
-    parser.add_argument('-id', '--config-id', type=str, help='ID of the source to use from the config file (defaults to first source)')
+    parser.add_argument('-id', '--config-id', type=str, help='ID of the source to use from the config file')
     args = parser.parse_args()
     
-    asyncio.run(main(args.config, args.config_id))
+    try:
+        asyncio.run(main(args.config, args.config_id))
+    except ValueError as e:
+        print(f"Configuration Error: {e}")
+        sys.exit(1)

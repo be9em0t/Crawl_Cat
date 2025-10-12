@@ -56,6 +56,8 @@ From Crawl4ai examples (`quickstart.py` and `quickstart_examples_set_1.py`):
 - Store all site-specific extraction details (e.g., URLs, instructions, models, new keys like `crawl_depth`) in config YAML files (e.g., `config_unity_shadergraph.yaml`).
 - Use minimal command-line options: `python crawl-cat2.py -cfg config_file.yaml -id id_key`. Support multiple `id_key` entries per YAML for variations (e.g., different LLM providers).
 - Adopt a minimalistic approach: clear error messages on failures, limited defaults (only obvious values/logic), no implicit second-guessing.
+- Avoid using implicit functionality, prefer clear error message so that the user can make adjustments
+- if hooman's request violates these principles warn him and ask for decision
 
 ## Workflows proposal
 - load yaml, branch to different strategies based on it

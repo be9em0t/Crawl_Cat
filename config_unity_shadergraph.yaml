@@ -53,10 +53,11 @@ sources:
     cache_mode: "BYPASS"
     word_count_threshold: 1
     page_timeout: 80000
+    # Allowed workflow values: 'llm' (uses LLM for structured extraction with Pydantic models), 'explore' (basic crawling without LLM/Pydantic)
     workflow: "llm"
 
 
-  - id: "shadergraph_explore_or-gpt4o-mini"
+  - id: "shadergraph_explore_toc_or-gpt4o-mini"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
     urls:
     title: "Unity Shadergraph node library structure based on sidebar"
@@ -67,11 +68,11 @@ sources:
       - Save as well structured Markdown, preserving nested hierarchy.
     prompt_file: "none"
     pydantic_model: null
-    llm: "openrouter_gpt4o-mini"
+    llm: null
     temperature: 0.0
     top_p: 0.9
     max_tokens: 8000
-    out_file: "shadergraph_gpt4o-mini"
+    out_file: "shadergraph_toc_gpt4o-mini"
     out_format: "markdown"
     extraction_type: "block"
     css_selector: "#toc"
@@ -79,9 +80,46 @@ sources:
     cache_mode: "BYPASS"
     word_count_threshold: 1
     page_timeout: 80000
+    # Allowed workflow values: 'llm' (uses LLM for structured extraction with Pydantic models), 'explore' (basic crawling without LLM/Pydantic)
     workflow: "explore"
+    # For explore workflow: enable deep crawling to follow links up to max_depth levels
+    deep_crawl: false
+    # Maximum depth for deep crawling (default: 3)
+    max_depth: 3
+    # Maximum number of pages to crawl (default: 10)
+    max_pages: 10
 
-
+  - id: "shadergraph_explore_content_or-gpt4o-mini"
+    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+    urls:
+    title: "Unity Shadergraph node library structure based on iframe"
+    description: "Extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes arrays with nested categories and nodes."
+    instruction: |
+      From the URL focus on the sidebar. It represents structure of the topics in Shadergaph documentation.
+      - Extract the entire sidebar structure, starting with "About Shadergraph" and ending with Samples/Terrain Shaders/Performance Comparison
+      - Save as well structured Markdown, preserving nested hierarchy.
+    prompt_file: "none"
+    pydantic_model: null
+    llm: null
+    temperature: 0.0
+    top_p: 0.9
+    max_tokens: 8000
+    out_file: "shadergraph_content_gpt4o-mini"
+    out_format: "markdown"
+    extraction_type: "block"
+    css_selector: "#_content"
+    headless: true
+    cache_mode: "BYPASS"
+    word_count_threshold: 1
+    page_timeout: 80000
+    # Allowed workflow values: 'llm' (uses LLM for structured extraction with Pydantic models), 'explore' (basic crawling without LLM/Pydantic)
+    workflow: "explore"
+    # For explore workflow: enable deep crawling to follow links up to max_depth levels
+    deep_crawl: true
+    # Maximum depth for deep crawling (default: 3)
+    max_depth: 3
+    # Maximum number of pages to crawl (default: 10)
+    max_pages: 20
 
 
 
