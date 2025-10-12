@@ -1,3 +1,7 @@
+# Documentation extraction crawler that uses crawl4ai, LLM capability to analyze schema and select elements, then use DOM selectors for actual content extraction.
+
+# Current plan is in PLAN.md
+
 import os, sys
 from dotenv import load_dotenv
 load_dotenv()  # Loads from .env by default
@@ -16,6 +20,8 @@ from typing import Dict, List
 from pydantic import BaseModel, Field
 from crawl4ai import AsyncWebCrawler, CacheMode, BrowserConfig, CrawlerRunConfig
 from crawl4ai import LLMExtractionStrategy
+from crawl4ai import BFSDeepCrawlStrategy, DomainFilter, FilterChain
+from crawl4ai.deep_crawling.filters import URLPatternFilter, ContentRelevanceFilter
 import save_utils
 
 print("Crawl4AI: Advanced Web Crawling and Data Extraction")
@@ -169,6 +175,20 @@ async def extract_structured_data_using_llm(
 async def workflow_explore(source, urls):
     from urllib.parse import urlparse
     
+    class BlockedURLFilter:
+        def __init__(self, blocked_patterns):
+            self.blocked_patterns = blocked_patterns
+        
+        def filter(self, url):
+            from fnmatch import fnmatch
+            for pattern in self.blocked_patterns:
+                if fnmatch(url, pattern):
+                    return False
+            return True
+        
+        def apply(self, url):
+            return self.filter(url)
+    
     llm_alias = source['llm']  # Not used, but keep for consistency
     headless = source.get('headless', True)
     cache_mode = source.get('cache_mode', 'BYPASS')
@@ -194,9 +214,31 @@ async def workflow_explore(source, urls):
     cache_mode_enum = getattr(CacheMode, cache_mode.upper(), CacheMode.BYPASS)
     
     if deep_crawl:
-        from crawl4ai import BFSDeepCrawlStrategy, DomainFilter, FilterChain
-        domain = urlparse(url).netloc
-        filter_chain = FilterChain([DomainFilter(allowed_domains=[domain])])
+        # Build filter chain from config
+        filters = source.get('filters', [])
+        filter_instances = []
+        for f in filters:
+            f_type = f['type']
+            if f_type == 'DomainFilter':
+                filter_instances.append(DomainFilter(**{k: v for k, v in f.items() if k != 'type'}))
+            elif f_type == 'URLPatternFilter':
+                allowed = f.get('patterns', [])
+                blocked = f.get('blocked_patterns', [])
+                if allowed:
+                    filter_instances.append(URLPatternFilter(patterns=allowed))
+                if blocked:
+                    filter_instances.append(BlockedURLFilter(blocked))
+            elif f_type == 'ContentRelevanceFilter':
+                filter_instances.append(ContentRelevanceFilter(**{k: v for k, v in f.items() if k != 'type'}))
+            else:
+                print(f"Warning: Unknown filter type '{f_type}', skipping.")
+        
+        # Default to domain filter if no filters specified
+        if not filter_instances:
+            domain = urlparse(url).netloc
+            filter_instances = [DomainFilter(allowed_domains=[domain])]
+        
+        filter_chain = FilterChain(filter_instances)
         deep_crawl_strategy = BFSDeepCrawlStrategy(
             max_depth=max_depth,
             max_pages=max_pages,

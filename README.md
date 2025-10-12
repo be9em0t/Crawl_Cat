@@ -39,17 +39,6 @@ If you use pyenv and want to activate the project's Python version:
 pyenv shell $(cat .python-version)
 ```
 
-# Running the script
-
-Usage examples:
-  python crawl-cat2.py -cfg config_openai_fees.yaml
-  python crawl-cat2.py -cfg config_openai_fees.yaml -id openai_fees_or-gpt4o-mini
-
-Required files:
-- config_<name>.yaml: Configuration file with sources, URLs, models, etc.
-- providers.yaml: Provider definitions with LLM aliases and API keys reference
-
-
 # What the script does
 - Crawls page(s)
 - May use user-supplied pythonic model
@@ -76,3 +65,19 @@ Root
 ├── main.py
 └── output
 ```
+
+
+# Usage
+
+## Running the script
+
+Usage examples:
+  python crawl-cat2.py -cfg config_openai_fees.yaml
+  python crawl-cat2.py -cfg config_openai_fees.yaml -id openai_fees_or-gpt4o-mini
+
+Required files:
+- config_<name>.yaml: Configuration file with sources, URLs, models, etc.
+- providers.yaml: Provider definitions with LLM aliases and API keys reference
+
+## Yaml - Extracion filters
+... documenta consizely ..

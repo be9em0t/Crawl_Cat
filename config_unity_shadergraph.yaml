@@ -117,9 +117,24 @@ sources:
     # For explore workflow: enable deep crawling to follow links up to max_depth levels
     deep_crawl: true
     # Maximum depth for deep crawling (default: 3)
-    max_depth: 3
+    max_depth: 4
     # Maximum number of pages to crawl (default: 10)
-    max_pages: 20
+    max_pages: 50
+    # Filters for deep crawling (optional)
+    filters:
+      - type: DomainFilter
+        allowed_domains: ["docs.unity3d.com"]
+      - type: URLPatternFilter
+        patterns: ["*Nodes.html", "*Node.html"]
+        # blocked_patterns: ["*Block-Node.html"]
+      # - type: ContentRelevanceFilter
+      #   query: "Unity ShaderGraph node documentation, categories like Artistic, Channel, Math, Procedural"
+      #   threshold: 0.6
+      # - type: ContentTypeFilter
+      #   allowed_types: ["text/html", "application/json"]
+      # - type: SEOFilter
+      #   threshold: 0.5
+      #   keywords: ["shader", "node", "unity"]
 
 
 
