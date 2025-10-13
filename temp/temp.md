@@ -565,3 +565,135 @@ class PricingPage(BaseModel):
 
 __all__ = ["PriceEntry", "ModelPricing", "PricingPage"]
 ----
+
+# Run explore first
+python crawl-cat2.py -cfg config_unity_shadergraph.yaml -id shadergraph_content_explore
+
+# Then run pydantic workflow
+python crawl-cat2.py -cfg config_unity_shadergraph.yaml -id shadergraph_pydantic
+
+---- unfinished prompt:
+
+The execution of -id shadergraph_pydantic exits with
+
+Failed to parse structured JSON from LLM response
+Saved Pydantic models to output/shadergraph_content_pydantic.py
+Could not identify main model class
+Saved structured JSON to output/shadergraph_content_pydantic.json
+
+I know that you were able to extract the right pydantic model on a previuos run, but I suspect you used the url: as analysis source. The JSON output of the explore workflow is unstructured and is not useful in generating a pydantic model. I admit I have midirected you here.
+
+-------
+
+Vla:
+Ok, here i start to panic. When working with llm workflow we used pydantic model. I know people are on owe with the thing, but it was pretty dramatic failiure in this case.
+
+Generation of the model seems complete black art (and I'm not going to read 200 pages of documentation to fix this)
+When we used the Crawl4Ai function to generate the model the results were extremely hit and miss
+Different llm models (gpt4, gpt5-mini, oss, phi 3 and 4) generated vastly different results
+the method that worked best was to ask Copilot look at the source pages and generate pydantic model
+So, going forward:
+
+I would like to adjust formatting of explore workflow output to facilitate better understanding of the pydantic model that will represent it.
+look into ways of generating pydantic models that will correctly reflect the explore workflow
+summarise for me the basics of the pydantic model, so I can have some oversight over it
+Does this sound ok, and if yes lets work on point 1.
+
+Grok:
+Agreed—your concerns with Pydantic model generation via LLM are valid; it's often inconsistent and requires manual tuning. Relying on Copilot for source-page analysis is a pragmatic workaround, and we'll build on that.
+
+Plan Confirmation
+Adjust Explore Output: We'll modify the explore workflow to output a structured JSON format that highlights the data structure (e.g., categories, nodes, descriptions) from the crawled content. This will make it easier to visualize and derive a Pydantic model, rather than raw Markdown.
+Generate Pydantic Models: Once we have clearer output, we can refine model generation—starting with Copilot-assisted creation based on the structured data, then testing for consistency.
+Pydantic Basics Summary: I'll provide a quick overview below for your oversight.
+Let's start with point 1: Adjusting the explore output.
+
+Proposed Change for Explore Output
+Current: Saves combined Markdown or a list of {"url": "...", "content": "raw markdown"}.
+New: Extract key elements (e.g., node names, descriptions) from the content and output a JSON array of objects, e.g.:
+This mirrors your NodeLibrary structure, making Pydantic modeling straightforward.
+I'll update the code to add basic extraction logic (e.g., regex or simple parsing) for node data in workflow_explore. If the content structure varies, we can refine it.
+
+Ready to implement the output adjustment? Let me know if you want to tweak the extraction logic!
+
+Vla:
+Almost ready to implement. Here are my considerations:
+
+I have chosen explore workflow to save markdown because markdown is easier to check by a hooman for missed elemens. You are right, verifying structure with markdown is much harder than in JSON.
+i dont want to lose the work we did on mardown, as I feel that it has its merits. To that end, lets keep the code for markdown export, add (or improve existing) code for JSON export, and export as multiple formats if more than one format is specified in out_format: key.
+I've put a placeholder in id: shadergraph_content_explore for multiple format exports,
+lets execute on providing export as json and/or markdown as requested.
+
+Grok:
+Excellent! The multiple format export is working perfectly—141 pages crawled, with both Markdown and JSON saved. The JSON output provides a structured view of the raw content, making it much easier to analyze the data patterns for Pydantic modeling.
+
+Quick Summary of Outputs
+Markdown: Human-readable, great for spotting missing elements or verifying completeness.
+JSON: Machine-readable list of {"url": "...", "content": "raw markdown"} per page—ideal for parsing node names, descriptions, and hierarchies programmatically.
+This addresses point 1: The JSON now facilitates better understanding of the underlying structure (e.g., categories like "Artistic", "Math", with nested nodes and descriptions).
+
+Next Steps for Point 2: Generating Pydantic Models
+With the structured data in hand, we can reliably create Pydantic models. Since Copilot worked well for you before, I recommend:
+
+Feed the JSON to Copilot: Share a sample from shadergraph_content_explore.json (e.g., 5-10 entries) and ask it to generate the NodeLibrary model with nested Category and ShaderNode classes.
+Manual Refinement: Use the existing model in your YAML as a starting point, then adjust based on the data patterns.
+Validation: Test the model with sample data to ensure it captures all fields (e.g., optional subcategories, descriptions).
+If you'd like, I can help generate a sample Pydantic model based on the JSON structure—share a snippet from the output, and I'll propose one! Otherwise, proceed with Copilot and let me know how it goes. 🚀
+
+Vla:
+nice.
+I expected the JSON to generate nested structure with node pages as child nodes to category pages, according to #fetch https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html
+
+Grok:
+Summary
+I addressed your expectation for a nested JSON structure from the explore workflow output. The initial flat JSON (list of {"url": ..., "content": ...}) didn't reflect the hierarchy, but I've now created a proper nested structure.
+
+What Was Done
+Analyzed the Flat Output: The crawled data was a flat list of 141 pages, including the root Node Library page, category pages, and individual node pages.
+
+Parsed the Hierarchy:
+
+Extracted 9 categories from the root page (Artistic, Channel, Custom Render Texture, Input, Math, Procedural, UI, Utility, UV).
+For each category, parsed subcategories (e.g., Adjustment, Blend under Artistic) and their individual nodes.
+Built Nested Structure: Created shadergraph_hierarchy.json with the following hierarchy:
+
+Generated Pydantic Models: Created shadergraph_models.py with validated Pydantic classes:
+
+NodeLibrary → Category → Subcategory → Node
+Models include proper typing and validation.
+Key Improvements
+Nested JSON: Now reflects the parent-child relationships (categories → subcategories → nodes) as expected from the Unity docs structure.
+Pydantic Validation: Ensures data integrity and provides a solid foundation for the DOM workflow.
+Reusable Models: The generated models can be imported and used for structured data handling in your crawler.
+The nested JSON provides the structured data you needed to facilitate accurate Pydantic model generation, avoiding the "hit and miss" issues from LLM-based approaches. You can now proceed to implement the DOM workflow with JsonCssExtractionStrategy using these validated schemas.
+
+Vla:
+This looks amazing.
+
+The JSON structure looks perfect. I havent tested how well the pydantic model will work as we still dont have the dom workflow implemented.
+I would like to encapsulate your process of analyzing the structure and generating pydantic model and hyerarchycal JSON in additional workflow. Corrrect me if I'm wrong:
+explore workflow: define the base url, filters, crawl depth etc. and verify the result by the hooman. Output: markdown and JSON
+NEW pydantic workflow: based on the explore configuration generate correct pydantic model, generate structured JSON and let the hooman verify the result. Output: pydantic model and JSON for user verification. This stage obviously includes heavy LLM involvement in generation of the model and verification of the result.
+dom workflow: based on config file and pydantic model crawl and extract correct information. Output: well-structured JSON. (note: this workflow probably will output the same JSON as pydantic workflow, but without the overhead of generating and testing a pydantic model)
+
+New prompt Vla:
+Working on our #file:crawl-cat2.py documentation extraction app we've got to the point where we can nicely crawl the correct pages from url:, and give the hooman a markdown and non-structured JSON to verify nothing is missed. This is our explore workflow.
+
+Now we need to expand this further to be able to extract hyerarcihcally structrured JSON ready for AI consumption as local documentation.
+
+On a previous run we had this conversation with Grok on the subject and after a couple of iterations a perfectly structured JSON was achieved. But then we were not able to modularize this process i a way that we keeo #file:crawl-cat2.py clear and modular, and adjust extraction proces to different sites using the config.yaml files.
+
+The conversation is here #file:Converstion Vla-Grok.md 
+Please analyze it and try to implement a workflow "pydantic" that will use the settings of "explore" workflow and its output (markdown and JSON files) to come up with correct pydantic model of the url:, then use that model to extract a structured JSON from the url:
+
+We have some version of pydantic model already, "shadergraph_content_pydantic". Please dont feel constrained by it and replace it with a working version.
+
+My suggestion is to:
+- use intelligent processing using the provided in config.json llm: to create a pydantic model suitable for extraction of structured JSON. Currently, we are able to extract correct but unstructured  pages via explore workflow, based on DOM elements.
+- create a promt tailored to the specific url: and based on output of explore workflow, that will allow the llm to intelligently analyze and create a correct pydantic model, that it should test and iterate until extraction results match the site structure 
+- rely on files resulting from explore workflow ( out_file: "shadergraph_content" means they will be named shadergraph_content.md and shadergraph_content.json)
+- rely also on the url:, it is our ground truth
+- once you have a working prompt store it in the config.yaml for future use
+- save the pydantic model as "shadergraph_content_model.py"
+- save the structured JSON outpup as "shadergraph_content_pydantic.json"
+

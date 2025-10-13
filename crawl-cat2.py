@@ -6,6 +6,16 @@ import os, sys
 from dotenv import load_dotenv
 load_dotenv()  # Loads from .env by default
 
+try:
+    from openai import OpenAI
+except ImportError:
+    OpenAI = None
+
+try:
+    import ollama
+except ImportError:
+    ollama = None
+
 from crawl4ai import LLMConfig
 
 sys.path.append(
@@ -50,24 +60,32 @@ def get_provider_info(llm_alias, providers_file='providers.yaml'):
     raise ValueError(f"LLM alias '{llm_alias}' not found in providers.yaml")
 
 
-def create_dynamic_model(model_str):
-    if model_str.strip().startswith('from'):
-        # Model string defines classes, exec it and return the last defined class
-        exec(model_str, globals())
-        lines = model_str.strip().split('\n')
-        for line in reversed(lines):
-            if line.strip().startswith('class '):
-                class_name = line.split()[1].split('(')[0]
-                return globals()[class_name]
+async def call_llm_directly(provider, api_token, prompt, extra_args):
+    """Call LLM directly without crawling."""
+    if provider.startswith("openai") or provider.startswith("openrouter"):
+        if OpenAI is None:
+            raise ImportError("OpenAI library not installed. Install with: pip install openai")
+        base_url = "https://openai.com/v1" if provider.startswith("openai") else "https://openrouter.ai/api/v1"
+        client = OpenAI(api_key=api_token, base_url=base_url)
+        model = provider.split("/")[-1] if "/" in provider else provider
+        response = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            **extra_args
+        )
+        return response.choices[0].message.content.strip()
+    elif provider.startswith("ollama"):
+        if ollama is None:
+            raise ImportError("Ollama library not installed. Install with: pip install ollama")
+        model = provider.split("/")[-1]
+        response = ollama.chat(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            options=extra_args
+        )
+        return response['message']['content'].strip()
     else:
-        # Original logic for simple field definitions
-        indented_model_str = '\n'.join('    ' + line for line in model_str.split('\n') if line.strip())
-        model_code = f"""
-class DynamicModel(BaseModel):
-{indented_model_str}
-"""
-        exec(model_code, globals())
-        return DynamicModel
+        raise ValueError(f"Unsupported provider: {provider}")
 
 
 async def extract_structured_data_using_llm(
@@ -172,6 +190,8 @@ async def extract_structured_data_using_llm(
                 'nodes': cat_data['nodes'] if cat_data['nodes'] else None
             })
         
+        save_utils.save_json(f"output/{output_file}", {"graph_nodes": final_graph, "block_nodes": final_block})
+        
 async def workflow_explore(source, urls):
     from urllib.parse import urlparse
     
@@ -195,8 +215,9 @@ async def workflow_explore(source, urls):
     word_count_threshold = source.get('word_count_threshold', 1)
     page_timeout = source.get('page_timeout', 80000)
     out_file = source.get('out_file', 'explore_output')
-    out_format = source.get('out_format', 'json')
-    output_file = f"{out_file}.md" if out_format == 'markdown' else f"{out_file}.json"
+    out_formats = source.get('out_format', ['json'])
+    if isinstance(out_formats, str):
+        out_formats = [out_formats]
     css_selector = source.get('css_selector', None)
     deep_crawl = source.get('deep_crawl', False)
     max_depth = source.get('max_depth', 3)
@@ -270,41 +291,52 @@ async def workflow_explore(source, urls):
     
     print(f"Explored {len(results)} pages")
     
-    if out_format == 'markdown':
-        # Concatenate all markdowns with separators
-        combined_content = ""
-        for i, result in enumerate(results):
-            combined_content += f"\n--- Page {i+1}: {result.url} ---\n\n"
-            combined_content += result.markdown.raw_markdown + "\n"
-        save_utils.save_data(f"output/{output_file}", combined_content, 'markdown')
-    else:
-        # Save as JSON list
-        pages_data = [{"url": result.url, "content": result.markdown.raw_markdown} for result in results]
-        save_utils.save_json(f"output/{output_file}", pages_data)
+    for fmt in out_formats:
+        if fmt == 'markdown':
+            combined_content = ""
+            for i, result in enumerate(results):
+                combined_content += f"\n--- Page {i+1}: {result.url} ---\n\n"
+                combined_content += result.markdown.raw_markdown + "\n"
+            file_ext = ".md"
+            save_utils.save_data(f"output/{out_file}{file_ext}", combined_content, 'markdown')
+        elif fmt == 'json':
+            pages_data = [{"url": result.url, "content": result.markdown.raw_markdown} for result in results]
+            file_ext = ".json"
+            save_utils.save_json(f"output/{out_file}{file_ext}", pages_data)
+        print(f"Saved {fmt} output to output/{out_file}{file_ext}")
+
+
+async def workflow_pydantic(source, urls):
+    out_file = source.get('out_file', 'pydantic_output')
+    explore_md_path = f"output/{out_file}.md"
+    explore_json_path = f"output/{out_file}.json"
     
-    print(f"Saved explore output to output/{output_file}")
-
-
-async def workflow_llm(source, urls):
-    instruction = source['instruction']
-    pydantic_model_str = source['pydantic_model']
+    if not os.path.exists(explore_md_path) or not os.path.exists(explore_json_path):
+        raise ValueError(f"Explore outputs not found: {explore_md_path} and {explore_json_path}. Run explore workflow first with out_file: '{out_file}'.")
+    
+    with open(explore_md_path, 'r') as f:
+        explore_md = f.read()
+    
+    with open(explore_json_path, 'r') as f:
+        explore_json = json.load(f)
+    
+    # Get the prompt from config
+    base_prompt = source.get('prompt', '')
+    
+    # Build the full prompt including the data
+    prompt = base_prompt + f"\n\nExplore Markdown (truncated if necessary):\n{explore_md[:10000]}...\n\nExplore JSON (first 5 pages):\n{json.dumps(explore_json[:5], indent=2)}"
+    
     llm_alias = source['llm']
     temperature = source.get('temperature', 0.0)
     top_p = source.get('top_p', 0.9)
-    max_tokens = source.get('max_tokens', 4000)
-    headless = source.get('headless', True)
-    cache_mode = source.get('cache_mode', 'BYPASS')
-    word_count_threshold = source.get('word_count_threshold', 1)
-    page_timeout = source.get('page_timeout', 80000)
-    out_file = source.get('out_file', 'extracted_fees')
-    output_file = f"{out_file}.json"
-    css_selector = source.get('css_selector', None)
-    extraction_type = source.get('extraction_type', 'schema')
+    max_tokens = source.get('max_tokens', 8000)
     
     provider, env_var = get_provider_info(llm_alias)
     api_token = os.getenv(env_var) if env_var else None
     
-    schema_model = create_dynamic_model(pydantic_model_str)
+    if api_token is None and not provider.startswith("ollama"):
+        print(f"API token is required for {provider}. Skipping.")
+        return
     
     extra_args = {
         "temperature": temperature,
@@ -312,21 +344,61 @@ async def workflow_llm(source, urls):
         "max_tokens": max_tokens
     }
     
-    await extract_structured_data_using_llm(
-        provider=provider,
-        api_token=api_token,
-        urls=urls,
-        instruction=instruction,
-        schema_model=schema_model,
-        extra_args=extra_args,
-        headless=headless,
-        cache_mode=cache_mode,
-        word_count_threshold=word_count_threshold,
-        page_timeout=page_timeout,
-        output_file=output_file,
-        css_selector=css_selector,
-        extraction_type=extraction_type
-    )
+    # Call LLM directly with the prompt
+    model_code = await call_llm_directly(provider, api_token, prompt, extra_args)
+    
+    # Clean the model_code by removing markdown code blocks
+    if model_code.startswith('```python'):
+        model_code = model_code[9:]
+    if model_code.endswith('```'):
+        model_code = model_code[:-3]
+    model_code = model_code.strip()
+    
+    # Save the model code
+    model_file = f"output/{out_file}_model.py"
+    with open(model_file, 'w') as f:
+        f.write(model_code)
+    print(f"Saved Pydantic models to {model_file}")
+    
+    # Execute the model code to get the classes
+    try:
+        exec(model_code, globals())
+        # Find the main class (assume NodeLibrary)
+        main_class = 'NodeLibrary'
+        if main_class in globals():
+            ModelClass = globals()[main_class]
+        else:
+            # Find any class
+            for name in globals():
+                if isinstance(globals()[name], type) and issubclass(globals()[name], BaseModel):
+                    ModelClass = globals()[name]
+                    break
+            else:
+                raise ValueError("No Pydantic model class found in generated code")
+        
+        print(f"Using model class: {ModelClass.__name__}")
+        
+        # Now, use the model for extraction
+        await extract_structured_data_using_llm(
+            provider=provider, 
+            api_token=api_token, 
+            urls=urls, 
+            instruction=source.get('instruction', ''), 
+            schema_model=ModelClass, 
+            extra_args=extra_args,
+            headless=source.get('headless', True),
+            cache_mode=source.get('cache_mode', 'BYPASS'),
+            word_count_threshold=source.get('word_count_threshold', 1),
+            page_timeout=source.get('page_timeout', 80000),
+            output_file=f"{out_file}_pydantic.json",
+            css_selector=source.get('css_selector'),
+            extraction_type="schema"
+        )
+        
+    except Exception as e:
+        print(f"Error processing generated model or extracting: {e}")
+        # Save empty structured JSON
+        save_utils.save_json(f"output/{out_file}_pydantic.json", {})
 
 
 # Main execution
@@ -349,7 +421,7 @@ async def main(config_file, config_id=None):
         raise ValueError("Workflow key missing")
     
     workflow = source['workflow']
-    allowed_workflows = ['llm', 'explore']
+    allowed_workflows = ['llm', 'explore', 'pydantic']
     if workflow not in allowed_workflows:
         raise ValueError("Workflow key invalid")
     
@@ -359,6 +431,8 @@ async def main(config_file, config_id=None):
         await workflow_llm(source, urls)
     elif workflow == 'explore':
         await workflow_explore(source, urls)
+    elif workflow == 'pydantic':
+        await workflow_pydantic(source, urls)
 
 
 if __name__ == "__main__":
