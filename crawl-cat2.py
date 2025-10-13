@@ -30,6 +30,7 @@ from typing import Dict, List
 from pydantic import BaseModel, Field
 from crawl4ai import AsyncWebCrawler, CacheMode, BrowserConfig, CrawlerRunConfig
 from crawl4ai import LLMExtractionStrategy
+from crawl4ai import JsonCssExtractionStrategy
 from crawl4ai import BFSDeepCrawlStrategy, DomainFilter, FilterChain
 from crawl4ai.deep_crawling.filters import URLPatternFilter, ContentRelevanceFilter
 import save_utils
@@ -378,22 +379,40 @@ async def workflow_pydantic(source, urls):
         
         print(f"Using model class: {ModelClass.__name__}")
         
-        # Now, use the model for extraction
-        await extract_structured_data_using_llm(
-            provider=provider, 
-            api_token=api_token, 
-            urls=urls, 
-            instruction=source.get('instruction', ''), 
-            schema_model=ModelClass, 
-            extra_args=extra_args,
-            headless=source.get('headless', True),
-            cache_mode=source.get('cache_mode', 'BYPASS'),
-            word_count_threshold=source.get('word_count_threshold', 1),
-            page_timeout=source.get('page_timeout', 80000),
-            output_file=f"{out_file}_pydantic.json",
-            css_selector=source.get('css_selector'),
-            extraction_type="schema"
-        )
+        # Use the explore markdown to build hierarchical structure with LLM
+        build_prompt = f"""
+Using the generated Pydantic model schema, analyze the combined explore markdown content and construct the hierarchical NodeLibrary structure.
+
+Model schema: {json.dumps(ModelClass.model_json_schema())}
+
+The markdown contains content from all crawled pages. Parse the hierarchical structure of categories, subcategories, and nodes.
+
+Output only the JSON object matching the NodeLibrary schema.
+
+Combined Markdown Content (truncated):
+{explore_md[:60000]}...
+"""
+        
+        hierarchical_json_str = await call_llm_directly(provider, api_token, build_prompt, extra_args)
+        
+        # Clean the JSON
+        if hierarchical_json_str.startswith('```json'):
+            hierarchical_json_str = hierarchical_json_str[7:]
+        if hierarchical_json_str.endswith('```'):
+            hierarchical_json_str = hierarchical_json_str[:-3]
+        hierarchical_json_str = hierarchical_json_str.strip()
+        
+        try:
+            hierarchical_data = json.loads(hierarchical_json_str)
+            # Validate with the model
+            validated = ModelClass(**hierarchical_data)
+            final_data = validated.model_dump()
+            print("Successfully validated hierarchical structure")
+        except Exception as e:
+            print(f"Validation failed: {e}. Using raw data.")
+            final_data = json.loads(hierarchical_json_str)
+        
+        save_utils.save_json(f"output/{out_file}_pydantic.json", final_data)
         
     except Exception as e:
         print(f"Error processing generated model or extracting: {e}")

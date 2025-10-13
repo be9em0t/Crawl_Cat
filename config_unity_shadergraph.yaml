@@ -56,7 +56,7 @@ sources:
     workflow: "llm"
 
 
-  - id: "shadergraph_toc_explore"
+  - id: "shadergraph_toc_explore_old"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
     urls:
     title: "Unity Shadergraph node library structure based on sidebar"
@@ -83,6 +83,111 @@ sources:
     deep_crawl: false
     max_depth: 3
     max_pages: 10
+
+  - id: "shadergraph_toc_explore"
+    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+    urls:
+    title: "Unity Shadergraph node library structure based on sidebar toc"
+    description: Extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes arrays with nested categories and nodes."
+    instruction: |
+      From the URL focus on the sidebar. It represents structure of the topics in Shadergaph documentation.
+      - Extract the entire sidebar structure, starting with "About Shadergraph" and ending with Samples/Terrain Shaders/Performance Comparison
+      - Save as well structured Markdown, preserving nested hierarchy.
+    prompt_file: "none"
+    pydantic_model: null
+    llm: null
+    temperature: 0.0
+    top_p: 0.9
+    max_tokens: 8000
+    out_file: "shadergraph_toc_explore"
+    out_format: ["markdown", "json"]
+    extraction_type: "block"
+    css_selector: "#toc"
+    headless: true
+    cache_mode: "BYPASS"
+    word_count_threshold: 1
+    page_timeout: 80000
+    # Allowed workflow values: 'llm' (uses LLM for structured extraction with Pydantic models), 'explore' (basic crawling without LLM/Pydantic)
+    workflow: "explore"
+    # For explore workflow: enable deep crawling to follow links up to max_depth levels
+    deep_crawl: true
+    # Maximum depth for deep crawling (default: 3)
+    max_depth: 4
+    # Maximum number of pages to crawl (default: 10)
+    max_pages: 150
+    # Filters for deep crawling (optional)
+    filters:
+      - type: DomainFilter
+        allowed_domains: ["docs.unity3d.com"]
+      - type: URLPatternFilter
+        patterns: ["*Nodes.html", "*Node.html"]
+        # blocked_patterns: ["*Block-Node.html"]
+      # - type: ContentRelevanceFilter
+      #   query: "Unity ShaderGraph node documentation, categories like Artistic, Channel, Math, Procedural"
+      #   threshold: 0.6
+      # - type: ContentTypeFilter
+      #   allowed_types: ["text/html", "application/json"]
+      # - type: SEOFilter
+      #   threshold: 0.5
+      #   keywords: ["shader", "node", "unity"]
+
+  - id: "shadergraph_toc_pydantic"
+    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+    urls:
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Artistic-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Channel-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Custom-Render-Texture-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Input-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Math-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Procedural-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/ui-nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Utility-Nodes.html"
+      - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/UV-Nodes.html"
+    title: "Generate Pydantic models from explore JSON"
+    description: "Use LLM to analyze the explore JSON output and generate appropriate Pydantic models for the hierarchical structure"
+    instruction: |
+      From the crawled content of this page, extract Unity ShaderGraph nodes, categories, or subcategories present.
+      Output a single NodeLibrary object.
+      - If this page is the main Node Library page, populate graph_nodes with category objects (name only, no subcategories or nodes), and block_nodes similarly.
+      - If this page is a category page (e.g., Artistic Nodes), populate graph_nodes with a single category object containing its name, and either subcategories (if the page has sections like Adjustment, Blend) with their nodes, or direct nodes if no subcategories.
+      - Do not output multiple objects or empty categories. Ensure subcategories are nested under their parent category.
+      - Only include data actually present on the page.
+    prompt: |
+      You are provided with the output from an explore workflow: a JSON file containing a list of pages with their URLs and raw markdown content, and a markdown file with combined content.
+
+      The site is the Unity ShaderGraph Node Library documentation. The structure is hierarchical:
+
+      - Root: NodeLibrary with graph_nodes (both lists of Category). Don't include the block_nodes.
+
+      - Category: name, url (optional), description (optional), subcategories (optional list of Subcategory), nodes (optional list of Node)
+
+      - Subcategory: name, anchor (optional), nodes (list of Node)
+
+      - Node: name, url (optional), description (optional)
+
+      Analyze the provided data to understand the exact hierarchy and fields present.
+
+      Generate appropriate Pydantic BaseModel classes in Python that accurately represent this structure.
+
+      Include proper field types (str, List, Optional), descriptions using Field, and relationships.
+
+      Ensure the models can be used for schema-based extraction.
+
+      Output only the Python code for the models, starting with necessary imports and class definitions. No explanations or markdown.
+    prompt_file: "none"
+    pydantic_model: null
+    llm: "openrouter_gpt4o-mini"
+    temperature: 0.0
+    top_p: 0.9
+    max_tokens: 16000
+    out_file: "shadergraph_toc_explore"
+    headless: true
+    cache_mode: "BYPASS"
+    word_count_threshold: 1
+    page_timeout: 80000
+    workflow: "pydantic"
+    css_selector: "table"
 
   - id: "shadergraph_content_explore"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
@@ -158,7 +263,7 @@ sources:
 
       The site is the Unity ShaderGraph Node Library documentation. The structure is hierarchical:
 
-      - Root: NodeLibrary with graph_nodes and block_nodes (both lists of Category)
+      - Root: NodeLibrary with graph_nodes (both lists of Category). Don't include the block_nodes.
 
       - Category: name, url (optional), description (optional), subcategories (optional list of Subcategory), nodes (optional list of Node)
 
@@ -187,6 +292,8 @@ sources:
     word_count_threshold: 1
     page_timeout: 80000
     workflow: "pydantic"
+    css_selector: "table"
+
 
   - id: "shadergraph_content_dom"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
