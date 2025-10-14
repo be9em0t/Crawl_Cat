@@ -26,7 +26,8 @@ import asyncio
 import json
 import yaml
 import argparse
-from typing import Dict, List
+import re
+from typing import Dict, List, Any
 from pydantic import BaseModel, Field
 from crawl4ai import AsyncWebCrawler, CacheMode, BrowserConfig, CrawlerRunConfig
 from crawl4ai import LLMExtractionStrategy
@@ -38,6 +39,147 @@ print("Crawl4AI: Advanced Web Crawling and Data Extraction")
 print("GitHub Repository: https://github.com/unclecode/crawl4ai")
 print("Twitter: @unclecode")
 print("Website: https://crawl4ai.com \n")
+
+
+def parse_markdown_table(content: str) -> List[Dict[str, str]]:
+    """Parse markdown table to extract links and descriptions."""
+    lines = content.split('\n')
+    table_start = False
+    headers = []
+    rows = []
+
+    for line in lines:
+        line = line.strip()
+        if '**Topic**' in line and '**Description**' in line:
+            table_start = True
+            headers = ['topic', 'description']
+            continue
+        elif table_start and '---' in line:
+            continue
+        elif table_start and '|' in line and not line.startswith('##'):
+            parts = [p.strip() for p in line.split('|')]
+            if len(parts) >= 2:
+                topic = parts[0]
+                description = parts[1] if len(parts) > 1 else ""
+                # Extract link from [text](url)
+                link_match = re.search(r'\[([^\]]+)\]\(([^)]+)\)', topic)
+                if link_match:
+                    name = link_match.group(1)
+                    url = link_match.group(2)
+                    rows.append({
+                        'name': name,
+                        'url': url,
+                        'description': description
+                    })
+        elif table_start and line.startswith('##'):
+            # New section, stop parsing table
+            break
+
+    return rows
+
+
+def build_hierarchy(flat_data: List[Dict[str, Any]], root_url: str) -> Dict[str, Any]:
+    """Build hierarchical structure from flat crawled data."""
+    # Create lookup by URL, normalize
+    url_to_content = {}
+    for item in flat_data:
+        url = item['url'].replace('%40', '@')
+        url_to_content[url] = item['content']
+
+    if root_url not in url_to_content:
+        raise ValueError("Root URL not found in data")
+
+    root_content = url_to_content[root_url]
+
+    # Parse root for categories
+    categories = parse_markdown_table(root_content)
+
+    hierarchy = {
+        'name': 'Node Library',
+        'url': root_url,
+        'description': 'Explore nodes that enable color and channel manipulation...',
+        'categories': []
+    }
+
+    for cat in categories:
+        cat_url = cat['url']
+        if cat_url in url_to_content:
+            cat_content = url_to_content[cat_url]
+            # Parse category for subcategories and nodes
+            sub_sections = parse_category_content(cat_content)
+            hierarchy['categories'].append({
+                'name': cat['name'],
+                'url': cat_url,
+                'description': cat['description'],
+                'subcategories': sub_sections
+            })
+
+    return hierarchy
+
+
+def parse_category_content(content: str) -> List[Dict[str, Any]]:
+    """Parse category page content for subcategories and nodes."""
+    lines = content.split('\n')
+    subcategories = []
+    current_sub = None
+
+    i = 0
+    while i < len(lines):
+        line = lines[i].strip()
+        if line.startswith('## ') and '[](' in line:
+            # New subcategory
+            sub_match = re.search(r'##\s+\[\]\(([^)]+)#([^)]+)\)(.+)', line)
+            if sub_match:
+                anchor = sub_match.group(2)
+                title = sub_match.group(3).strip()
+                current_sub = {
+                    'name': title,
+                    'anchor': anchor,
+                    'nodes': []
+                }
+                subcategories.append(current_sub)
+                # Look for table after this
+                i += 1
+                while i < len(lines):
+                    table_line = lines[i].strip()
+                    if '**Topic**' in table_line and '**Description**' in table_line:
+                        # Parse table
+                        table_content = []
+                        i += 1  # skip the header line
+                        if i < len(lines) and '---' in lines[i].strip():
+                            i += 1  # skip the separator line
+                        while i < len(lines) and not lines[i].strip().startswith('##'):
+                            table_content.append(lines[i])
+                            i += 1
+                        table_str = '**Topic** | **Description**\n---|---\n' + '\n'.join(table_content)
+                        nodes = parse_markdown_table(table_str)
+                        if current_sub:
+                            current_sub['nodes'] = nodes
+                        break
+                    i += 1
+            else:
+                print("Regex did not match")
+                i += 1
+        elif '**Topic**' in line and '**Description**' in line and not current_sub:
+            # Direct nodes without subcategory
+            table_content = []
+            i += 1
+            if i < len(lines) and '---' in lines[i].strip():
+                i += 1
+            while i < len(lines) and not lines[i].strip().startswith('##'):
+                table_content.append(lines[i])
+                i += 1
+            table_str = '**Topic** | **Description**\n---|---\n' + '\n'.join(table_content)
+            nodes = parse_markdown_table(table_str)
+            if nodes:
+                subcategories.append({
+                    'name': 'General',
+                    'nodes': nodes
+                })
+        else:
+            i += 1
+
+    return subcategories
 
 
 # LLM Extraction Example
@@ -192,6 +334,50 @@ async def extract_structured_data_using_llm(
         
         save_utils.save_json(f"output/{output_file}", {"graph_nodes": final_graph, "block_nodes": final_block})
         
+async def workflow_llm(source, urls):
+    llm_alias = source['llm']
+    provider, env_var = get_provider_info(llm_alias)
+    api_token = os.getenv(env_var) if env_var else None
+    
+    instruction = source.get('instruction', '')
+    schema_model = None
+    if 'pydantic_model' in source and source['pydantic_model']:
+        exec(source['pydantic_model'], globals())
+        for name in globals():
+            if isinstance(globals()[name], type) and issubclass(globals()[name], BaseModel):
+                schema_model = globals()[name]
+                break
+    
+    extraction_type = source.get('extraction_type', 'schema')
+    extra_args = {
+        "temperature": source.get('temperature', 0),
+        "top_p": source.get('top_p', 0.9),
+        "max_tokens": source.get('max_tokens', 2000)
+    }
+    output_file = source.get('out_file', 'extracted')
+    css_selector = source.get('css_selector')
+    headless = source.get('headless', True)
+    cache_mode = source.get('cache_mode', 'BYPASS')
+    word_count_threshold = source.get('word_count_threshold', 1)
+    page_timeout = source.get('page_timeout', 80000)
+    
+    await extract_structured_data_using_llm(
+        provider=provider,
+        api_token=api_token,
+        urls=urls,
+        instruction=instruction,
+        schema_model=schema_model,
+        extra_args=extra_args,
+        headless=headless,
+        cache_mode=cache_mode,
+        word_count_threshold=word_count_threshold,
+        page_timeout=page_timeout,
+        output_file=output_file,
+        css_selector=css_selector,
+        extraction_type=extraction_type
+    )
+
+
 async def workflow_explore(source, urls):
     from urllib.parse import urlparse
     
@@ -401,6 +587,31 @@ async def workflow_pydantic(source, urls):
         save_utils.save_json(f"output/{out_file}_pydantic.json", {})
 
 
+async def workflow_hierarchy(source, urls):
+    out_file = source.get('out_file', 'explore_output')
+    explore_json_path = f"output/{out_file}.json"
+    
+    if not os.path.exists(explore_json_path):
+        raise ValueError(f"Explore JSON not found: {explore_json_path}. Run explore workflow first with out_file: '{out_file}'.")
+    
+    with open(explore_json_path, 'r') as f:
+        flat_data = json.load(f)
+    
+    root_url = source.get('root_url')
+    if not root_url:
+        raise ValueError("root_url required for hierarchy workflow")
+    
+    # Build hierarchy
+    hierarchy = build_hierarchy(flat_data, root_url)
+    
+    # Save
+    hierarchy_file = f"output/{out_file}_hierarchy.json"
+    with open(hierarchy_file, 'w') as f:
+        json.dump(hierarchy, f, indent=2)
+    
+    print(f"Hierarchical JSON saved to {hierarchy_file}")
+
+
 # Main execution
 async def main(config_file, config_id=None):
     config = load_config(config_file)
@@ -421,7 +632,7 @@ async def main(config_file, config_id=None):
         raise ValueError("Workflow key missing")
     
     workflow = source['workflow']
-    allowed_workflows = ['llm', 'explore', 'pydantic']
+    allowed_workflows = ['llm', 'explore', 'pydantic', 'hierarchy']
     if workflow not in allowed_workflows:
         raise ValueError("Workflow key invalid")
     
@@ -433,6 +644,8 @@ async def main(config_file, config_id=None):
         await workflow_explore(source, urls)
     elif workflow == 'pydantic':
         await workflow_pydantic(source, urls)
+    elif workflow == 'hierarchy':
+        await workflow_hierarchy(source, urls)
 
 
 if __name__ == "__main__":

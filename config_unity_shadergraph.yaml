@@ -72,7 +72,7 @@ sources:
     top_p: 0.9
     max_tokens: 8000
     out_file: "shadergraph_toc_explore"
-    out_format: "markdown"
+    out_format: ["markdown", "json"]
     extraction_type: "block"
     css_selector: "#toc"
     headless: true
@@ -234,5 +234,12 @@ sources:
       # - type: SEOFilter
       #   threshold: 0.5
       #   keywords: ["shader", "node", "unity"]
+
+  - id: "shadergraph_hierarchy"
+    title: "Build hierarchical structure from explore output"
+    description: "Process the flat crawled data from explore workflow and build a hierarchical JSON structure of ShaderGraph nodes"
+    out_file: "shadergraph_content"
+    root_url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+    workflow: "hierarchy"
 
 

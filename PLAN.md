@@ -1,26 +1,24 @@
 # Plan for Fixing Unity ShaderGraph Node Extraction
 
 ## Issue
-Left simply to LLM the crawler now captures hierarchical categories with subcategories and nodes, but if the source pages are not perfectly structured we miss information. Exaple: the sidebar lists more pages than the subcategories available on individual pages. 
+Not all pages are correctly structured (surprise).
+So we need to use smartly DOM elements and use LLM only for extremely messy sites.
+Soem reqire user interaction (JS) to browse.
 
 ## Root Cause Analysis
 - Sidebar structure isn't fully reflected in page subcategories; some category pages exist but aren't nested under the main Node Library page.
 - LLM-based extraction works but is slow/expensive; switching to CSS/DOM selectors for speed is needed for repetitive extraction.
 - Potential need for JS actions to expand dynamic sidebars or deep crawling to auto-discover links.
 
-## Updated Requirements
-1. **Read sidebar structure and print for approval (a)**: Crawl the main Node-Library.html, extract all sidebar links (especially under "Node Library"), and output them for user confirmation before proceeding.
-2. **Select only part of the sidebar (b)**: Filter to pages under "Node Library" (e.g., Artistic-Nodes.html, Channel-Nodes.html, etc.), excluding unrelated sections.
-3. **Capture from each page using CSS/DOM selectors (c)**: For selected pages, extract node names and descriptions using pure CSS selectors (no LLM) for speed. If dynamic content, use JS to load it first.
 
 ## Next Steps Plan
 
-1. **DONE - Support CSS-based extraction**
+1. **Support CSS-based extraction**
    - Inspect Unity page DOM to identify selectors for node names/descriptions (e.g., `.node-title`, `.node-desc`).
    - Use `JsonCssExtractionStrategy` for structured output without LLM (generate schema once if needed).
    - If pages are dynamic, add `js_code` to expand/load content.
 
-2. **DONE - Implement sidebar reading and selection**
+2. **Implement sidebar reading and selection**
    - Use deep crawl or JS actions to extract sidebar links from the main page.
    - Filter links to only those under "Node Library".
    - Print the list for user approval; proceed only after confirmation.
@@ -48,6 +46,30 @@ From Crawl4ai examples (`quickstart.py`, `quickstart_examples_set_1.py` and `qui
 - **`demo_deep_crawl()`**: Demonstrates filtered deep crawl; adapt for sidebar link discovery.
 - **`demo_css_structured_extraction_no_schema()`**: One-time schema gen via LLM, then pure CSS extraction. Perfect for repeatable, fast node pulls.
 
+### Content Selection documentation
+Url: https://docs.crawl4ai.com/core/content-selection/
+
+Yes, the Content Selection documentation is very helpful for the extraction process. Here's how it applies to our task:
+
+## Key Helpful Features:
+
+1. **CSS Selector Scoping**: We can use `css_selector="#toc"` in `CrawlerRunConfig` to limit the crawl to just the table of contents region, reducing noise and improving parsing accuracy.
+
+2. **Content Filtering**: Parameters like `excluded_tags`, `word_count_threshold`, and link/media exclusions can help clean up the extracted TOC HTML before parsing.
+
+3. **Structured Extraction**: The `JsonCssExtractionStrategy` with nested schemas could potentially extract hierarchical link data from the TOC, though for complex nested structures like `#toc`, manual parsing with BeautifulSoup might still be needed.
+
+4. **Target Elements**: `target_elements` allows focusing on specific parts while preserving full page context for link analysis.
+
+## How It Fits Our Process:
+
+- **Main Page Crawl**: Use `css_selector="#toc"` to get clean TOC HTML, then parse the hierarchy with BeautifulSoup.
+- **Node Page Crawls**: Use content filtering to exclude unwanted elements (nav, footer, etc.) when extracting `<h1>` and `<p>` from individual node pages.
+- **Performance**: The LXML scraping strategy mentioned provides fast processing for large HTML documents.
+
+The documentation confirms that Crawl4AI's content selection capabilities will make our modular Python function more efficient and precise, especially for scoping crawls and filtering irrelevant content. We can combine CSS selection with manual parsing for the hierarchical structure.
+
+
 ## Code Organization Principles
 - Keep `crawl-cat2.py` minimal, universal, and modular (aim for under ~400 lines; offload to separate modules if exceeded).
 - Work towards achieving flexibilty and modularity with end goal of support for all Workflows listed below
@@ -60,16 +82,18 @@ From Crawl4ai examples (`quickstart.py`, `quickstart_examples_set_1.py` and `qui
 ## Workflows
 - Launch app
 - Load yaml, branch to different workflow strategies based on it
-   - Explore - try to capture only tructure
-   - Pure LLM - intelligently crawl pages and select content according to instructions
-   - LLM + DOM - intelligent crawl pages, but collect information based on DOM selectors
-   - Pure DOM - use predefined schema, follow through the pages based om DOMselectors
+   - explore - try to capture only tructure
+   - llm - intelligently crawl pages and select content according to instructions
+   - hybrid - LLM + DOM - intelligent crawl pages, but collect information based on DOM selectors
+   - dom - use predefined schema, follow through the pages based om DOMselectors
+   - hierarchy - convert flat json into hierarchy organised one
    - Full HTML - extracion to download all candidate pages, extract content locally
 - Optional verification of results
 - Optional processing with postprocessing prompt
 - Optional format filters (clear fences, UTF charecters etc.)
 - Save as JSON (via save_utils.py module)
 - Exit
+
 
 ### Remarks for Future Implementation (workflows explore, llm, dom, html)
 - **Feasibility**: All workflows are fully feasible with Crawl4Ai (e.g., LLM via LLMExtractionStrategy, DOM via JsonCssExtractionStrategy, Explore via BFSDeepCrawlStrategy). No major gaps identified.
@@ -81,5 +105,30 @@ From Crawl4ai examples (`quickstart.py`, `quickstart_examples_set_1.py` and `qui
 - **Scalability**: Integrate `BFSDeepCrawlStrategy` where needed (e.g., Explore, HTML). For large crawls, add `max_pages` and filters.
 - **Fallbacks**: If DOM fails, allow hybrid LLM+DOM. For Explore, print links for user approval before full extraction.
 - **Next Steps**: Start with 'llm' (done), then 'explore' (link discovery), 'dom' (CSS extraction), 'html' (raw download). Add optionals last.
+
+
+# Next prompt:
+
+Let's execute with the following restraints:
+- It seems we should be able to do this only using DOM selectors.
+- If we need a specific python function optimized for this case it's also fine, but it needs to be modular.
+- I hope we can achieve this without LLM, and will try LLM approach in our next case.
+- Analyze the task first, check documentation at #fetch https://docs.crawl4ai.com/core/content-selection/
+ and tell me what will work and what will not work within these constraints:
+
+Extract Node names and descriptions, hyerarchically ordered under Root and Categories.
+
+- use url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+
+- extract contents of css_selector: "#toc"
+
+- filter out the contents of "#toc" and keep only
+  * [Node Library](https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html "Node Library") and all of its sub-pages, remove all other content. (we might need to use LLM request for this)
+
+- structure them hyerarchically, exactly as they are structured in captured #toc
+
+- capture for each Node (this are always the furthest down the hyerachy) the 
+ -- name (<h1> containing something like "Normal Strength Node". Node seems to be always present.)
+ -- description (first <p> after the <h1>)
 
 
