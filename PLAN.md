@@ -46,6 +46,30 @@ From Crawl4ai examples (`quickstart.py`, `quickstart_examples_set_1.py` and `qui
 - **`demo_deep_crawl()`**: Demonstrates filtered deep crawl; adapt for sidebar link discovery.
 - **`demo_css_structured_extraction_no_schema()`**: One-time schema gen via LLM, then pure CSS extraction. Perfect for repeatable, fast node pulls.
 
+### Content Selection documentation
+Url: https://docs.crawl4ai.com/core/content-selection/
+
+Yes, the Content Selection documentation is very helpful for the extraction process. Here's how it applies to our task:
+
+## Key Helpful Features:
+
+1. **CSS Selector Scoping**: We can use `css_selector="#toc"` in `CrawlerRunConfig` to limit the crawl to just the table of contents region, reducing noise and improving parsing accuracy.
+
+2. **Content Filtering**: Parameters like `excluded_tags`, `word_count_threshold`, and link/media exclusions can help clean up the extracted TOC HTML before parsing.
+
+3. **Structured Extraction**: The `JsonCssExtractionStrategy` with nested schemas could potentially extract hierarchical link data from the TOC, though for complex nested structures like `#toc`, manual parsing with BeautifulSoup might still be needed.
+
+4. **Target Elements**: `target_elements` allows focusing on specific parts while preserving full page context for link analysis.
+
+## How It Fits Our Process:
+
+- **Main Page Crawl**: Use `css_selector="#toc"` to get clean TOC HTML, then parse the hierarchy with BeautifulSoup.
+- **Node Page Crawls**: Use content filtering to exclude unwanted elements (nav, footer, etc.) when extracting `<h1>` and `<p>` from individual node pages.
+- **Performance**: The LXML scraping strategy mentioned provides fast processing for large HTML documents.
+
+The documentation confirms that Crawl4AI's content selection capabilities will make our modular Python function more efficient and precise, especially for scoping crawls and filtering irrelevant content. We can combine CSS selection with manual parsing for the hierarchical structure.
+
+
 ## Code Organization Principles
 - Keep `crawl-cat2.py` minimal, universal, and modular (aim for under ~400 lines; offload to separate modules if exceeded).
 - Work towards achieving flexibilty and modularity with end goal of support for all Workflows listed below
@@ -79,5 +103,31 @@ From Crawl4ai examples (`quickstart.py`, `quickstart_examples_set_1.py` and `qui
 - **Scalability**: Integrate `BFSDeepCrawlStrategy` where needed (e.g., Explore, HTML). For large crawls, add `max_pages` and filters.
 - **Fallbacks**: If DOM fails, allow hybrid LLM+DOM. For Explore, print links for user approval before full extraction.
 - **Next Steps**: Start with 'llm' (done), then 'explore' (link discovery), 'dom' (CSS extraction), 'html' (raw download). Add optionals last.
+
+
+# Next prompt:
+
+Let's execute with the following restraints:
+- It seems we should be able to do this only using DOM selectors.
+- If we need a specific python function optimized for this case it's also fine, but it needs to be modular.
+- I hope we can achieve this without LLM, and will try LLM approach in our next case.
+- Analyze the task first, check documentation at #fetch https://docs.crawl4ai.com/core/content-selection/
+ and tell me what will work and what will not work within these constraints:
+
+Extract Node names and descriptions, hyerarchically ordered under Root and Categories.
+
+- use url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+
+- extract contents of css_selector: "#toc"
+
+- filter out the contents of "#toc" and keep only
+  * [Node Library](https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html "Node Library") and all of its sub-pages, remove all other content. (we might need to use LLM request for this)
+
+- structure them hyerarchically, exactly as they are structured in captured #toc
+
+- capture for each Node (this are always the furthest down the hyerachy) the 
+ -- name (<h1> containing something like "Normal Strength Node". Node seems to be always present.)
+ -- description (first <p> after the <h1>)
+
 
 

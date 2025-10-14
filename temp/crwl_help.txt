@@ -1,0 +1,30 @@
+Usage: crwl crawl [OPTIONS] URL
+
+  Crawl a website and extract content
+
+  Simple Usage:     crwl crawl https://example.com
+
+Options:
+  -B, --browser-config PATH       Browser config file (YAML/JSON)
+  -C, --crawler-config PATH       Crawler config file (YAML/JSON)
+  -f, --filter-config PATH        Content filter config file
+  -e, --extraction-config PATH    Extraction strategy config file
+  -j, --json-extract TEXT         Extract structured data using LLM with
+                                  optional description
+  -s, --schema PATH               JSON schema for extraction
+  -b, --browser TEXT              Browser parameters as
+                                  key1=value1,key2=value2
+  -c, --crawler TEXT              Crawler parameters as
+                                  key1=value1,key2=value2
+  -o, --output [all|json|markdown|md|markdown-fit|md-fit]
+  -O, --output-file PATH          Output file path (default: stdout)
+  -bc, --bypass-cache             Bypass cache when crawling
+  -q, --question TEXT             Ask a question about the crawled content
+  -v, --verbose
+  -p, --profile TEXT              Use a specific browser profile (by name)
+  --deep-crawl [bfs|dfs|best-first]
+                                  Enable deep crawling with specified strategy
+                                  (bfs, dfs, or best-first)
+  --max-pages INTEGER             Maximum number of pages to crawl in deep
+                                  crawl mode
+  -h, --help                      Show this message and exit.

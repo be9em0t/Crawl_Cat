@@ -1,0 +1,92 @@
+# Crawl4ai CLI Wrapper Configuration for Unity ShaderGraph
+# This config file contains multiple sources for different extraction targets
+
+# Global settings (applied to all sources unless overridden)
+save_folder: "output"  # All outputs will go to ./output/ folder
+
+# Multiple sources configuration
+sources:
+  # Source 1: Extract table of contents from Node Library page
+  - id: "shadergraph_toc"
+    save: "shadergraph_toc"
+    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+    output_format: "markdown"
+    verbose: true
+    bypass_cache: true
+
+    # Browser configuration
+    browser:
+      headless: true
+      viewport_width: 1280
+      user_agent_mode: "random"
+      ignore_https_errors: true
+
+    # Crawler configuration
+    crawler:
+      css_selector: "#toc"
+      cache_mode: "BYPASS"
+      page_timeout: 80000
+      word_count_threshold: 1
+      wait_until: "networkidle"
+      delay_before_return_html: 0.5
+      scan_full_page: true
+      scroll_delay: 0.3
+      process_iframes: false
+      remove_overlay_elements: true
+      magic: true
+
+  # Source 2: Extract main content from Node Library page
+  - id: "shadergraph_content"
+    save: "shadergraph_content"
+    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+    output_format: "markdown"
+    verbose: true
+    bypass_cache: true
+
+    # Browser configuration
+    browser:
+      headless: true
+      viewport_width: 1280
+      user_agent_mode: "random"
+      ignore_https_errors: true
+
+    # Crawler configuration - extract full page content (no specific selector)
+    crawler:
+      # css_selector: "#content"  # Commented out to extract full page
+      cache_mode: "BYPASS"
+      page_timeout: 80000
+      word_count_threshold: 10
+      wait_until: "networkidle"
+      delay_before_return_html: 0.5
+      scan_full_page: true
+      scroll_delay: 0.3
+      process_iframes: false
+      remove_overlay_elements: true
+      magic: true
+
+# Optional: Global extraction configuration (can be overridden per source)
+# extraction:
+#   type: "llm"
+#   provider: "openrouter/openai/gpt-4o-mini"
+#   instruction: "Extract Unity ShaderGraph node information"
+#   params:
+#     temperature: 0.0
+#     max_tokens: 8000
+
+# Optional: Global schema for extraction (can be overridden per source)
+# schema:
+#   name: "ShaderGraphExtractor"
+#   baseSelector: ".node-item"
+#   fields:
+#     - name: "name"
+#       selector: ".node-name"
+#       type: "text"
+#     - name: "description"
+#       selector: ".node-desc"
+#       type: "text"
+
+# Filter configuration (optional)
+# filter:
+#   type: "bm25"
+#   query: "Unity ShaderGraph node"
+#   threshold: 0.6

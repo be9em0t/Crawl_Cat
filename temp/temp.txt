@@ -1,1 +1,21 @@
 # temporary remarks
+
+Ok, can we do a small QT6 UI module that would let us choose from a dropdown list:
+
+browser.yml - Browser settings
+crawler.yml - Crawling behavior
+extract.yml - Extraction configuration (for structured data)
+filter.yml - Content filtering
+schema.json - Pydantic schema for structured extraction
+~/.crawl4ai/global.yml - Global settings and API keys
+
+- have dropdown selector for possible sourse URLs
+- dropdown selector for possible 
+
+----
+
+crwl "https://manual/Node-Library.html" -C crawler.yml -o markdown > output/toc.md
+
+crwl "https://manual/Node-Library.html" -C crawler.yml -o all > output/toc.json
+
+

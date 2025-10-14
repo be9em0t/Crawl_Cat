@@ -1,0 +1,6 @@
+css_selector: "#toc"
+cache_mode: "BYPASS"
+page_timeout: 80000
+word_count_threshold: 1
+headless: true
+verbose: true
