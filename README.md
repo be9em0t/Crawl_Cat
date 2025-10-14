@@ -1,10 +1,13 @@
+# Name
+crawl-cat.py
+
 # Crawl-cat Crawl4Ai-based documentation extractor
-Documentation extraction crawler that uses crawl4ai, LLM capability to analyze schema and select elements, then use DOM selectors for actual content extraction.
+Documentation extraction crawler that uses crawl4ai CLI, LLM capability to analyze schema and select elements, then use DOM selectors for actual content extraction.
 
 # Prerequisites
-- pyenv (optional but recommended) to match the project's Python version (see `.python-version` if present)
+- pyenv to match the project's Python version (see `.python-version` if present)
 - Python 3.11+ (the project was tested with pyenv Python 3.13.x)
-- An OpenAI API key stored in a `.env` file at the project root as `OPENAI_API_KEY=sk-...`
+- An API keys stored in a `.env` file at the project root
 - Crawl4Ai installed and verified.
 
 ## Verify Crawl4ai install:
@@ -36,36 +39,42 @@ If you use pyenv and want to activate the project's Python version:
 pyenv shell $(cat .python-version)
 ```
 
-# Running the script
-
-```bash
-# main.py will contain minimal GUI in the future
-python schema_discovery.py --help
-python crawl_cat.py --help
-```
-
 # What the script does
-- Crawls the OpenAI pricing page (`https://openai.com/api/pricing/`)
-- Uses crawl4ai's LLM extraction strategy to extract structured model fee information
-- Prints the extracted JSON to stdout
+- Crawls page(s)
+- May use user-supplied pythonic model
+- Uses crawl4ai's extraction strategies to extract structured information
+- Supports different workflows
+    - explore (explore the structure using CSS selectors)
+    - llm (ai-assisted extraction)
+    - dom (or css) - non-ai extraction
+    - html - page extraction for loacal processing
+- Prints the extracted information to stdout
+- Saves to JSON, markdown, HTML (depending on yaml settings)
 
 
 # Internal structure
 ```text
 Root
-├── main.py
-├── schema_discovery.py 
+├── .env
+├── requirements.txt
+├── providers.yaml
 ├── crawl_cat.py
 ├── save_utils.py
-├── requirements.txt
-├── .env
-├── sources
-│   ├── providers.yaml
-│   ├── prompt_Unity_Shadergraph_gpt41.md
-│   ├── prompt_Unity_Shadergraph_oss.md
-│   └── guidance_OpenAI_fees_gpt4o.md
-├── schemas
-│   ├── openai_price_discovered_model.py
-│   └── openai_price_prompt.txt
 └── output
 ```
+
+
+# Usage
+
+## Running the script
+
+Usage examples:
+  python crawl-cat2.py -cfg config_openai_fees.yaml
+  python crawl-cat2.py -cfg config_openai_fees.yaml -id openai_fees_or-gpt4o-mini
+
+Required files:
+- config_<name>.yaml: Configuration file with sources, URLs, models, etc.
+- providers.yaml: Provider definitions with LLM aliases and API keys reference
+
+## Yaml - Extracion filters
+... document consizely at some point ...
