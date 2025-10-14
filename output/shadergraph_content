@@ -1,0 +1,973 @@
+{
+  "graph_nodes": [
+    {
+      "name": "Artistic",
+      "subcategories": null,
+      "nodes": [
+        {
+          "name": "Channel Mixer",
+          "description": "Controls the amount each of the channels of input In contribute to each of the output channels.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Channel-Mixer-Node.html"
+        },
+        {
+          "name": "Contrast",
+          "description": "Adjusts the contrast of input In by the amount of input Contrast.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Contrast-Node.html"
+        },
+        {
+          "name": "Hue",
+          "description": "Offsets the hue of input In by the amount of input Offset.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Hue-Node.html"
+        },
+        {
+          "name": "Invert Colors",
+          "description": "Inverts the colors of input In on a per channel basis.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Invert-Colors-Node.html"
+        },
+        {
+          "name": "Replace Color",
+          "description": "Replaces values in input In equal to input From to the value of input To.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Replace-Color-Node.html"
+        },
+        {
+          "name": "Saturation",
+          "description": "Adjusts the saturation of input In by the amount of input Saturation.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Saturation-Node.html"
+        },
+        {
+          "name": "White Balance",
+          "description": "Adjusts the temperature and tint of input In by the amount of inputs Temperature and Tint respectively.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/White-Balance-Node.html"
+        },
+        {
+          "name": "Blend",
+          "description": "Blends the value of input Blend onto input Base using the blending mode defined by parameter Mode.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Blend-Node.html"
+        },
+        {
+          "name": "Dither",
+          "description": "Dither is an intentional form of noise used to randomize quantization error. It is used to prevent large-scale patterns such as color banding in images.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Dither-Node.html"
+        },
+        {
+          "name": "Channel Mask",
+          "description": "Masks values of input In on channels selected in dropdown Channels.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Channel-Mask-Node.html"
+        },
+        {
+          "name": "Color Mask",
+          "description": "Creates a mask from values in input In equal to input Mask Color.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Color-Mask-Node.html"
+        },
+        {
+          "name": "Normal Blend",
+          "description": "Blends two normal maps defined by inputs A and B together.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Normal-Blend-Node.html"
+        },
+        {
+          "name": "Normal From Height",
+          "description": "Creates a normal map from a height map defined by input Texture.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Normal-From-Height-Node.html"
+        },
+        {
+          "name": "Normal Strength",
+          "description": "Adjusts the strength of the normal map defined by input In by the amount of input Strength.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Normal-Strength-Node.html"
+        },
+        {
+          "name": "Normal Unpack",
+          "description": "Unpacks a normal map defined by input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Normal-Unpack-Node.html"
+        },
+        {
+          "name": "Colorspace Conversion",
+          "description": "Returns the result of converting the value of input In from one colorspace space to another.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Colorspace-Conversion-Node.html"
+        }
+      ]
+    },
+    {
+      "name": "Channel",
+      "subcategories": null,
+      "nodes": [
+        {
+          "name": "Append",
+          "description": "Combine two float or vector inputs into a single new vector of variable dimensions.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Append-Node.html"
+        },
+        {
+          "name": "Combine",
+          "description": "Creates new vectors from the four inputs R, G, B and A.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Combine-Node.html"
+        },
+        {
+          "name": "Flip",
+          "description": "Flips the individual channels of input In selected by the node's parameters.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Flip-Node.html"
+        },
+        {
+          "name": "Split",
+          "description": "Splits the input vector In into four Float outputs R, G, B and A.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Split-Node.html"
+        },
+        {
+          "name": "Swizzle",
+          "description": "Creates a new vector from the reordered elements of the input vector.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Swizzle-Node.html"
+        }
+      ]
+    },
+    {
+      "name": "Custom Render Texture",
+      "subcategories": null,
+      "nodes": [
+        {
+          "name": "Custom Render Texture Slice",
+          "description": "Access the custom render texture slice index and cubemap face.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Custom-Texture-Slice.html"
+        },
+        {
+          "name": "Custom Render Texture Size",
+          "description": "Access the custom render texture size.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Custom-Texture-Size.html"
+        },
+        {
+          "name": "Custom Render Texture Self",
+          "description": "Access the custom render texture from the previous update.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Custom-Texture-Self.html"
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "subcategories": null,
+      "nodes": [
+        {
+          "name": "Boolean",
+          "description": "Defines a constant Boolean value in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Boolean-Node.html"
+        },
+        {
+          "name": "Color",
+          "description": "Defines a constant Vector 4 value in the shader using a Color field.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Color-Node.html"
+        },
+        {
+          "name": "Constant",
+          "description": "Defines a Float of a mathematical constant value in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Constant-Node.html"
+        },
+        {
+          "name": "Integer",
+          "description": "Defines a constant Float value in the shader using an Integer field.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Integer-Node.html"
+        },
+        {
+          "name": "Slider",
+          "description": "Defines a constant Float value in the shader using a Slider field.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Slider-Node.html"
+        },
+        {
+          "name": "Time",
+          "description": "Provides access to various Time parameters in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Time-Node.html"
+        },
+        {
+          "name": "Float",
+          "description": "Defines a Float value in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Float-Node.html"
+        },
+        {
+          "name": "Vector 2",
+          "description": "Defines a Vector 2 value in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Vector-2-Node.html"
+        },
+        {
+          "name": "Vector 3",
+          "description": "Defines a Vector 3 value in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Vector-3-Node.html"
+        },
+        {
+          "name": "Vector 4",
+          "description": "Defines a Vector 4 value in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Vector-4-Node.html"
+        },
+        {
+          "name": "Bitangent Vector",
+          "description": "Provides access to the mesh vertex or fragment's Bitangent Vector.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Bitangent-Vector-Node.html"
+        },
+        {
+          "name": "Normal Vector",
+          "description": "Provides access to the mesh vertex or fragment's Normal Vector.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Normal-Vector-Node.html"
+        },
+        {
+          "name": "Position",
+          "description": "Provides access to the mesh vertex or fragment's Position.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Position-Node.html"
+        },
+        {
+          "name": "Screen Position",
+          "description": "Provides access to the mesh vertex or fragment's Screen Position.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Screen-Position-Node.html"
+        },
+        {
+          "name": "Tangent Vector",
+          "description": "Provides access to the mesh vertex or fragment's Tangent Vector.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Tangent-Vector-Node.html"
+        },
+        {
+          "name": "UV",
+          "description": "Provides access to the mesh vertex or fragment's UV coordinates.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/UV-Node.html"
+        },
+        {
+          "name": "Vertex Color",
+          "description": "Provides access to the mesh vertex or fragment's Vertex Color value.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Vertex-Color-Node.html"
+        },
+        {
+          "name": "View Direction",
+          "description": "Provides access to the mesh vertex or fragment's View Direction vector.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/View-Direction-Node.html"
+        },
+        {
+          "name": "Vertex ID",
+          "description": "Provides access to the mesh vertex or fragment's Vertex ID value.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Vertex-ID-Node.html"
+        },
+        {
+          "name": "Blackbody",
+          "description": "Samples a radiation based gradient from temperature input (in Kelvin).",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Blackbody-Node.html"
+        },
+        {
+          "name": "Gradient",
+          "description": "Defines a constant Gradient in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Gradient-Node.html"
+        },
+        {
+          "name": "Sample Gradient",
+          "description": "Samples a Gradient given the input of Time.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sample-Gradient-Node.html"
+        },
+        {
+          "name": "Matrix 2x2",
+          "description": "Defines a constant Matrix 2x2 value in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Matrix-2x2-Node.html"
+        },
+        {
+          "name": "Matrix 3x3",
+          "description": "Defines a constant Matrix 3x3 value in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Matrix-3x3-Node.html"
+        },
+        {
+          "name": "Matrix 4x4",
+          "description": "Defines a constant Matrix 4x4 value in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Matrix-4x4-Node.html"
+        },
+        {
+          "name": "Transformation Matrix",
+          "description": "Defines a constant Matrix 4x4 value for a default Unity Transformation Matrix in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Transformation-Matrix-Node.html"
+        },
+        {
+          "name": "Compute Deformation Node",
+          "description": "Passes compute deformed vertex data to a vertex shader. Only works with the Entities Graphics package.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Compute-Deformation-Node.html"
+        },
+        {
+          "name": "Linear Blend Skinning Node",
+          "description": "Applies Linear Blend Vertex Skinning. Only works with the Entities Graphics package.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Linear-Blend-Skinning-Node.html"
+        },
+        {
+          "name": "Sprite Skinning Node",
+          "description": "Applies Vertex Skinning on Sprites. Only works with the 2D Animation.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sprite-Skinning-Node.html"
+        },
+        {
+          "name": "Dielectric Specular",
+          "description": "Returns a Dielectric Specular F0 value for a physically based material.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Dielectric-Specular-Node.html"
+        },
+        {
+          "name": "Metal Reflectance",
+          "description": "Returns a Metal Reflectance value for a physically based material.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Metal-Reflectance-Node.html"
+        },
+        {
+          "name": "Ambient",
+          "description": "Provides access to the Scene's Ambient color values.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Ambient-Node.html"
+        },
+        {
+          "name": "Camera",
+          "description": "Provides access to various parameters of the current Camera.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Camera-Node.html"
+        },
+        {
+          "name": "Fog",
+          "description": "Provides access to the Scene's Fog parameters.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Fog-Node.html"
+        },
+        {
+          "name": "Baked GI",
+          "description": "Provides access to the Baked GI values at the vertex or fragment's position.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Baked-GI-Node.html"
+        },
+        {
+          "name": "Object",
+          "description": "Provides access to various parameters of the Object.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Object-Node.html"
+        },
+        {
+          "name": "Reflection Probe",
+          "description": "Provides access to the nearest Reflection Probe to the object.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Reflection-Probe-Node.html"
+        },
+        {
+          "name": "Scene Color",
+          "description": "Provides access to the current Camera's color buffer.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Scene-Color-Node.html"
+        },
+        {
+          "name": "Scene Depth",
+          "description": "Provides access to the current Camera's depth buffer.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Scene-Depth-Node.html"
+        },
+        {
+          "name": "Screen",
+          "description": "Provides access to parameters of the screen.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Screen-Node.html"
+        },
+        {
+          "name": "Eye Index",
+          "description": "Provides access to the Eye Index when stereo rendering.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Eye-Index-Node.html"
+        },
+        {
+          "name": "Cubemap Asset",
+          "description": "Defines a constant Cubemap Asset for use in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Cubemap-Asset-Node.html"
+        },
+        {
+          "name": "Sample Cubemap",
+          "description": "Samples a Cubemap and returns a Vector 4 color value for use in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sample-Cubemap-Node.html"
+        },
+        {
+          "name": "Sample Reflected Cubemap Node",
+          "description": "Samples a Cubemap with reflected vector and returns a Vector 4 color value for use in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sample-Reflected-Cubemap-Node.html"
+        },
+        {
+          "name": "Sample Texture 2D",
+          "description": "Samples a Texture 2D and returns a color value for use in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sample-Texture-2D-Node.html"
+        },
+        {
+          "name": "Sample Texture 2D Array",
+          "description": "Samples a Texture 2D Array at an Index and returns a color value for use in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sample-Texture-2D-Array-Node.html"
+        },
+        {
+          "name": "Sample Texture 2D LOD",
+          "description": "Samples a Texture 2D at a specific LOD and returns a color value for use in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sample-Texture-2D-LOD-Node.html"
+        },
+        {
+          "name": "Sample Texture 3D",
+          "description": "Samples a Texture 3D and returns a color value for use in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sample-Texture-3D-Node.html"
+        },
+        {
+          "name": "Sample Virtual Texture",
+          "description": "Samples a Virtual Texture and returns color values for use in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sample-Virtual-Texture-Node.html"
+        },
+        {
+          "name": "Sampler State",
+          "description": "Defines a Sampler State for sampling textures.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sampler-State-Node.html"
+        },
+        {
+          "name": "Texture Size",
+          "description": "Returns the Width and Height of the texel size of Texture 2D input.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Texture-Size-Node.html"
+        },
+        {
+          "name": "Texture 2D Array Asset",
+          "description": "Defines a constant Texture 2D Array Asset for use in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Texture-2D-Array-Asset-Node.html"
+        },
+        {
+          "name": "Texture 2D Asset",
+          "description": "Defines a constant Texture 2D Asset for use in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Texture-2D-Asset-Node.html"
+        },
+        {
+          "name": "Texture 3D Asset",
+          "description": "Defines a constant Texture 3D Asset for use in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Texture-3D-Asset-Node.html"
+        },
+        {
+          "name": "Element Texture UV",
+          "description": "Provides the texture coordinates (UV) typically used to sample the texture assigned to a UI element.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/element-texture-uv-node.html"
+        },
+        {
+          "name": "Element Layout UV",
+          "description": "Provides the layout UV coordinates within a UI element's layout rectangle.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/element-layout-uv-node.html"
+        },
+        {
+          "name": "Element Texture Size",
+          "description": "Provides the size of the texture assigned to a UI element.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/element-texture-size-node.html"
+        }
+      ]
+    },
+    {
+      "name": "Math",
+      "subcategories": null,
+      "nodes": [
+        {
+          "name": "Absolute",
+          "description": "Returns the absolute value of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Absolute-Node.html"
+        },
+        {
+          "name": "Exponential",
+          "description": "Returns the exponential value of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Exponential-Node.html"
+        },
+        {
+          "name": "Length",
+          "description": "Returns the length of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Length-Node.html"
+        },
+        {
+          "name": "Log",
+          "description": "Returns the logarithm of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Log-Node.html"
+        },
+        {
+          "name": "Modulo",
+          "description": "Returns the remainder of input A divided by input B.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Modulo-Node.html"
+        },
+        {
+          "name": "Negate",
+          "description": "Returns the inverse value of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Negate-Node.html"
+        },
+        {
+          "name": "Normalize",
+          "description": "Returns the normalized vector of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Normalize-Node.html"
+        },
+        {
+          "name": "Posterize",
+          "description": "Returns the input In converted into a number of values defined by input Steps.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Posterize-Node.html"
+        },
+        {
+          "name": "Reciprocal",
+          "description": "Returns the result of 1 divided by input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Reciprocal-Node.html"
+        },
+        {
+          "name": "Reciprocal Square Root",
+          "description": "Returns the result of 1 divided by the square root of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Reciprocal-Square-Root-Node.html"
+        },
+        {
+          "name": "Add",
+          "description": "Returns the sum of the two input values.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Add-Node.html"
+        },
+        {
+          "name": "Divide",
+          "description": "Returns the result of input A divided by input B.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Divide-Node.html"
+        },
+        {
+          "name": "Multiply",
+          "description": "Returns the result of input A multiplied by input B.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Multiply-Node.html"
+        },
+        {
+          "name": "Power",
+          "description": "Returns the result of input A to the power of input B.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Power-Node.html"
+        },
+        {
+          "name": "Square Root",
+          "description": "Returns the square root of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Square-Root-Node.html"
+        },
+        {
+          "name": "Subtract",
+          "description": "Returns the result of input A minus input B.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Subtract-Node.html"
+        },
+        {
+          "name": "DDX",
+          "description": "Returns the partial derivative with respect to the screen-space x-coordinate.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/DDX-Node.html"
+        },
+        {
+          "name": "DDXY",
+          "description": "Returns the sum of both partial derivatives.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/DDXY-Node.html"
+        },
+        {
+          "name": "DDY",
+          "description": "Returns the partial derivative with respect to the screen-space y-coordinate.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/DDY-Node.html"
+        },
+        {
+          "name": "Inverse Lerp",
+          "description": "Returns the parameter that produces the interpolant specified by input T within the range of input A to input B.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Inverse-Lerp-Node.html"
+        },
+        {
+          "name": "Lerp",
+          "description": "Returns the result of linearly interpolating between input A and input B by input T.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Lerp-Node.html"
+        },
+        {
+          "name": "Smoothstep",
+          "description": "Returns the result of a smooth Hermite interpolation between 0 and 1, if input In is between inputs Edge1 and Edge2.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Smoothstep-Node.html"
+        },
+        {
+          "name": "Matrix Construction",
+          "description": "Constructs square matrices from the four input vectors M0, M1, M2 and M3.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Matrix-Construction-Node.html"
+        },
+        {
+          "name": "Matrix Determinant",
+          "description": "Returns the determinant of the matrix defined by input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Matrix-Determinant-Node.html"
+        },
+        {
+          "name": "Matrix Split",
+          "description": "Splits a square matrix defined by input In into vectors.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Matrix-Split-Node.html"
+        },
+        {
+          "name": "Matrix Transpose",
+          "description": "Returns the transposed value of the matrix defined by input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Matrix-Transpose-Node.html"
+        },
+        {
+          "name": "Clamp",
+          "description": "Returns the input In clamped between the minimum and maximum values defined by inputs Min and Max respectively.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Clamp-Node.html"
+        },
+        {
+          "name": "Fraction",
+          "description": "Returns the fractional (or decimal) part of input In; which is greater than or equal to 0 and less than 1.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Fraction-Node.html"
+        },
+        {
+          "name": "Maximum",
+          "description": "Returns the largest of the two inputs values A and B.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Maximum-Node.html"
+        },
+        {
+          "name": "Minimum",
+          "description": "Returns the smallest of the two inputs values A and B.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Minimum-Node.html"
+        },
+        {
+          "name": "One Minus",
+          "description": "Returns the result of input In subtracted from 1.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/One-Minus-Node.html"
+        },
+        {
+          "name": "Random Range",
+          "description": "Returns a pseudo-random number that is between the minimum and maximum values defined by inputs Min and Max.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Random-Range-Node.html"
+        },
+        {
+          "name": "Remap",
+          "description": "Remaps the value of input In from between the values of input Out Min Max to between the values of input In Min Max.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Remap-Node.html"
+        },
+        {
+          "name": "Saturate",
+          "description": "Returns the value of input In clamped between 0 and 1.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Saturate-Node.html"
+        },
+        {
+          "name": "Ceiling",
+          "description": "Returns the smallest integer value, or whole number, that is greater than or equal to the value of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Ceiling-Node.html"
+        },
+        {
+          "name": "Floor",
+          "description": "Returns the largest integer value, or whole number, that is less than or equal to the value of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Floor-Node.html"
+        },
+        {
+          "name": "Round",
+          "description": "Returns the value of input In rounded to the nearest integer, or whole number.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Round-Node.html"
+        },
+        {
+          "name": "Sign",
+          "description": "Returns -1 if the value of input In is less than zero, 0 if equal to zero and 1 if greater than zero.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sign-Node.html"
+        },
+        {
+          "name": "Step",
+          "description": "Returns 1 if the value of input In is greater than or equal to the value of input Edge, otherwise returns 0.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Step-Node.html"
+        },
+        {
+          "name": "Truncate",
+          "description": "Returns the integer, or whole number, component of the value of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Truncate-Node.html"
+        },
+        {
+          "name": "Arccosine",
+          "description": "Returns the arccosine of each component the input In as a vector of equal length.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Arccosine-Node.html"
+        },
+        {
+          "name": "Arcsine",
+          "description": "Returns the arcsine of each component the input In as a vector of equal length.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Arcsine-Node.html"
+        },
+        {
+          "name": "Arctangent",
+          "description": "Returns the arctangent of the value of input In. Each component should be within the range of -Pi/2 to Pi/2.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Arctangent-Node.html"
+        },
+        {
+          "name": "Arctangent2",
+          "description": "Returns the arctangent of the values of both input A and input B.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Arctangent2-Node.html"
+        },
+        {
+          "name": "Cosine",
+          "description": "Returns the cosine of the value of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Cosine-Node.html"
+        },
+        {
+          "name": "Degrees to Radians",
+          "description": "Returns the value of input In converted from degrees to radians.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Degrees-To-Radians-Node.html"
+        },
+        {
+          "name": "Hyperbolic Cosine",
+          "description": "Returns the hyperbolic cosine of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Hyperbolic-Cosine-Node.html"
+        },
+        {
+          "name": "Hyperbolic Sine",
+          "description": "Returns the hyperbolic sine of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Hyperbolic-Sine-Node.html"
+        },
+        {
+          "name": "Hyperbolic Tangent",
+          "description": "Returns the hyperbolic tangent of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Hyperbolic-Tangent-Node.html"
+        },
+        {
+          "name": "Radians to Degrees",
+          "description": "Returns the value of input In converted from radians to degrees.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Radians-To-Degrees-Node.html"
+        },
+        {
+          "name": "Sine",
+          "description": "Returns the sine of the value of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sine-Node.html"
+        },
+        {
+          "name": "Tangent",
+          "description": "Returns the tangent of the value of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Tangent-Node.html"
+        },
+        {
+          "name": "Cross Product",
+          "description": "Returns the cross product of the values of the inputs A and B.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Cross-Product-Node.html"
+        },
+        {
+          "name": "Distance",
+          "description": "Returns the Euclidean distance between the values of the inputs A and B.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Distance-Node.html"
+        },
+        {
+          "name": "Dot Product",
+          "description": "Returns the dot product, or scalar product, of the values of the inputs A and B.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Dot-Product-Node.html"
+        },
+        {
+          "name": "Fresnel Effect",
+          "description": "Fresnel Effect is the effect of differing reflectance on a surface depending on viewing angle, where as you approach the grazing angle more light is reflected.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Fresnel-Effect-Node.html"
+        },
+        {
+          "name": "Projection",
+          "description": "Returns the result of projecting the value of input A onto a straight line parallel to the value of input B.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Projection-Node.html"
+        },
+        {
+          "name": "Reflection",
+          "description": "Returns a reflection vector using input In and a surface normal Normal.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Reflection-Node.html"
+        },
+        {
+          "name": "Rejection",
+          "description": "Returns the result of the projection of the value of input A onto the plane orthogonal, or perpendicular, to the value of input B.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Rejection-Node.html"
+        },
+        {
+          "name": "Rotate About Axis",
+          "description": "Rotates the input vector In around the axis Axis by the value of Rotation.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Rotate-About-Axis-Node.html"
+        },
+        {
+          "name": "Sphere Mask",
+          "description": "Creates a sphere mask originating from input Center.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sphere-Mask-Node.html"
+        },
+        {
+          "name": "Transform",
+          "description": "Returns the result of transforming the value of input In from one coordinate space to another.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Transform-Node.html"
+        },
+        {
+          "name": "Noise Sine Wave",
+          "description": "Returns the sine of the value of input In. For variance, random noise is added to the amplitude of the sine wave.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Noise-Sine-Wave-Node.html"
+        },
+        {
+          "name": "Sawtooth Wave",
+          "description": "Returns a sawtooth wave from the value of input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sawtooth-Wave-Node.html"
+        }
+      ]
+    },
+    {
+      "name": "Checkerboard",
+      "subcategories": null,
+      "nodes": null
+    },
+    {
+      "name": "Gradient Noise",
+      "subcategories": null,
+      "nodes": null
+    },
+    {
+      "name": "Simple Noise",
+      "subcategories": null,
+      "nodes": null
+    },
+    {
+      "name": "Voronoi",
+      "subcategories": null,
+      "nodes": null
+    },
+    {
+      "name": "Ellipse",
+      "subcategories": null,
+      "nodes": null
+    },
+    {
+      "name": "Polygon",
+      "subcategories": null,
+      "nodes": null
+    },
+    {
+      "name": "Rectangle",
+      "subcategories": null,
+      "nodes": null
+    },
+    {
+      "name": "Rounded Polygon",
+      "subcategories": null,
+      "nodes": null
+    },
+    {
+      "name": "Rounded Rectangle",
+      "subcategories": null,
+      "nodes": null
+    },
+    {
+      "name": "UI",
+      "subcategories": null,
+      "nodes": [
+        {
+          "name": "Default Solid",
+          "description": "Outputs the solid color specified for your UI elements.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/default-solid-node.html"
+        },
+        {
+          "name": "Default Texture",
+          "description": "Provides a pre-defined texture for your UI elements.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/default-texture-node.html"
+        },
+        {
+          "name": "Default SDF Text",
+          "description": "Provides the text color set for SDF text rendering and includes a tint input to modify the color of the text.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/default-sdf-text-node.html"
+        },
+        {
+          "name": "Default Bitmap Text",
+          "description": "Provides the text color set for bitmap text rendering and includes a tint input to modify the color of the text.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/default-bitmap-text-node.html"
+        },
+        {
+          "name": "Default Gradient",
+          "description": "Outputs the gradient specified for your UI elements.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/default-gradient-node.html"
+        },
+        {
+          "name": "Render Type",
+          "description": "Outputs the current render type for conditional logic in the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/render-type-node.html"
+        },
+        {
+          "name": "Render Type Branch",
+          "description": "Routes inputs based on the current render type and outputs the appropriate result.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/render-type-branch-node.html"
+        },
+        {
+          "name": "Sample Element Texture",
+          "description": "Samples a texture at specific UV coordinates.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/sample-element-texture-node.html"
+        }
+      ]
+    },
+    {
+      "name": "Utility",
+      "subcategories": null,
+      "nodes": [
+        {
+          "name": "Preview",
+          "description": "Provides a preview window and passes the input value through without modification.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Preview-Node.html"
+        },
+        {
+          "name": "Sub-Graph",
+          "description": "Provides a reference to a Sub-graph asset.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Sub-graph-Node.html"
+        },
+        {
+          "name": "All",
+          "description": "Returns true if all components of the input In are non-zero.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/All-Node.html"
+        },
+        {
+          "name": "And",
+          "description": "Returns true if both the inputs A and B are true.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/And-Node.html"
+        },
+        {
+          "name": "Any",
+          "description": "Returns true if any of the components of the input In are non-zero.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Any-Node.html"
+        },
+        {
+          "name": "Branch",
+          "description": "Provides a dynamic branch to the shader.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Branch-Node.html"
+        },
+        {
+          "name": "Comparison",
+          "description": "Compares the two input values A and B based on the condition selected on the dropdown.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Comparison-Node.html"
+        },
+        {
+          "name": "Is Infinite",
+          "description": "Returns true if any of the components of the input In is an infinite value.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Is-Infinite-Node.html"
+        },
+        {
+          "name": "Is NaN",
+          "description": "Returns true if any of the components of the input In is not a number (NaN).",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Is-NaN-Node.html"
+        },
+        {
+          "name": "Nand",
+          "description": "Returns true if both the inputs A and B are false.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Nand-Node.html"
+        },
+        {
+          "name": "Not",
+          "description": "Returns the opposite of input In. If In is true, the output is false. Otherwise, it returns true.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Not-Node.html"
+        },
+        {
+          "name": "Or",
+          "description": "Returns true if either input A or input B is true.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Or-Node.html"
+        }
+      ]
+    },
+    {
+      "name": "UV",
+      "subcategories": null,
+      "nodes": [
+        {
+          "name": "Flipbook",
+          "description": "Creates a flipbook, or texture sheet animation, of the UVs supplied to input In.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Flipbook-Node.html"
+        },
+        {
+          "name": "Radial Shear",
+          "description": "Applies a radial shear warping effect similar to a wave to the value of input UV.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Radial-Shear-Node.html"
+        },
+        {
+          "name": "Spherize",
+          "description": "Applies a spherical warping effect similar to a fisheye camera lens to the value of input UV.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Spherize-Node.html"
+        },
+        {
+          "name": "Triplanar",
+          "description": "A method of generating UVs and sampling a texture by projecting in world space.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Triplanar-Node.html"
+        },
+        {
+          "name": "Parallax Mapping",
+          "description": "Creates a parallax effect that displaces a material's UVs.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Parallax-Mapping-Node.html"
+        },
+        {
+          "name": "Polar Coordinates",
+          "description": "Converts the value of input UV to polar coordinates.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Polar-Coordinates-Node.html"
+        },
+        {
+          "name": "Rotate",
+          "description": "Rotates the value of input UV around a reference point defined by input Center by the amount of input Rotation.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Rotate-Node.html"
+        },
+        {
+          "name": "Tiling and Offset",
+          "description": "Tiles and offsets the value of input UV by the inputs Tiling and Offset respectively.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Tiling-And-Offset-Node.html"
+        },
+        {
+          "name": "Twirl",
+          "description": "Applies a twirl warping effect similar to a black hole to the value of input UV.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Twirl-Node.html"
+        },
+        {
+          "name": "Parallax Occlusion Mapping",
+          "description": "Creates a parallax effect that displaces a material's UVs and depth.",
+          "url": "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Parallax-Occlusion-Mapping-Node.html"
+        }
+      ]
+    }
+  ],
+  "block_nodes": []
+}

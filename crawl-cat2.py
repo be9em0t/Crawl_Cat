@@ -6,16 +6,6 @@ import os, sys
 from dotenv import load_dotenv
 load_dotenv()  # Loads from .env by default
 
-try:
-    from openai import OpenAI
-except ImportError:
-    OpenAI = None
-
-try:
-    import ollama
-except ImportError:
-    ollama = None
-
 from crawl4ai import LLMConfig
 
 sys.path.append(
@@ -34,6 +24,8 @@ from crawl4ai import JsonCssExtractionStrategy
 from crawl4ai import BFSDeepCrawlStrategy, DomainFilter, FilterChain
 from crawl4ai.deep_crawling.filters import URLPatternFilter, ContentRelevanceFilter
 import save_utils
+from llm_utils import load_config, get_provider_info, prepare_llm_config
+from workflow_pydantic import workflow_pydantic
 
 print("Crawl4AI: Advanced Web Crawling and Data Extraction")
 print("GitHub Repository: https://github.com/unclecode/crawl4ai")
@@ -46,47 +38,6 @@ print("Website: https://crawl4ai.com \n")
 #     model_name: str = Field(..., description="Name of the OpenAI model.")
 #     input_fee: str = Field(..., description="Fee for input token for the OpenAI model.")
 #     output_fee: str = Field(..., description="Fee for output token for the OpenAI model.")
-
-
-def load_config(config_file):
-    with open(config_file, 'r') as f:
-        return yaml.safe_load(f)
-
-
-def get_provider_info(llm_alias, providers_file='providers.yaml'):
-    providers = load_config(providers_file)['providers']
-    for key, info in providers.items():
-        if llm_alias in info.get('aliases', []) or key == llm_alias:
-            return info['provider'], info['env_var']
-    raise ValueError(f"LLM alias '{llm_alias}' not found in providers.yaml")
-
-
-async def call_llm_directly(provider, api_token, prompt, extra_args):
-    """Call LLM directly without crawling."""
-    if provider.startswith("openai") or provider.startswith("openrouter"):
-        if OpenAI is None:
-            raise ImportError("OpenAI library not installed. Install with: pip install openai")
-        base_url = "https://openai.com/v1" if provider.startswith("openai") else "https://openrouter.ai/api/v1"
-        client = OpenAI(api_key=api_token, base_url=base_url)
-        model = provider.split("/")[-1] if "/" in provider else provider
-        response = client.chat.completions.create(
-            model=model,
-            messages=[{"role": "user", "content": prompt}],
-            **extra_args
-        )
-        return response.choices[0].message.content.strip()
-    elif provider.startswith("ollama"):
-        if ollama is None:
-            raise ImportError("Ollama library not installed. Install with: pip install ollama")
-        model = provider.split("/")[-1]
-        response = ollama.chat(
-            model=model,
-            messages=[{"role": "user", "content": prompt}],
-            options=extra_args
-        )
-        return response['message']['content'].strip()
-    else:
-        raise ValueError(f"Unsupported provider: {provider}")
 
 
 async def extract_structured_data_using_llm(
@@ -165,8 +116,22 @@ async def extract_structured_data_using_llm(
         
         for item in all_extracted:
             if isinstance(item, dict):
-                merge_categories(merged_graph, item.get("graph_nodes", []))
-                merge_categories(merged_block, item.get("block_nodes", []))
+                # Handle different extraction formats
+                if "graph_nodes" in item:
+                    merge_categories(merged_graph, item.get("graph_nodes", []))
+                    merge_categories(merged_block, item.get("block_nodes", []))
+                elif "category" in item:
+                    # DOM extraction format: CategoryNodes
+                    cat_name = item["category"]
+                    if cat_name not in merged_graph:
+                        merged_graph[cat_name] = {'name': cat_name, 'subcategories': {}, 'nodes': []}
+                    merged_graph[cat_name]['nodes'].extend(item.get('nodes', []))
+                    # Deduplicate
+                    nodes_dict = {node['name']: node for node in merged_graph[cat_name]['nodes']}
+                    merged_graph[cat_name]['nodes'] = list(nodes_dict.values())
+                else:
+                    # Try to merge as if it's a list of categories
+                    merge_categories(merged_graph, [item])
         
         # Convert back to list
         final_graph = []
@@ -215,7 +180,9 @@ async def workflow_explore(source, urls):
     cache_mode = source.get('cache_mode', 'BYPASS')
     word_count_threshold = source.get('word_count_threshold', 1)
     page_timeout = source.get('page_timeout', 80000)
-    out_file = source.get('out_file', 'explore_output')
+    out_file_base = source.get('out_file', 'explore_output')
+    workflow = source['workflow']
+    out_file = f"{out_file_base}_{workflow}"
     out_formats = source.get('out_format', ['json'])
     if isinstance(out_formats, str):
         out_formats = [out_formats]
@@ -307,119 +274,6 @@ async def workflow_explore(source, urls):
         print(f"Saved {fmt} output to output/{out_file}{file_ext}")
 
 
-async def workflow_pydantic(source, urls):
-    out_file = source.get('out_file', 'pydantic_output')
-    explore_md_path = f"output/{out_file}.md"
-    explore_json_path = f"output/{out_file}.json"
-    
-    if not os.path.exists(explore_md_path) or not os.path.exists(explore_json_path):
-        raise ValueError(f"Explore outputs not found: {explore_md_path} and {explore_json_path}. Run explore workflow first with out_file: '{out_file}'.")
-    
-    with open(explore_md_path, 'r') as f:
-        explore_md = f.read()
-    
-    with open(explore_json_path, 'r') as f:
-        explore_json = json.load(f)
-    
-    # Get the prompt from config
-    base_prompt = source.get('prompt', '')
-    
-    # Build the full prompt including the data
-    prompt = base_prompt + f"\n\nExplore Markdown (truncated if necessary):\n{explore_md[:10000]}...\n\nExplore JSON (first 5 pages):\n{json.dumps(explore_json[:5], indent=2)}"
-    
-    llm_alias = source['llm']
-    temperature = source.get('temperature', 0.0)
-    top_p = source.get('top_p', 0.9)
-    max_tokens = source.get('max_tokens', 8000)
-    
-    provider, env_var = get_provider_info(llm_alias)
-    api_token = os.getenv(env_var) if env_var else None
-    
-    if api_token is None and not provider.startswith("ollama"):
-        print(f"API token is required for {provider}. Skipping.")
-        return
-    
-    extra_args = {
-        "temperature": temperature,
-        "top_p": top_p,
-        "max_tokens": max_tokens
-    }
-    
-    # Call LLM directly with the prompt
-    model_code = await call_llm_directly(provider, api_token, prompt, extra_args)
-    
-    # Clean the model_code by removing markdown code blocks
-    if model_code.startswith('```python'):
-        model_code = model_code[9:]
-    if model_code.endswith('```'):
-        model_code = model_code[:-3]
-    model_code = model_code.strip()
-    
-    # Save the model code
-    model_file = f"output/{out_file}_model.py"
-    with open(model_file, 'w') as f:
-        f.write(model_code)
-    print(f"Saved Pydantic models to {model_file}")
-    
-    # Execute the model code to get the classes
-    try:
-        exec(model_code, globals())
-        # Find the main class (assume NodeLibrary)
-        main_class = 'NodeLibrary'
-        if main_class in globals():
-            ModelClass = globals()[main_class]
-        else:
-            # Find any class
-            for name in globals():
-                if isinstance(globals()[name], type) and issubclass(globals()[name], BaseModel):
-                    ModelClass = globals()[name]
-                    break
-            else:
-                raise ValueError("No Pydantic model class found in generated code")
-        
-        print(f"Using model class: {ModelClass.__name__}")
-        
-        # Use the explore markdown to build hierarchical structure with LLM
-        build_prompt = f"""
-Using the generated Pydantic model schema, analyze the combined explore markdown content and construct the hierarchical NodeLibrary structure.
-
-Model schema: {json.dumps(ModelClass.model_json_schema())}
-
-The markdown contains content from all crawled pages. Parse the hierarchical structure of categories, subcategories, and nodes.
-
-Output only the JSON object matching the NodeLibrary schema.
-
-Combined Markdown Content (truncated):
-{explore_md[:60000]}...
-"""
-        
-        hierarchical_json_str = await call_llm_directly(provider, api_token, build_prompt, extra_args)
-        
-        # Clean the JSON
-        if hierarchical_json_str.startswith('```json'):
-            hierarchical_json_str = hierarchical_json_str[7:]
-        if hierarchical_json_str.endswith('```'):
-            hierarchical_json_str = hierarchical_json_str[:-3]
-        hierarchical_json_str = hierarchical_json_str.strip()
-        
-        try:
-            hierarchical_data = json.loads(hierarchical_json_str)
-            # Validate with the model
-            validated = ModelClass(**hierarchical_data)
-            final_data = validated.model_dump()
-            print("Successfully validated hierarchical structure")
-        except Exception as e:
-            print(f"Validation failed: {e}. Using raw data.")
-            final_data = json.loads(hierarchical_json_str)
-        
-        save_utils.save_json(f"output/{out_file}_pydantic.json", final_data)
-        
-    except Exception as e:
-        print(f"Error processing generated model or extracting: {e}")
-        # Save empty structured JSON
-        save_utils.save_json(f"output/{out_file}_pydantic.json", {})
-
-
 # Main execution
 async def main(config_file, config_id=None):
     config = load_config(config_file)
@@ -446,8 +300,25 @@ async def main(config_file, config_id=None):
     
     urls = source.get('urls') or [source['url']]
     
+    # Prepare parameters for LLM workflows
+    provider, api_token, schema_model, extra_args = prepare_llm_config(source) if workflow in ['llm', 'pydantic'] else (None, None, None, None)
+    
     if workflow == 'llm':
-        await workflow_llm(source, urls)
+        await extract_structured_data_using_llm(
+            provider=provider, 
+            api_token=api_token, 
+            urls=urls, 
+            instruction=source.get('instruction'), 
+            schema_model=schema_model, 
+            extra_args=extra_args,
+            headless=source.get('headless', True),
+            cache_mode=source.get('cache_mode', 'BYPASS'),
+            word_count_threshold=source.get('word_count_threshold', 1),
+            page_timeout=source.get('page_timeout', 80000),
+            output_file=source.get('out_file', 'extracted_data'),
+            css_selector=source.get('css_selector'),
+            extraction_type=source.get('extraction_type', 'schema')
+        )
     elif workflow == 'explore':
         await workflow_explore(source, urls)
     elif workflow == 'pydantic':
@@ -469,11 +340,11 @@ Required files:
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument('-cfg', '--config', type=str, required=True, help='Path to the configuration YAML file')
-    parser.add_argument('-id', '--config-id', type=str, help='ID of the source to use from the config file')
+    parser.add_argument('-id', '--id', '--config-id', type=str, help='ID of the source to use from the config file')
     args = parser.parse_args()
     
     try:
-        asyncio.run(main(args.config, args.config_id))
+        asyncio.run(main(args.config, args.id))
     except ValueError as e:
         print(f"Configuration Error: {e}")
         sys.exit(1)
