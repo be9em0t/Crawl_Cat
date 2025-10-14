@@ -281,8 +281,9 @@ sources:
   - id: "shadergraph_hierarchy"
     title: "Build hierarchical structure from explore output"
     description: "Process the flat crawled data from explore workflow and build a hierarchical JSON structure of ShaderGraph nodes"
+    input_file: "shadergraph_content.json"
     out_file: "shadergraph_hierarchy"
-    root_url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
     workflow: "hierarchy"
 
 

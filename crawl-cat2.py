@@ -17,6 +17,7 @@ import argparse
 import json
 import yaml
 import asyncio
+import re
 
 print("Crawl4AI: Advanced Web Crawling and Data Extraction")
 print("GitHub Repository: https://github.com/unclecode/crawl4ai")
@@ -441,24 +442,28 @@ async def workflow_pydantic(source, urls):
 
 
 async def workflow_hierarchy(source, urls):
-    out_file = source.get('out_file', 'explore_output')
-    explore_json_path = f"output/{out_file}.json"
+    input_file = source.get('input_file')
+    if not input_file:
+        raise ValueError("input_file required for hierarchy workflow")
+    
+    explore_json_path = f"output/{input_file}"
     
     if not os.path.exists(explore_json_path):
-        raise ValueError(f"Explore JSON not found: {explore_json_path}. Run explore workflow first with out_file: '{out_file}'.")
+        raise ValueError(f"Explore JSON not found: {explore_json_path}. Run explore workflow first.")
     
     with open(explore_json_path, 'r') as f:
         flat_data = json.load(f)
     
-    root_url = source.get('root_url')
+    root_url = source.get('url')
     if not root_url:
-        raise ValueError("root_url required for hierarchy workflow")
+        raise ValueError("url required for hierarchy workflow")
     
     # Build hierarchy
     hierarchy = build_hierarchy(flat_data, root_url)
     
     # Save
-    hierarchy_file = f"output/{out_file}_hierarchy.json"
+    out_file = source.get('out_file', 'hierarchy_output')
+    hierarchy_file = f"output/{out_file}.json"
     with open(hierarchy_file, 'w') as f:
         json.dump(hierarchy, f, indent=2)
     
@@ -489,7 +494,10 @@ async def main(config_file, config_id=None):
     if workflow not in allowed_workflows:
         raise ValueError("Workflow key invalid")
     
-    urls = source.get('urls') or [source['url']]
+    # Only get URLs for workflows that need them
+    urls = None
+    if workflow in ['llm', 'explore', 'pydantic']:
+        urls = source.get('urls') or [source['url']]
     
     if workflow == 'llm':
         await workflow_llm(source, urls)
