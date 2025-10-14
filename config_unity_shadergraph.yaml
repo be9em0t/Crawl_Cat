@@ -55,6 +55,49 @@ sources:
     page_timeout: 80000
     workflow: "llm"
 
+  - id: "shadergraph_categories_opengpt4o-mini"
+    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+    title: "Unity Shadergraph category page"
+    description: "Extract the Unity ShaderGraph categories from the url."
+    instruction: |
+      From the crawled content of this page, extract Unity ShaderGraph categories.
+      Output a single NodeLibrary object.
+      - If this page is the main Node Library page, categories with descriptions. Skip block_nodes similarly.
+      - Only include data actually present on the page.
+    prompt_file: "none"
+    pydantic_model: |
+      from pydantic import BaseModel, Field
+      from typing import List, Optional
+
+      class ShaderNode(BaseModel):
+          name: str = Field(..., description="Name of the shader node.")
+          description: str = Field(..., description="Description of the shader node.")
+
+      class Subcategory(BaseModel):
+          name: str = Field(..., description="Name of the subcategory.")
+          nodes: List[ShaderNode] = Field(..., description="List of nodes in this subcategory.")
+
+      class Category(BaseModel):
+          name: str = Field(..., description="Name of the category.")
+          subcategories: Optional[List[Subcategory]] = Field(None, description="List of subcategories, if any.")
+          nodes: Optional[List[ShaderNode]] = Field(None, description="List of nodes directly in this category, if no subcategories.")
+
+      class NodeLibrary(BaseModel):
+          graph_nodes: List[Category] = Field(..., description="List of graph node categories.")
+          block_nodes: List[Category] = Field(..., description="List of block node categories.")
+    llm: "openrouter_gpt4o-mini"
+    temperature: 0.0
+    top_p: 0.9
+    max_tokens: 8000
+    out_file: "shadergraph_categories"
+    extraction_type: "schema"
+    css_selector: null
+    headless: true
+    cache_mode: "BYPASS"
+    word_count_threshold: 1
+    page_timeout: 80000
+    workflow: "llm"
+
 
   - id: "shadergraph_toc_explore"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
@@ -238,7 +281,7 @@ sources:
   - id: "shadergraph_hierarchy"
     title: "Build hierarchical structure from explore output"
     description: "Process the flat crawled data from explore workflow and build a hierarchical JSON structure of ShaderGraph nodes"
-    out_file: "shadergraph_content"
+    out_file: "shadergraph_hierarchy"
     root_url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
     workflow: "hierarchy"
 
