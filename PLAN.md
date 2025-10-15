@@ -112,6 +112,7 @@ The documentation confirms that Crawl4AI's content selection capabilities will m
 - the idea for next step was to build flexible dom workflow, that can follow detailed dom element instructions as in the propmt below
 
 # dom workflow creation prompt:
+Next we will work on dom workflow.
 
 Let's execute with the following restraints:
 - It seems we should be able to do this only using DOM selectors.
