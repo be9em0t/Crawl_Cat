@@ -207,6 +207,8 @@ async def workflow_llm(source, urls):
         "max_tokens": source.get('max_tokens', 2000)
     }
     output_file = source.get('out_file', 'extracted')
+    workflow = source.get('workflow', 'llm')
+    output_file = f"{output_file}_{workflow}"
     if not output_file.endswith('.json'):
         output_file += '.json'
     css_selector = source.get('css_selector')
@@ -242,14 +244,15 @@ async def workflow_explore(source, urls):
         def filter(self, url):
             from fnmatch import fnmatch
             for pattern in self.blocked_patterns:
-                if fnmatch(url, pattern):
-                    return False
+                return False
             return True
         
         def apply(self, url):
             return self.filter(url)
     
-    llm_alias = source['llm']  # Not used, but keep for consistency
+    out_file = source.get('out_file', 'explore_output')
+    workflow = source.get('workflow', 'explore')
+    out_file_with_workflow = f"{out_file}_{workflow}"
     headless = source.get('headless', True)
     cache_mode = source.get('cache_mode', 'BYPASS')
     word_count_threshold = source.get('word_count_threshold', 1)
@@ -338,21 +341,26 @@ async def workflow_explore(source, urls):
                 combined_content += f"\n--- Page {i+1}: {result.url} ---\n\n"
                 combined_content += result.markdown.raw_markdown + "\n"
             file_ext = ".md"
-            save_utils.save_data(f"output/{out_file}{file_ext}", combined_content, 'markdown')
+            save_utils.save_data(f"output/{out_file_with_workflow}{file_ext}", combined_content, 'markdown')
         elif fmt == 'json':
             pages_data = [{"url": result.url, "content": result.markdown.raw_markdown} for result in results]
             file_ext = ".json"
-            save_utils.save_json(f"output/{out_file}{file_ext}", pages_data)
-        print(f"Saved {fmt} output to output/{out_file}{file_ext}")
+            save_utils.save_json(f"output/{out_file_with_workflow}{file_ext}", pages_data)
+        print(f"Saved {fmt} output to output/{out_file_with_workflow}{file_ext}")
 
 
 async def workflow_pydantic(source, urls):
     out_file = source.get('out_file', 'pydantic_output')
-    explore_md_path = f"output/{out_file}.md"
-    explore_json_path = f"output/{out_file}.json"
+    workflow = source.get('workflow', 'pydantic')
+    out_file_with_workflow = f"{out_file}_{workflow}"
+    
+    # Look for explore outputs (assuming they have _explore suffix)
+    explore_base = out_file  # The base name without workflow
+    explore_md_path = f"output/{explore_base}_explore.md"
+    explore_json_path = f"output/{explore_base}_explore.json"
     
     if not os.path.exists(explore_md_path) or not os.path.exists(explore_json_path):
-        raise ValueError(f"Explore outputs not found: {explore_md_path} and {explore_json_path}. Run explore workflow first with out_file: '{out_file}'.")
+        raise ValueError(f"Explore outputs not found: {explore_md_path} and {explore_json_path}. Run explore workflow first with out_file: '{explore_base}'.")
     
     with open(explore_md_path, 'r') as f:
         explore_md = f.read()
@@ -395,7 +403,7 @@ async def workflow_pydantic(source, urls):
     model_code = model_code.strip()
     
     # Save the model code
-    model_file = f"output/{out_file}_model.py"
+    model_file = f"output/{out_file_with_workflow}_model.py"
     with open(model_file, 'w') as f:
         f.write(model_code)
     print(f"Saved Pydantic models to {model_file}")
@@ -463,11 +471,12 @@ async def workflow_hierarchy(source, urls):
     
     # Save
     out_file = source.get('out_file', 'hierarchy_output')
-    hierarchy_file = f"output/{out_file}.json"
-    with open(hierarchy_file, 'w') as f:
+    workflow = source.get('workflow', 'hierarchy')
+    out_file_with_workflow = f"{out_file}_{workflow}.json"
+    with open(f"output/{out_file_with_workflow}", 'w') as f:
         json.dump(hierarchy, f, indent=2)
     
-    print(f"Hierarchical JSON saved to {hierarchy_file}")
+    print(f"Hierarchical JSON saved to output/{out_file_with_workflow}")
 
 
 # Main execution

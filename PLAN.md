@@ -107,7 +107,11 @@ The documentation confirms that Crawl4AI's content selection capabilities will m
 - **Next Steps**: Start with 'llm' (done), then 'explore' (link discovery), 'dom' (CSS extraction), 'html' (raw download). Add optionals last.
 
 
-# Next prompt:
+# Remarks
+- Seems that llm workflow can generate pretty well a non-structured json and markdown, whcih than hierarchy workwlow sorts nicely. We still miss ui nodes for some reason, but on the right track.
+- the idea for next step was to build flexible dom workflow, that can follow detailed dom element instructions as in the propmt below
+
+# dom workflow creation prompt:
 
 Let's execute with the following restraints:
 - It seems we should be able to do this only using DOM selectors.

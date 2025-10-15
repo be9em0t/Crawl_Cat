@@ -67,25 +67,7 @@ Adjust colors, blend layers, filter images, mask regions, manipulate normal maps
 [Colorspace Conversion](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Colorspace-Conversion-Node.html) | Returns the result of converting the value of input In from one colorspace space to another.
 
 
---- Page 3: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/UV-Nodes.html ---
-
-# UV nodes
-Create texture animations, coordinate transformations, and warping through UV manipulation and mapping effects.
-**Topic** | **Description**  
----|---  
-[Flipbook](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Flipbook-Node.html) | Creates a flipbook, or texture sheet animation, of the UVs supplied to input In.  
-[Radial Shear](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Radial-Shear-Node.html) | Applies a radial shear warping effect similar to a wave to the value of input UV.  
-[Spherize](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Spherize-Node.html) | Applies a spherical warping effect similar to a fisheye camera lens to the value of input UV.  
-[Triplanar](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Triplanar-Node.html) | A method of generating UVs and sampling a texture by projecting in world space.  
-[Parallax Mapping](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Mapping-Node.html) | Creates a parallax effect that displaces a material's UVs.  
-[Polar Coordinates](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polar-Coordinates-Node.html) | Converts the value of input UV to polar coordinates.  
-[Rotate](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rotate-Node.html) | Rotates the value of input UV around a reference point defined by input Center by the amount of input Rotation.  
-[Tiling and Offset](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tiling-And-Offset-Node.html) | Tiles and offsets the value of input UV by the inputs Tiling and Offset respectively.  
-[Twirl](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Twirl-Node.html) | Applies a twirl warping effect similar to a black hole to the value of input UV.  
-[Parallax Occlusion Mapping](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Occlusion-Mapping-Node.html) | Creates a parallax effect that displaces a material's UVs and depth.
-
-
---- Page 4: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Procedural-Nodes.html ---
+--- Page 3: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Procedural-Nodes.html ---
 
 # Procedural nodes
 Generate patterns, noise textures, and customizable geometric shapes procedurally using UV input.
@@ -108,40 +90,30 @@ Generate patterns, noise textures, and customizable geometric shapes procedurall
 [Rounded Rectangle](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rounded-Rectangle-Node.html) | Generates a rounded rectangle shape based on input UV at the size specified by inputs Width and Height. The input Radius defines the radius of each corner.
 
 
---- Page 5: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html ---
+--- Page 4: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Utility-Nodes.html ---
 
-# Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html#description)Description
-A **Node** defines an input, output or operation on the Shader Graph, depending on its available [Ports](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Port.html). A **Node** may have any number of input and/or output ports. You create a Shader Graph by connecting these ports with [Edges](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Edge.html). A **Node** might also have any number of **Controls** , these are controls on the **Node** that do not have ports.
-You can collapse a **Node** by clicking the **Collapse** button in the top-right corner of the **Node**. This will hide all unconnected ports.
-For components of a **Node** see:
-  * [Port](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Port.html)
-  * [Edge](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Edge.html)
-
-
-There are many available **Nodes** in Shader Graph. For a full list of all available **Nodes** see the [Node Library](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node-Library.html).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html#preview)Preview
-Many nodes include a preview. This preview displays the main output value at that stage in the graph. Hide this preview with the Collapse control that displays when you hover over the node. You can also collapse and expand node previews via the Context Menu in the [Shader Graph Window](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Graph-Window.html). To configure the appearance of node previews, see [Preview Mode Control](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Preview-Mode-Control.html).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html#context-menu)Context Menu
-Right clicking on a **Node** will open a context menu. This menu contains many operations that can be performed on the **Node**. Note that when multiple nodes are selected, these operations will be applied to the entire selection.
-Item | Description  
+# Utility nodes
+Enable essential logic operations, previews, and sub-graph referencing.
+**Topic** | **Description**  
 ---|---  
-Copy Shader | Copies the generated HLSL code at this stage in the graph to the clipboard  
-Disconnect All | Removes all edges from all ports on the **Node(s)**  
-Cut | Cuts selected **Node(s)** to the clipboard  
-Copy | Copies selected **Nodes(s)** to the clipboard  
-Paste | Pastes **Node(s)** in the clipboard  
-Delete | Deletes selected **Node(s)**  
-Duplicate | Duplicates selected **Node(s)**  
-Convert To Sub-graph | Creates a new [Sub-graph Asset](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sub-graph-Asset.html) with the selected **Node(s)** included  
-Convert To Inline Node | Converts a [Property Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Property-Types.html) into a regular node of the appropriate [Data Type](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Data-Types.html)  
-Convert To Property | Converts a **Node** into a new **Property** on the [Blackboard](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Blackboard.html) of the appropriate [Property Type](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Property-Types.html)  
-Open Documentation | Opens a new web browser to the selected **Nodes** documentation page in the [Node Library](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node-Library.html)  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html#color-mode)Color Mode
-**Nodes** interact with the Shader Graph Window's Color Modes. Colors are displayed on nodes underneath the text on the node title bar. See [Color Modes](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Modes.html) for more information on available colors for nodes.
+[Preview](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Preview-Node.html) | Provides a preview window and passes the input value through without modification.  
+[Sub-Graph](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sub-graph-Node.html) | Provides a reference to a Sub-graph asset.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Utility-Nodes.html#logic)Logic
+**Topic** | **Description**  
+---|---  
+[All](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/All-Node.html) | Returns true if all components of the input In are non-zero.  
+[And](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/And-Node.html) | Returns true if both the inputs A and B are true.  
+[Any](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Any-Node.html) | Returns true if any of the components of the input In are non-zero.  
+[Branch](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html) | Provides a dynamic branch to the shader.  
+[Comparison](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Comparison-Node.html) | Compares the two input values A and B based on the condition selected on the dropdown.  
+[Is Infinite](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-Infinite-Node.html) | Returns true if any of the components of the input In is an infinite value.  
+[Is NaN](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-NaN-Node.html) | Returns true if any of the components of the input In is not a number (NaN).  
+[Nand](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Nand-Node.html) | Returns true if both the inputs A and B are false.  
+[Not](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Not-Node.html) | Returns the opposite of input In. If In is true, the output is false. Otherwise, it returns true.  
+[Or](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Or-Node.html) | Returns true if either input A or input B is true.
 
 
---- Page 6: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Custom-Render-Texture-Nodes.html ---
+--- Page 5: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Custom-Render-Texture-Nodes.html ---
 
 # Custom Render Texture nodes
 Access properties and data of custom render textures, including size, slice index, cubemap face, and previous update state.
@@ -150,6 +122,24 @@ Access properties and data of custom render textures, including size, slice inde
 [Custom Render Texture Slice](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Custom-Texture-Slice.html) | Access the custom render texture slice index and cubemap face.  
 [Custom Render Texture Size](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Custom-Texture-Size.html) | Access the custom render texture size.  
 [Custom Render Texture Self](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Custom-Texture-Self.html) | Access the custom render texture from the previous update.
+
+
+--- Page 6: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/UV-Nodes.html ---
+
+# UV nodes
+Create texture animations, coordinate transformations, and warping through UV manipulation and mapping effects.
+**Topic** | **Description**  
+---|---  
+[Flipbook](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Flipbook-Node.html) | Creates a flipbook, or texture sheet animation, of the UVs supplied to input In.  
+[Radial Shear](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Radial-Shear-Node.html) | Applies a radial shear warping effect similar to a wave to the value of input UV.  
+[Spherize](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Spherize-Node.html) | Applies a spherical warping effect similar to a fisheye camera lens to the value of input UV.  
+[Triplanar](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Triplanar-Node.html) | A method of generating UVs and sampling a texture by projecting in world space.  
+[Parallax Mapping](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Mapping-Node.html) | Creates a parallax effect that displaces a material's UVs.  
+[Polar Coordinates](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polar-Coordinates-Node.html) | Converts the value of input UV to polar coordinates.  
+[Rotate](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rotate-Node.html) | Rotates the value of input UV around a reference point defined by input Center by the amount of input Rotation.  
+[Tiling and Offset](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tiling-And-Offset-Node.html) | Tiles and offsets the value of input UV by the inputs Tiling and Offset respectively.  
+[Twirl](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Twirl-Node.html) | Applies a twirl warping effect similar to a black hole to the value of input UV.  
+[Parallax Occlusion Mapping](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Occlusion-Mapping-Node.html) | Creates a parallax effect that displaces a material's UVs and depth.
 
 
 --- Page 7: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Input-Nodes.html ---
@@ -245,27 +235,37 @@ Supply shaders with essential data such as constants, mesh attributes, gradients
 [Element Texture Size](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/element-texture-size-node.html) | Provides the size of the texture assigned to a UI element.
 
 
---- Page 8: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Utility-Nodes.html ---
+--- Page 8: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html ---
 
-# Utility nodes
-Enable essential logic operations, previews, and sub-graph referencing.
-**Topic** | **Description**  
+# Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html#description)Description
+A **Node** defines an input, output or operation on the Shader Graph, depending on its available [Ports](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Port.html). A **Node** may have any number of input and/or output ports. You create a Shader Graph by connecting these ports with [Edges](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Edge.html). A **Node** might also have any number of **Controls** , these are controls on the **Node** that do not have ports.
+You can collapse a **Node** by clicking the **Collapse** button in the top-right corner of the **Node**. This will hide all unconnected ports.
+For components of a **Node** see:
+  * [Port](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Port.html)
+  * [Edge](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Edge.html)
+
+
+There are many available **Nodes** in Shader Graph. For a full list of all available **Nodes** see the [Node Library](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node-Library.html).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html#preview)Preview
+Many nodes include a preview. This preview displays the main output value at that stage in the graph. Hide this preview with the Collapse control that displays when you hover over the node. You can also collapse and expand node previews via the Context Menu in the [Shader Graph Window](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Graph-Window.html). To configure the appearance of node previews, see [Preview Mode Control](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Preview-Mode-Control.html).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html#context-menu)Context Menu
+Right clicking on a **Node** will open a context menu. This menu contains many operations that can be performed on the **Node**. Note that when multiple nodes are selected, these operations will be applied to the entire selection.
+Item | Description  
 ---|---  
-[Preview](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Preview-Node.html) | Provides a preview window and passes the input value through without modification.  
-[Sub-Graph](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sub-graph-Node.html) | Provides a reference to a Sub-graph asset.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Utility-Nodes.html#logic)Logic
-**Topic** | **Description**  
----|---  
-[All](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/All-Node.html) | Returns true if all components of the input In are non-zero.  
-[And](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/And-Node.html) | Returns true if both the inputs A and B are true.  
-[Any](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Any-Node.html) | Returns true if any of the components of the input In are non-zero.  
-[Branch](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html) | Provides a dynamic branch to the shader.  
-[Comparison](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Comparison-Node.html) | Compares the two input values A and B based on the condition selected on the dropdown.  
-[Is Infinite](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-Infinite-Node.html) | Returns true if any of the components of the input In is an infinite value.  
-[Is NaN](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-NaN-Node.html) | Returns true if any of the components of the input In is not a number (NaN).  
-[Nand](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Nand-Node.html) | Returns true if both the inputs A and B are false.  
-[Not](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Not-Node.html) | Returns the opposite of input In. If In is true, the output is false. Otherwise, it returns true.  
-[Or](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Or-Node.html) | Returns true if either input A or input B is true.
+Copy Shader | Copies the generated HLSL code at this stage in the graph to the clipboard  
+Disconnect All | Removes all edges from all ports on the **Node(s)**  
+Cut | Cuts selected **Node(s)** to the clipboard  
+Copy | Copies selected **Nodes(s)** to the clipboard  
+Paste | Pastes **Node(s)** in the clipboard  
+Delete | Deletes selected **Node(s)**  
+Duplicate | Duplicates selected **Node(s)**  
+Convert To Sub-graph | Creates a new [Sub-graph Asset](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sub-graph-Asset.html) with the selected **Node(s)** included  
+Convert To Inline Node | Converts a [Property Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Property-Types.html) into a regular node of the appropriate [Data Type](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Data-Types.html)  
+Convert To Property | Converts a **Node** into a new **Property** on the [Blackboard](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Blackboard.html) of the appropriate [Property Type](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Property-Types.html)  
+Open Documentation | Opens a new web browser to the selected **Nodes** documentation page in the [Node Library](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node-Library.html)  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html#color-mode)Color Mode
+**Nodes** interact with the Shader Graph Window's Color Modes. Colors are displayed on nodes underneath the text on the node title bar. See [Color Modes](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Modes.html) for more information on available colors for nodes.
 
 
 --- Page 9: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Math-Nodes.html ---
@@ -425,182 +425,46 @@ void Unity_Absolute_float4(float4 In, out float4 Out)
 
 
 
---- Page 13: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Node.html ---
+--- Page 13: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html ---
 
-# Color Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Node.html#description)Description
-Defines a constant **Vector 4** value in the shader using a **Color** field. Can be converted to a **Color** [Property Type](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Property-Types.html) via the [Node's](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) context menu. The value of the **Mode** parameter will also respected when generating the [Property](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Property-Types.html).
-NOTE: In versions prior to 10.0, Shader Graph assumed that HDR colors from the Color Node were in gamma space. Version 10.0 corrected this behavior, and Shader Graph now interprets HDR colors in linear space. HDR Color nodes that you created with older versions maintain the old behavior, but you can use the [Graph Inspector](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Internal-Inspector.html) to upgrade them. To mimic the old behavior on a new HDR Color node, you can use a [Colorspace Conversion Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Colorspace-Conversion-Node.html) to convert the HDR color from **RGB** to **Linear**.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Node.html#ports)Ports
+# Append Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html#description)Description
+Creates a new vector **Out** by combining the channels of input **A** followed by the channels of input **B**. Inputs **A** and **B** can have up to **three** channels.
+**Out** can have **two** to **four** channels, depending on the combination of channels of the inputs.
+Input **A** channels take priority over input **B** to combine up to a maximum of **four** in the output.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html#ports)Ports
 Name | Direction | Type | Binding | Description  
 ---|---|---|---|---  
-Out | Output | Vector 4 | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-| Color |  | Defines the output value.  
-Mode | Dropdown | Default, HDR | Sets properties of the Color field  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
+A | Input | Dynamic | None | First input value  
+B | Input | Dynamic | None | Second input value  
+Out | Output | Dynamic | None | Combined vector from A and B  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html#example-graph-usage)Example graph usage
+In the following example, an **Append** node combines a **Vector 2** and a **Float**. The resulting output vector has 3 channels: the **X** and **Y** from the **Vector 2** , and the **X** from the **Float**.
+Notice that with an Append node, you don't need to use a Split node to break up the Vector 2 into individual channels, then a Combine node to combine the 3 separate channels.
+![An image of the Graph window that shows a Vector 2 node and a Float node with their outputs connected to the inputs of an Append node.](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/images/sg-append-node-example.png)
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node for different inputs combinations.
+###  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html#vector2-and-float)Vector2 and Float
 ```
-float4 _Color = IsGammaSpace() ? float4(1, 2, 3, 4) : float4(SRGBToLinear(float3(1, 2, 3)), 4);
+float3 Append_Out = float3( A.xy, B.x);
+
+```
+
+###  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html#float-and-vector3)Float and Vector3
+```
+float4 Append_Out = float4( A.x, B.xyz);
+
+```
+
+###  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html#vector3-and-vector2)Vector3 and Vector2
+```
+float4 Append_Out = float4( A.xyz, B.x);
 
 ```
 
 
 
---- Page 14: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Boolean-Node.html ---
-
-# Boolean Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Boolean-Node.html#description)Description
-Defines a constant **Boolean** value in the [Shader Graph](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/index.html), although internally to the shader this is treated as a constant **float** value that is ether 0 or 1, similar to Shaderlab's [Toggle](https://docs.unity3d.com/ScriptReference/MaterialPropertyDrawer.html) property. Can be converted to a **Boolean** type [Property](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Property-Types.html) via the [Node's](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) context menu.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Boolean-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Out | Output | Boolean | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Boolean-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-| Toggle |  | Defines the output value.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Boolean-Node.html#generated-code-example)Generated Code Example
-The following basic test code represents one possible outcome of this node with the Boolean value set to 0:
-```
-float _Boolean = 0;
-
-```
-
-
-
---- Page 15: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Bitangent-Vector-Node.html ---
-
-# Bitangent Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Bitangent-Vector-Node.html#description)Description
-Provides access to the mesh vertex or fragment's **Bitangent Vector** , depending on the effective [Shader Stage](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Stage.html) of the graph section the [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) is part of.
-The bitangent vector is derived from the normal and tangent vectors and is orthogonal to both. The three vectors provide a reference frame to perform complex light calculations, for example.
-You can select the coordinate space of the output with the **Space** dropdown parameter.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Bitangent-Vector-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Out | Output | Vector 3 | None |  **Bitangent Vector** for the Mesh Vertex/Fragment.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Bitangent-Vector-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-Space | Dropdown | Object, View, World, Tangent | Selects coordinate space of **Bitangent Vector** to output.
-
-
---- Page 16: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html ---
-
-# Branch node
-The Branch node adds a dynamic branch to the shader, which outputs a different value depending on whether the input is true or false.
-Both sides of the branch are evaluated in the shader, and the output from the unused path is discarded.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html#ports)Ports
-**Name** | **Direction** | **Type** | **Binding** | **Description**  
----|---|---|---|---  
-**Predicate** | Input | Boolean | None | The input to test the value of. If you input a float, all values are evaluated as `true` except `0`.  
-**True** | Input | Dynamic Vector | None | The value to output as **Out** if **Predicate** is true.  
-**False** | Input | Dynamic Vector | None | The value to output as **Out** if **Predicate** is false.  
-**Out** | Output | Dynamic Vector | None | Outputs either **True** or **False**.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Branch_float4(float Predicate, float4 True, float4 False, out float4 Out)
-{
-    Out = Predicate ? True : False;
-}
-
-```
-
-
-
---- Page 17: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Blackbody-Node.html ---
-
-# Blackbody Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Blackbody-Node.html#description)Description
-Samples a **Gradient** that simulates the effect of black body radiation. The calculations in this node are based on data gathered by Mitchell Charity. This node outputs color in linear RGB space and preforms the conversion using a D65 whitepoint and a CIE 1964 10 degree color space. For more information, see [What color is a blackbody?](http://www.vendian.org/mncharity/dir3/blackbody/)
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Blackbody-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Temperature | Input | Float | None | Temperature or temperature map in Kelvin to sample.  
-Out | Output | Vector 3 | None | Intensity represented by color in Vector 3.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Blackbody-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Blackbody_float(float Temperature, out float3 Out)
-{
-    float3 color = float3(255.0, 255.0, 255.0);
-    color.x = 56100000. * pow(Temperature,(-3.0 / 2.0)) + 148.0;
-    color.y = 100.04 * log(Temperature) - 623.6;
-    if (Temperature > 6500.0) color.y = 35200000.0 * pow(Temperature,(-3.0 / 2.0)) + 184.0;
-    color.z = 194.18 * log(Temperature) - 1448.6;
-    color = clamp(color, 0.0, 255.0)/255.0;
-    if (Temperature < 1000.0) color *= Temperature/1000.0;
-    Out = color;
-}
-
-```
-
-
-
---- Page 18: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Camera-Node.html ---
-
-# Camera Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Camera-Node.html#description)Description
-Provides access to various parameters of the **Camera** currently being used for rendering. This is comprised of values the **Camera** 's GameObject, such as Position and Direction, as well as various projection parameters.
-####  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Camera-Node.html#unity-render-pipelines-support)Unity Render Pipelines Support
-  * Universal Render Pipeline
-
-
-The High Definition Render Pipeline does **not** support this Node.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Camera-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Position | Output | Vector 3 | None | Position of the Camera's GameObject in world space  
-Direction | Output | Vector 3 | None | The Camera's forward vector direction  
-Orthographic | Output | Float | None | Returns 1 if the Camera is orthographic, otherwise 0  
-Near Plane | Output | Float | None | The Camera's near plane distance  
-Far Plane | Output | Float | None | The Camera's far plane distance  
-Z Buffer Sign | Output | Float | None | Returns -1 when using a reversed Z Buffer, otherwise 1  
-Width | Output | Float | None | The Camera's width if orthographic  
-Height | Output | Float | None | The Camera's height if orthographic  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Camera-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-float3 _Camera_Position = _WorldSpaceCameraPos;
-float3 _Camera_Direction = -UNITY_MATRIX_V[2].xyz;
-float _Camera_Orthographic = unity_OrthoParams.w;
-float _Camera_NearPlane = _ProjectionParams.y;
-float _Camera_FarPlane = _ProjectionParams.z;
-float _Camera_ZBufferSign = _ProjectionParams.x;
-float _Camera_Width = unity_OrthoParams.x;
-float _Camera_Height = unity_OrthoParams.y;
-
-```
-
-
-
---- Page 19: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/And-Node.html ---
-
-# And Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/And-Node.html#description)Description
-Returns true if both the inputs **A** and **B** are true. This is useful for [Branching](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/And-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-A | Input | Boolean | None | First input value  
-B | Input | Boolean | None | Second input value  
-Out | Output | Boolean | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/And-Node.html#generated-code-example)Generated Code Example
-```
-void Unity_And(float A, float B, out float Out)
-{
-    Out = A && B;
-}
-
-```
-
-
-
---- Page 20: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Mask-Node.html ---
+--- Page 14: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Mask-Node.html ---
 
 # Color Mask Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Mask-Node.html#description)Description
@@ -626,7 +490,7 @@ void Unity_ColorMask_float(float3 In, float3 MaskColor, float Range, float Fuzzi
 
 
 
---- Page 21: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Ambient-Node.html ---
+--- Page 15: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Ambient-Node.html ---
 
 # Ambient Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Ambient-Node.html#description)Description
@@ -656,29 +520,31 @@ float3 _Ambient_Ground = SHADERGRAPH_AMBIENT_GROUND;
 
 
 
---- Page 22: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Ceiling-Node.html ---
+--- Page 16: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html ---
 
-# Ceiling Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Ceiling-Node.html#description)Description
-Returns the smallest integer value, or whole number, that is greater than or equal to the value of input **In**.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Ceiling-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-In | Input | Dynamic Vector | Input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Ceiling-Node.html#generated-code-example)Generated Code Example
+# Branch node
+The Branch node adds a dynamic branch to the shader, which outputs a different value depending on whether the input is true or false.
+Both sides of the branch are evaluated in the shader, and the output from the unused path is discarded.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html#ports)Ports
+**Name** | **Direction** | **Type** | **Binding** | **Description**  
+---|---|---|---|---  
+**Predicate** | Input | Boolean | None | The input to test the value of. If you input a float, all values are evaluated as `true` except `0`.  
+**True** | Input | Dynamic Vector | None | The value to output as **Out** if **Predicate** is true.  
+**False** | Input | Dynamic Vector | None | The value to output as **Out** if **Predicate** is false.  
+**Out** | Output | Dynamic Vector | None | Outputs either **True** or **False**.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html#generated-code-example)Generated Code Example
 The following example code represents one possible outcome of this node.
 ```
-void Unity_Ceiling_float4(float4 In, out float4 Out)
+void Unity_Branch_float4(float Predicate, float4 True, float4 False, out float4 Out)
 {
-    Out = ceil(In);
+    Out = Predicate ? True : False;
 }
 
 ```
 
 
 
---- Page 23: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Blend-Node.html ---
+--- Page 17: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Blend-Node.html ---
 
 # Blend Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Blend-Node.html#description)Description
@@ -931,105 +797,97 @@ void Unity_Blend_Overwrite_float4(float4 Base, float4 Blend, float Opacity, out 
 
 
 
---- Page 24: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html ---
+--- Page 18: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Boolean-Node.html ---
 
-# Append Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html#description)Description
-Creates a new vector **Out** by combining the channels of input **A** followed by the channels of input **B**. Inputs **A** and **B** can have up to **three** channels.
-**Out** can have **two** to **four** channels, depending on the combination of channels of the inputs.
-Input **A** channels take priority over input **B** to combine up to a maximum of **four** in the output.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html#ports)Ports
+# Boolean Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Boolean-Node.html#description)Description
+Defines a constant **Boolean** value in the [Shader Graph](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/index.html), although internally to the shader this is treated as a constant **float** value that is ether 0 or 1, similar to Shaderlab's [Toggle](https://docs.unity3d.com/ScriptReference/MaterialPropertyDrawer.html) property. Can be converted to a **Boolean** type [Property](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Property-Types.html) via the [Node's](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) context menu.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Boolean-Node.html#ports)Ports
 Name | Direction | Type | Binding | Description  
 ---|---|---|---|---  
-A | Input | Dynamic | None | First input value  
-B | Input | Dynamic | None | Second input value  
-Out | Output | Dynamic | None | Combined vector from A and B  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html#example-graph-usage)Example graph usage
-In the following example, an **Append** node combines a **Vector 2** and a **Float**. The resulting output vector has 3 channels: the **X** and **Y** from the **Vector 2** , and the **X** from the **Float**.
-Notice that with an Append node, you don't need to use a Split node to break up the Vector 2 into individual channels, then a Combine node to combine the 3 separate channels.
-![An image of the Graph window that shows a Vector 2 node and a Float node with their outputs connected to the inputs of an Append node.](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/images/sg-append-node-example.png)
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node for different inputs combinations.
-###  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html#vector2-and-float)Vector2 and Float
-```
-float3 Append_Out = float3( A.xy, B.x);
-
-```
-
-###  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html#float-and-vector3)Float and Vector3
-```
-float4 Append_Out = float4( A.x, B.xyz);
-
-```
-
-###  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Append-Node.html#vector3-and-vector2)Vector3 and Vector2
-```
-float4 Append_Out = float4( A.xyz, B.x);
-
-```
-
-
-
---- Page 25: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Baked-GI-Node.html ---
-
-# Baked GI Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Baked-GI-Node.html#description)Description
-Provides access to the **Baked GI** values at the vertex or fragment's position. Requires **Position** and **Normal** input for light probe sampling, and lightmap coordinates **Static UV** and **Dynamic UV** for all potential lightmap sampling cases.
-Note: The behavior of this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) is undefined globally. Shader Graph does not define the function of the node. Instead, each Render Pipeline defines what HLSL code to execute for this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html).
-Different Render Pipelines may produce different results. If you're building a shader in one Render Pipeline that you want to use in both, try checking it in both pipelines before production. A [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) might be defined in one Render Pipeline and undefined in the other. If this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) is undefined, it returns 0 (black).
-###  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Baked-GI-Node.html#unity-render-pipelines-support)Unity Render Pipelines Support
-This node is compatible with both the High Definition Render Pipeline (HDRP) and the Universal Render Pipeline (URP). However, this node does not work within unlit shaders for either pipeline.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Baked-GI-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Position | Input | Vector 3 | Position (world space) | Mesh vertex/fragment's **Position**  
-Normal | Input | Vector 3 | Normal (world space) | Mesh vertex/fragment's **Normal**  
-Static UV | Input | Vector 2 | UV1 | Lightmap coordinates for the static lightmap  
-Dynamic UV | Input | Vector 2 | UV2 | Lightmap coordinates for the dynamic lightmap  
-Out | Output | Vector 3 | None | Output color value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Baked-GI-Node.html#controls)Controls
+Out | Output | Boolean | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Boolean-Node.html#controls)Controls
 Name | Type | Options | Description  
 ---|---|---|---  
-Apply Lightmap Scaling | Toggle | True, False | If enabled lightmaps are automatically scaled and offset.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Baked-GI-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
+| Toggle |  | Defines the output value.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Boolean-Node.html#generated-code-example)Generated Code Example
+The following basic test code represents one possible outcome of this node with the Boolean value set to 0:
 ```
-void Unity_BakedGI_float(float3 Position, float3 Normal, float2 StaticUV, float2 DynamicUV, out float Out)
-{
-    Out = SHADERGRAPH_BAKED_GI(Position, Normal, StaticUV, DynamicUV, false);
-}
+float _Boolean = 0;
 
 ```
 
 
 
---- Page 26: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Channel-Mask-Node.html ---
+--- Page 19: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Any-Node.html ---
 
-# Channel Mask Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Channel-Mask-Node.html#description)Description
-Masks values of input **In** on channels selected in dropdown **Channels**. Outputs a vector of the same length as the input vector but with the selected channels set to 0. Channels available in the dropdown **Channels** will represent the amount of channels present in input **In**.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Channel-Mask-Node.html#ports)Ports
+# Any Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Any-Node.html#description)Description
+Returns true if any of the components of the input **In** are non-zero. This is useful for [Branching](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Any-Node.html#ports)Ports
 Name | Direction | Type | Binding | Description  
 ---|---|---|---|---  
 In | Input | Dynamic Vector | None | Input value  
-Out | Output | Dynamic Vector | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Channel-Mask-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-Channels | Mask Dropdown | Dynamic | Selects any number of channels to mask  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Channel-Mask-Node.html#generated-code-example)Generated Code Example
+Out | Output | Boolean | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Any-Node.html#generated-code-example)Generated Code Example
 The following example code represents one possible outcome of this node.
 ```
-void Unity_ChannelMask_RedGreen_float4(float4 In, out float4 Out)
+void Unity_Any_float4(float4 In, out float Out)
 {
-    Out = float4(0, 0, In.b, In.a);
+    Out = any(In);
 }
 
 ```
 
 
 
---- Page 27: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Checkerboard-Node.html ---
+--- Page 20: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Clamp-Node.html ---
+
+# Clamp Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Clamp-Node.html#description)Description
+Returns the input **In** clamped between the minimum and maximum values defined by inputs **Min** and **Max** respectively.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Clamp-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+In | Input | Dynamic Vector | Unclamped input value  
+Min | Input | Dynamic Vector | Minimum value  
+Max | Input | Dynamic Vector | Maximum value  
+Out | Output | Dynamic Vector | Clamped output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Clamp-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Clamp_float4(float4 In, float4 Min, float4 Max, out float4 Out)
+{
+    Out = clamp(In, Min, Max);
+}
+
+```
+
+
+
+--- Page 21: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/And-Node.html ---
+
+# And Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/And-Node.html#description)Description
+Returns true if both the inputs **A** and **B** are true. This is useful for [Branching](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/And-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+A | Input | Boolean | None | First input value  
+B | Input | Boolean | None | Second input value  
+Out | Output | Boolean | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/And-Node.html#generated-code-example)Generated Code Example
+```
+void Unity_And(float A, float B, out float Out)
+{
+    Out = A && B;
+}
+
+```
+
+
+
+--- Page 22: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Checkerboard-Node.html ---
 
 # Checkerboard Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Checkerboard-Node.html#description)Description
@@ -1063,52 +921,7 @@ void Unity_Checkerboard_float(float2 UV, float3 ColorA, float3 ColorB, float2 Fr
 
 
 
---- Page 28: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Add-Node.html ---
-
-# Add Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Add-Node.html#description)Description
-Returns the sum of the two input values **A** and **B**.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Add-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-A | Input | Dynamic Vector | First input value  
-B | Input | Dynamic Vector | Second input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Add-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Add_float4(float4 A, float4 B, out float4 Out)
-{
-    Out = A + B;
-}
-
-```
-
-
-
---- Page 29: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/All-Node.html ---
-
-# All Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/All-Node.html#description)Description
-Returns true if all components of the input **In** are non-zero. This is useful for [Branching](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/All-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-In | Input | Dynamic Vector | None | Input value  
-Out | Output | Boolean | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/All-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_All_float4(float4 In, out float Out)
-{
-    Out = all(In);
-}
-
-```
-
-
-
---- Page 30: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Channel-Mixer-Node.html ---
+--- Page 23: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Channel-Mixer-Node.html ---
 
 # Channel Mixer Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Channel-Mixer-Node.html#description)Description
@@ -1142,7 +955,240 @@ void Unity_ChannelMixer_float(float3 In, float3 _ChannelMixer_Red, float3 _Chann
 
 
 
---- Page 31: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Colorspace-Conversion-Node.html ---
+--- Page 24: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Channel-Mask-Node.html ---
+
+# Channel Mask Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Channel-Mask-Node.html#description)Description
+Masks values of input **In** on channels selected in dropdown **Channels**. Outputs a vector of the same length as the input vector but with the selected channels set to 0. Channels available in the dropdown **Channels** will represent the amount of channels present in input **In**.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Channel-Mask-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+In | Input | Dynamic Vector | None | Input value  
+Out | Output | Dynamic Vector | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Channel-Mask-Node.html#controls)Controls
+Name | Type | Options | Description  
+---|---|---|---  
+Channels | Mask Dropdown | Dynamic | Selects any number of channels to mask  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Channel-Mask-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_ChannelMask_RedGreen_float4(float4 In, out float4 Out)
+{
+    Out = float4(0, 0, In.b, In.a);
+}
+
+```
+
+
+
+--- Page 25: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Blackbody-Node.html ---
+
+# Blackbody Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Blackbody-Node.html#description)Description
+Samples a **Gradient** that simulates the effect of black body radiation. The calculations in this node are based on data gathered by Mitchell Charity. This node outputs color in linear RGB space and preforms the conversion using a D65 whitepoint and a CIE 1964 10 degree color space. For more information, see [What color is a blackbody?](http://www.vendian.org/mncharity/dir3/blackbody/)
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Blackbody-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Temperature | Input | Float | None | Temperature or temperature map in Kelvin to sample.  
+Out | Output | Vector 3 | None | Intensity represented by color in Vector 3.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Blackbody-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Blackbody_float(float Temperature, out float3 Out)
+{
+    float3 color = float3(255.0, 255.0, 255.0);
+    color.x = 56100000. * pow(Temperature,(-3.0 / 2.0)) + 148.0;
+    color.y = 100.04 * log(Temperature) - 623.6;
+    if (Temperature > 6500.0) color.y = 35200000.0 * pow(Temperature,(-3.0 / 2.0)) + 184.0;
+    color.z = 194.18 * log(Temperature) - 1448.6;
+    color = clamp(color, 0.0, 255.0)/255.0;
+    if (Temperature < 1000.0) color *= Temperature/1000.0;
+    Out = color;
+}
+
+```
+
+
+
+--- Page 26: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Baked-GI-Node.html ---
+
+# Baked GI Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Baked-GI-Node.html#description)Description
+Provides access to the **Baked GI** values at the vertex or fragment's position. Requires **Position** and **Normal** input for light probe sampling, and lightmap coordinates **Static UV** and **Dynamic UV** for all potential lightmap sampling cases.
+Note: The behavior of this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) is undefined globally. Shader Graph does not define the function of the node. Instead, each Render Pipeline defines what HLSL code to execute for this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html).
+Different Render Pipelines may produce different results. If you're building a shader in one Render Pipeline that you want to use in both, try checking it in both pipelines before production. A [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) might be defined in one Render Pipeline and undefined in the other. If this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) is undefined, it returns 0 (black).
+###  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Baked-GI-Node.html#unity-render-pipelines-support)Unity Render Pipelines Support
+This node is compatible with both the High Definition Render Pipeline (HDRP) and the Universal Render Pipeline (URP). However, this node does not work within unlit shaders for either pipeline.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Baked-GI-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Position | Input | Vector 3 | Position (world space) | Mesh vertex/fragment's **Position**  
+Normal | Input | Vector 3 | Normal (world space) | Mesh vertex/fragment's **Normal**  
+Static UV | Input | Vector 2 | UV1 | Lightmap coordinates for the static lightmap  
+Dynamic UV | Input | Vector 2 | UV2 | Lightmap coordinates for the dynamic lightmap  
+Out | Output | Vector 3 | None | Output color value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Baked-GI-Node.html#controls)Controls
+Name | Type | Options | Description  
+---|---|---|---  
+Apply Lightmap Scaling | Toggle | True, False | If enabled lightmaps are automatically scaled and offset.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Baked-GI-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_BakedGI_float(float3 Position, float3 Normal, float2 StaticUV, float2 DynamicUV, out float Out)
+{
+    Out = SHADERGRAPH_BAKED_GI(Position, Normal, StaticUV, DynamicUV, false);
+}
+
+```
+
+
+
+--- Page 27: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Camera-Node.html ---
+
+# Camera Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Camera-Node.html#description)Description
+Provides access to various parameters of the **Camera** currently being used for rendering. This is comprised of values the **Camera** 's GameObject, such as Position and Direction, as well as various projection parameters.
+####  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Camera-Node.html#unity-render-pipelines-support)Unity Render Pipelines Support
+  * Universal Render Pipeline
+
+
+The High Definition Render Pipeline does **not** support this Node.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Camera-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Position | Output | Vector 3 | None | Position of the Camera's GameObject in world space  
+Direction | Output | Vector 3 | None | The Camera's forward vector direction  
+Orthographic | Output | Float | None | Returns 1 if the Camera is orthographic, otherwise 0  
+Near Plane | Output | Float | None | The Camera's near plane distance  
+Far Plane | Output | Float | None | The Camera's far plane distance  
+Z Buffer Sign | Output | Float | None | Returns -1 when using a reversed Z Buffer, otherwise 1  
+Width | Output | Float | None | The Camera's width if orthographic  
+Height | Output | Float | None | The Camera's height if orthographic  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Camera-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+float3 _Camera_Position = _WorldSpaceCameraPos;
+float3 _Camera_Direction = -UNITY_MATRIX_V[2].xyz;
+float _Camera_Orthographic = unity_OrthoParams.w;
+float _Camera_NearPlane = _ProjectionParams.y;
+float _Camera_FarPlane = _ProjectionParams.z;
+float _Camera_ZBufferSign = _ProjectionParams.x;
+float _Camera_Width = unity_OrthoParams.x;
+float _Camera_Height = unity_OrthoParams.y;
+
+```
+
+
+
+--- Page 28: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Add-Node.html ---
+
+# Add Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Add-Node.html#description)Description
+Returns the sum of the two input values **A** and **B**.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Add-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+A | Input | Dynamic Vector | First input value  
+B | Input | Dynamic Vector | Second input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Add-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Add_float4(float4 A, float4 B, out float4 Out)
+{
+    Out = A + B;
+}
+
+```
+
+
+
+--- Page 29: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Ceiling-Node.html ---
+
+# Ceiling Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Ceiling-Node.html#description)Description
+Returns the smallest integer value, or whole number, that is greater than or equal to the value of input **In**.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Ceiling-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+In | Input | Dynamic Vector | Input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Ceiling-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Ceiling_float4(float4 In, out float4 Out)
+{
+    Out = ceil(In);
+}
+
+```
+
+
+
+--- Page 30: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Bitangent-Vector-Node.html ---
+
+# Bitangent Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Bitangent-Vector-Node.html#description)Description
+Provides access to the mesh vertex or fragment's **Bitangent Vector** , depending on the effective [Shader Stage](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Stage.html) of the graph section the [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) is part of.
+The bitangent vector is derived from the normal and tangent vectors and is orthogonal to both. The three vectors provide a reference frame to perform complex light calculations, for example.
+You can select the coordinate space of the output with the **Space** dropdown parameter.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Bitangent-Vector-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Out | Output | Vector 3 | None |  **Bitangent Vector** for the Mesh Vertex/Fragment.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Bitangent-Vector-Node.html#controls)Controls
+Name | Type | Options | Description  
+---|---|---|---  
+Space | Dropdown | Object, View, World, Tangent | Selects coordinate space of **Bitangent Vector** to output.
+
+
+--- Page 31: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/All-Node.html ---
+
+# All Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/All-Node.html#description)Description
+Returns true if all components of the input **In** are non-zero. This is useful for [Branching](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/All-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+In | Input | Dynamic Vector | None | Input value  
+Out | Output | Boolean | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/All-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_All_float4(float4 In, out float Out)
+{
+    Out = all(In);
+}
+
+```
+
+
+
+--- Page 32: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Node.html ---
+
+# Color Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Node.html#description)Description
+Defines a constant **Vector 4** value in the shader using a **Color** field. Can be converted to a **Color** [Property Type](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Property-Types.html) via the [Node's](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) context menu. The value of the **Mode** parameter will also respected when generating the [Property](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Property-Types.html).
+NOTE: In versions prior to 10.0, Shader Graph assumed that HDR colors from the Color Node were in gamma space. Version 10.0 corrected this behavior, and Shader Graph now interprets HDR colors in linear space. HDR Color nodes that you created with older versions maintain the old behavior, but you can use the [Graph Inspector](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Internal-Inspector.html) to upgrade them. To mimic the old behavior on a new HDR Color node, you can use a [Colorspace Conversion Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Colorspace-Conversion-Node.html) to convert the HDR color from **RGB** to **Linear**.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Out | Output | Vector 4 | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Node.html#controls)Controls
+Name | Type | Options | Description  
+---|---|---|---  
+| Color |  | Defines the output value.  
+Mode | Dropdown | Default, HDR | Sets properties of the Color field  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Color-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+float4 _Color = IsGammaSpace() ? float4(1, 2, 3, 4) : float4(SRGBToLinear(float3(1, 2, 3)), 4);
+
+```
+
+
+
+--- Page 33: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Colorspace-Conversion-Node.html ---
 
 # Colorspace Conversion Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Colorspace-Conversion-Node.html#description)Description
@@ -1266,134 +1312,7 @@ void Unity_ColorspaceConversion_HSV_HSV_float(float3 In, out float3 Out)
 
 
 
---- Page 32: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Clamp-Node.html ---
-
-# Clamp Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Clamp-Node.html#description)Description
-Returns the input **In** clamped between the minimum and maximum values defined by inputs **Min** and **Max** respectively.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Clamp-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-In | Input | Dynamic Vector | Unclamped input value  
-Min | Input | Dynamic Vector | Minimum value  
-Max | Input | Dynamic Vector | Maximum value  
-Out | Output | Dynamic Vector | Clamped output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Clamp-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Clamp_float4(float4 In, float4 Min, float4 Max, out float4 Out)
-{
-    Out = clamp(In, Min, Max);
-}
-
-```
-
-
-
---- Page 33: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Any-Node.html ---
-
-# Any Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Any-Node.html#description)Description
-Returns true if any of the components of the input **In** are non-zero. This is useful for [Branching](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Any-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-In | Input | Dynamic Vector | None | Input value  
-Out | Output | Boolean | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Any-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Any_float4(float4 In, out float Out)
-{
-    Out = any(In);
-}
-
-```
-
-
-
---- Page 34: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Combine-Node.html ---
-
-# Combine Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Combine-Node.html#description)Description
-Creates new vectors from the four inputs **R** , **G** , **B** and **A**. Output **RGBA** is a **Vector 4** composed of inputs **R** , **G** , **B** and **A**. Output **RGB** is a **Vector 3** composed of inputs **R** , **G** and **B**. Output **RG** is a **Vector 2** composed of inputs **R** and **G**.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Combine-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-R | Input | Float | None | Defines red channel of output  
-G | Input | Float | None | Defines green channel of output  
-B | Input | Float | None | Defines blue channel of output  
-A | Input | Float | None | Defines alpha channel of output  
-RGBA | Output | Vector 4 | None | Output value as **Vector 4**  
-RGB | Output | Vector 3 | None | Output value as **Vector 3**  
-RG | Output | Vector 2 | None | Output value as **Vector 2**  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Combine-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Combine_float(float R, float G, float B, float A, out float4 RGBA, out float3 RGB, out float2 RG)
-{
-    RGBA = float4(R, G, B, A);
-    RGB = float3(R, G, B);
-    RG = float2(R, G);
-}
-
-```
-
-
-
---- Page 35: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fraction-Node.html ---
-
-# Fraction Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fraction-Node.html#description)Description
-Returns the fractional (or decimal) part of input **In** ; which is greater than or equal to 0 and less than 1.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fraction-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-In | Input | Dynamic Vector | Input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fraction-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Fraction_float4(float4 In, out float4 Out)
-{
-    Out = frac(In);
-}
-
-```
-
-
-
---- Page 36: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fog-Node.html ---
-
-# Fog Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fog-Node.html#description)Description
-Provides access to the Scene's **Fog** parameters.
-Note: The behavior of this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) is undefined globally. Shader Graph does not define the function of the node. Instead, each Render Pipeline defines what HLSL code to execute for this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html).
-Different Render Pipelines may produce different results. If you're building a shader in one Render Pipeline that you want to use in both, try checking it in both pipelines before production. A [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) might be defined in one Render Pipeline and undefined in the other. If this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) is undefined, it returns 0 (black).
-####  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fog-Node.html#unity-render-pipelines-support)Unity Render Pipelines Support
-  * Universal Render Pipeline
-
-
-The High Definition Render Pipeline does **not** support this Node.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fog-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Position | Input | Vector 3 | Position (object space) | Mesh vertex/fragment's position  
-Color | Output | Vector 4 | None | Fog color  
-Density | Output | Float | None | Fog density based on depth. Returns a value between 0 and 1, where 0 is no fog and 1 is full fog.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fog-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Fog_float(float3 Position, out float4 Color, out float Density)
-{
-    SHADERGRAPH_FOG(Position, Color, Density);
-}
-
-```
-
-
-
---- Page 37: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Constant-Node.html ---
+--- Page 34: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Constant-Node.html ---
 
 # Constant Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Constant-Node.html#description)Description
@@ -1440,107 +1359,7 @@ float _Constant_SQRT2 = 1.414214;
 
 
 
---- Page 38: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Float-Node.html ---
-
-# Float Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Float-Node.html#description)Description
-Defines a **Float** value in the shader. If [Port](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Port.html) **X** is not connected with an [Edge](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Edge.html) this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) defines a constant **Float**.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Float-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-X | Input | Float | None | Input x component value  
-Out | Output | Float | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Float-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-float _Vector1_Out = X;
-
-```
-
-
-
---- Page 39: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Dielectric-Specular-Node.html ---
-
-# Dielectric Specular Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Dielectric-Specular-Node.html#description)Description
-Returns a **Dielectric Specular** F0 value for a physically based material. The material to use can be selected with the **Material** dropdown parameter on the [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html).
-A **Common** **Material** type defines a range between 0.034 and 0.048 sRGB values. The value between this range can be selected with the **Range** parameter. This **Material** type should be used for various materials such as plastics and fabrics.
-You can use **Custom** material type to define your own physically based material value. The output value in this case is defined by its index of refraction. This can be set by the parameter **IOR**.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Dielectric-Specular-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Out | Output | Float | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Dielectric-Specular-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-Material | Dropdown | Common, RustedMetal, Water, Ice, Glass, Custom | Selects the material value to output.  
-Range | Slider |  | Controls output value for **Common** material type.  
-IOR | Slider |  | Controls index of refraction for **Custom** material type.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Dielectric-Specular-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node per **Material** mode.
-**Common**
-```
-float _DielectricSpecular_Range = 0.5;
-float _DielectricSpecular_Out = lerp(0.034, 0.048, _DielectricSpecular_Range);
-
-```
-
-**RustedMetal**
-```
-float _DielectricSpecular_Out = 0.030;
-
-```
-
-**Water**
-```
-float _DielectricSpecular_Out = 0.020;
-
-```
-
-**Ice**
-```
-float _DielectricSpecular_Out = 0.018;
-
-```
-
-**Glass**
-```
-float _DielectricSpecular_Out = 0.040;
-
-```
-
-**Custom**
-```
-float _DielectricSpecular_IOR = 1;
-float _DielectricSpecular_Out = pow(_Node_IOR - 1, 2) / pow(_DielectricSpecular_IOR + 1, 2);
-
-```
-
-
-
---- Page 40: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Floor-Node.html ---
-
-# Floor Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Floor-Node.html#description)Description
-Returns the largest integer value, or whole number, that is less than or equal to the value of input **In**.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Floor-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-In | Input | Dynamic Vector | Input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Floor-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Floor_float4(float4 In, out float4 Out)
-{
-    Out = floor(In);
-}
-
-```
-
-
-
---- Page 41: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Compute-Deformation-Node.html ---
+--- Page 35: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Compute-Deformation-Node.html ---
 
 # Compute Deformation Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Compute-Deformation-Node.html#description)Description
@@ -1553,29 +1372,31 @@ Normal | Output | Vector3 | Vertex | Outputs the deformed vertex normal.
 Tangent | Output | Vector3 | Vertex | Outputs the deformed vertex tangent.
 
 
---- Page 42: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDXY-Node.html ---
+--- Page 36: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Contrast-Node.html ---
 
-# DDXY Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDXY-Node.html#description)Description
-Returns the sum of both partial derivatives of input **In** , with respect to the screen-space x-coordinate and screen-space y-coordinate respectively. This node can only be used in the pixel shader stage.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDXY-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-In | Input | Dynamic Vector | Input value  
-Out | Output | Dynamic Vector | Output partial derivative value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDXY-Node.html#generated-code-example)Generated Code Example
+# Contrast Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Contrast-Node.html#description)Description
+Adjusts the contrast of input **In** by the amount of input **Contrast**. A **Contrast** value of 1 will return the input unaltered. A **Contrast** value of 0 will return the midpoint of the input.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Contrast-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+In | Input | Vector 3 | None | Input value  
+Contrast | Input | Float | None | Contrast value  
+Out | Output | Vector 3 | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Contrast-Node.html#generated-code-example)Generated Code Example
 The following example code represents one possible outcome of this node.
 ```
-void Unity_DDXY_float4(float4 In, out float4 Out)
+void Unity_Contrast_float(float3 In, float Contrast, out float3 Out)
 {
-    Out = ddxy(In);
+    float midpoint = pow(0.5, 2.2);
+    Out = (In - midpoint) * Contrast + midpoint;
 }
 
 ```
 
 
 
---- Page 43: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Flipbook-Node.html ---
+--- Page 37: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Flipbook-Node.html ---
 
 # Flipbook Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Flipbook-Node.html#description)Description
@@ -1614,76 +1435,7 @@ void Unity_Flipbook_float(float2 UV, float Width, float Height, float Tile, floa
 
 
 
---- Page 44: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Node.html ---
-
-# Gradient Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Node.html#description)Description
-Defines a constant **Gradient** for use in [Shader Graph](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/index.html), although internally to the shader this is defined as a **struct**. To sample the **Gradient** it should be used in conjunction with a [Sample Gradient Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sample-Gradient-Node.html). When using a separate **Gradient Node** , you can sample a **Gradient** multiple times with different Time parameters.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-Out | Output | Gradient | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-| Gradient Field |  | Defines the gradient.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-Gradient Unity_Gradient_float()
-{
-    Gradient g;
-    g.type = 1;
-    g.colorsLength = 4;
-    g.alphasLength = 4;
-    g.colors[0] = 0.1;
-    g.colors[1] = 0.2;
-    g.colors[2] = 0.3;
-    g.colors[3] = 0.4;
-    g.colors[4] = 0;
-    g.colors[5] = 0;
-    g.colors[6] = 0;
-    g.colors[7] = 0;
-    g.alphas[0] = 0.1;
-    g.alphas[1] = 0.2;
-    g.alphas[2] = 0.3;
-    g.alphas[3] = 0.4;
-    g.alphas[4] = 0;
-    g.alphas[5] = 0;
-    g.alphas[6] = 0;
-    g.alphas[7] = 0;
-    return g;
-}
-
-Gradient _Gradient = Unity_Gradient_float();
-
-```
-
-
-
---- Page 45: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDY-Node.html ---
-
-# DDY Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDY-Node.html#description)Description
-Returns the partial derivative of the input **In** with respect to the screen-space y-coordinate. This node can only be used in the pixel shader stage.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDY-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-In | Input | Dynamic Vector | Input value  
-Out | Output | Dynamic Vector | Output partial derivative value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDY-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_DDY_float4(float4 In, out float4 Out)
-{
-    Out = ddy(In);
-}
-
-```
-
-
-
---- Page 46: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Dither-Node.html ---
+--- Page 38: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Dither-Node.html ---
 
 # Dither node
 The Dither node adds a structured form of noise to the input. Use the Dither node to reduce the color bands that might appear if you move from a high number of colors to a low number (quantizing), or to simulate transparency by adding random alpha pixels to an opaque object.
@@ -1716,31 +1468,7 @@ void Unity_Dither_float4(float4 In, float4 ScreenPosition, out float4 Out)
 
 
 
---- Page 47: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Contrast-Node.html ---
-
-# Contrast Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Contrast-Node.html#description)Description
-Adjusts the contrast of input **In** by the amount of input **Contrast**. A **Contrast** value of 1 will return the input unaltered. A **Contrast** value of 0 will return the midpoint of the input.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Contrast-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-In | Input | Vector 3 | None | Input value  
-Contrast | Input | Float | None | Contrast value  
-Out | Output | Vector 3 | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Contrast-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Contrast_float(float3 In, float Contrast, out float3 Out)
-{
-    float midpoint = pow(0.5, 2.2);
-    Out = (In - midpoint) * Contrast + midpoint;
-}
-
-```
-
-
-
---- Page 48: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Comparison-Node.html ---
+--- Page 39: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Comparison-Node.html ---
 
 # Comparison Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Comparison-Node.html#description)Description
@@ -1813,7 +1541,7 @@ void Unity_Comparison_GreaterOrEqual_float(float A, float B, out float Out)
 
 
 
---- Page 49: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Flip-Node.html ---
+--- Page 40: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Flip-Node.html ---
 
 # Flip Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Flip-Node.html#description)Description
@@ -1844,29 +1572,140 @@ void Unity_Flip_float4(float4 In, float4 Flip, out float4 Out)
 
 
 
---- Page 50: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDX-Node.html ---
+--- Page 41: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Floor-Node.html ---
 
-# DDX Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDX-Node.html#description)Description
-Returns the partial derivative of the input **In** with respect to the screen-space x-coordinate. This node can only be used in the pixel shader stage.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDX-Node.html#ports)Ports
+# Floor Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Floor-Node.html#description)Description
+Returns the largest integer value, or whole number, that is less than or equal to the value of input **In**.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Floor-Node.html#ports)Ports
 Name | Direction | Type | Description  
 ---|---|---|---  
 In | Input | Dynamic Vector | Input value  
-Out | Output | Dynamic Vector | Output partial derivative value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDX-Node.html#generated-code-example)Generated Code Example
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Floor-Node.html#generated-code-example)Generated Code Example
 The following example code represents one possible outcome of this node.
 ```
-void Unity_DDX_float4(float4 In, out float4 Out)
+void Unity_Floor_float4(float4 In, out float4 Out)
 {
-    Out = ddx(In);
+    Out = floor(In);
 }
 
 ```
 
 
 
---- Page 51: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Exponential-Node.html ---
+--- Page 42: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Combine-Node.html ---
+
+# Combine Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Combine-Node.html#description)Description
+Creates new vectors from the four inputs **R** , **G** , **B** and **A**. Output **RGBA** is a **Vector 4** composed of inputs **R** , **G** , **B** and **A**. Output **RGB** is a **Vector 3** composed of inputs **R** , **G** and **B**. Output **RG** is a **Vector 2** composed of inputs **R** and **G**.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Combine-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+R | Input | Float | None | Defines red channel of output  
+G | Input | Float | None | Defines green channel of output  
+B | Input | Float | None | Defines blue channel of output  
+A | Input | Float | None | Defines alpha channel of output  
+RGBA | Output | Vector 4 | None | Output value as **Vector 4**  
+RGB | Output | Vector 3 | None | Output value as **Vector 3**  
+RG | Output | Vector 2 | None | Output value as **Vector 2**  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Combine-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Combine_float(float R, float G, float B, float A, out float4 RGBA, out float3 RGB, out float2 RG)
+{
+    RGBA = float4(R, G, B, A);
+    RGB = float3(R, G, B);
+    RG = float2(R, G);
+}
+
+```
+
+
+
+--- Page 43: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Divide-Node.html ---
+
+# Divide Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Divide-Node.html#description)Description
+Returns the result of input **A** (dividend) divided by input **B** (divisor).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Divide-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+A | Input | Dynamic Vector | First input value  
+B | Input | Dynamic Vector | Second input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Divide-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Divide_float4(float4 A, float4 B, out float4 Out)
+{
+    Out = A / B;
+}
+
+```
+
+
+
+--- Page 44: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Dielectric-Specular-Node.html ---
+
+# Dielectric Specular Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Dielectric-Specular-Node.html#description)Description
+Returns a **Dielectric Specular** F0 value for a physically based material. The material to use can be selected with the **Material** dropdown parameter on the [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html).
+A **Common** **Material** type defines a range between 0.034 and 0.048 sRGB values. The value between this range can be selected with the **Range** parameter. This **Material** type should be used for various materials such as plastics and fabrics.
+You can use **Custom** material type to define your own physically based material value. The output value in this case is defined by its index of refraction. This can be set by the parameter **IOR**.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Dielectric-Specular-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Out | Output | Float | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Dielectric-Specular-Node.html#controls)Controls
+Name | Type | Options | Description  
+---|---|---|---  
+Material | Dropdown | Common, RustedMetal, Water, Ice, Glass, Custom | Selects the material value to output.  
+Range | Slider |  | Controls output value for **Common** material type.  
+IOR | Slider |  | Controls index of refraction for **Custom** material type.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Dielectric-Specular-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node per **Material** mode.
+**Common**
+```
+float _DielectricSpecular_Range = 0.5;
+float _DielectricSpecular_Out = lerp(0.034, 0.048, _DielectricSpecular_Range);
+
+```
+
+**RustedMetal**
+```
+float _DielectricSpecular_Out = 0.030;
+
+```
+
+**Water**
+```
+float _DielectricSpecular_Out = 0.020;
+
+```
+
+**Ice**
+```
+float _DielectricSpecular_Out = 0.018;
+
+```
+
+**Glass**
+```
+float _DielectricSpecular_Out = 0.040;
+
+```
+
+**Custom**
+```
+float _DielectricSpecular_IOR = 1;
+float _DielectricSpecular_Out = pow(_Node_IOR - 1, 2) / pow(_DielectricSpecular_IOR + 1, 2);
+
+```
+
+
+
+--- Page 45: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Exponential-Node.html ---
 
 # Exponential Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Exponential-Node.html#description)Description
@@ -1906,30 +1745,7 @@ void Unity_Exponential2_float4(float4 In, out float4 Out)
 
 
 
---- Page 52: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Divide-Node.html ---
-
-# Divide Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Divide-Node.html#description)Description
-Returns the result of input **A** (dividend) divided by input **B** (divisor).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Divide-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-A | Input | Dynamic Vector | First input value  
-B | Input | Dynamic Vector | Second input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Divide-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Divide_float4(float4 A, float4 B, out float4 Out)
-{
-    Out = A / B;
-}
-
-```
-
-
-
---- Page 53: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Ellipse-Node.html ---
+--- Page 46: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Ellipse-Node.html ---
 
 # Ellipse Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Ellipse-Node.html#description)Description
@@ -1955,56 +1771,166 @@ void Unity_Ellipse_float(float2 UV, float Width, float Height, out float4 Out)
 
 
 
---- Page 54: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Noise-Node.html ---
+--- Page 47: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fraction-Node.html ---
 
-# Gradient Noise Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Noise-Node.html#description)Description
-Generates a gradient, or [Perlin](https://en.wikipedia.org/wiki/Perlin_noise), noise based on input **UV**. The scale of the generated noise is controlled by input **Scale**. In terms of performance cost, Gradient Noise node can be slightly more computationally intensive than sampling a texture map.
-You can also choose to use two different hashing methods for calculating the noise. As of Unity version 2021.2, the Gradient Noise node defaults to the **Deterministic** hash, to ensure consistent results for noise generation across platforms. Because the **UV** value is used as the seed for the noise generation, you can offset, scale, or distort the **UV** value to generate different noise patterns.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Noise-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-UV | Input | Vector 2 | UV | Input UV value  
-Scale | Input | Float | None | Noise scale  
-Out | Output | Float | None | Output value in the range 0.0 to 1.0  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Noise-Node.html#controls)Controls
-Name | Type | Options | Description  
+# Fraction Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fraction-Node.html#description)Description
+Returns the fractional (or decimal) part of input **In** ; which is greater than or equal to 0 and less than 1.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fraction-Node.html#ports)Ports
+Name | Direction | Type | Description  
 ---|---|---|---  
-Hash Type | Dropdown | Deterministic, LegacyMod | Selects the hash function used to generate random numbers for noise generation.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Noise-Node.html#generated-code-example)Generated Code Example
+In | Input | Dynamic Vector | Input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fraction-Node.html#generated-code-example)Generated Code Example
 The following example code represents one possible outcome of this node.
 ```
-float2 unity_gradientNoise_dir(float2 p)
+void Unity_Fraction_float4(float4 In, out float4 Out)
 {
-    p = p % 289;
-    float x = (34 * p.x + 1) * p.x % 289 + p.y;
-    x = (34 * x + 1) * x % 289;
-    x = frac(x / 41) * 2 - 1;
-    return normalize(float2(x - floor(x + 0.5), abs(x) - 0.5));
-}
-
-float unity_gradientNoise(float2 p)
-{
-    float2 ip = floor(p);
-    float2 fp = frac(p);
-    float d00 = dot(unity_gradientNoise_dir(ip), fp);
-    float d01 = dot(unity_gradientNoise_dir(ip + float2(0, 1)), fp - float2(0, 1));
-    float d10 = dot(unity_gradientNoise_dir(ip + float2(1, 0)), fp - float2(1, 0));
-    float d11 = dot(unity_gradientNoise_dir(ip + float2(1, 1)), fp - float2(1, 1));
-    fp = fp * fp * fp * (fp * (fp * 6 - 15) + 10);
-    return lerp(lerp(d00, d01, fp.y), lerp(d10, d11, fp.y), fp.x);
-}
-
-void Unity_GradientNoise_float(float2 UV, float Scale, out float Out)
-{
-    Out = unity_gradientNoise(UV * Scale) + 0.5;
+    Out = frac(In);
 }
 
 ```
 
 
 
---- Page 55: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Hue-Node.html ---
+--- Page 48: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fog-Node.html ---
+
+# Fog Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fog-Node.html#description)Description
+Provides access to the Scene's **Fog** parameters.
+Note: The behavior of this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) is undefined globally. Shader Graph does not define the function of the node. Instead, each Render Pipeline defines what HLSL code to execute for this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html).
+Different Render Pipelines may produce different results. If you're building a shader in one Render Pipeline that you want to use in both, try checking it in both pipelines before production. A [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) might be defined in one Render Pipeline and undefined in the other. If this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) is undefined, it returns 0 (black).
+####  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fog-Node.html#unity-render-pipelines-support)Unity Render Pipelines Support
+  * Universal Render Pipeline
+
+
+The High Definition Render Pipeline does **not** support this Node.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fog-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Position | Input | Vector 3 | Position (object space) | Mesh vertex/fragment's position  
+Color | Output | Vector 4 | None | Fog color  
+Density | Output | Float | None | Fog density based on depth. Returns a value between 0 and 1, where 0 is no fog and 1 is full fog.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fog-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Fog_float(float3 Position, out float4 Color, out float Density)
+{
+    SHADERGRAPH_FOG(Position, Color, Density);
+}
+
+```
+
+
+
+--- Page 49: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Float-Node.html ---
+
+# Float Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Float-Node.html#description)Description
+Defines a **Float** value in the shader. If [Port](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Port.html) **X** is not connected with an [Edge](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Edge.html) this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) defines a constant **Float**.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Float-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+X | Input | Float | None | Input x component value  
+Out | Output | Float | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Float-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+float _Vector1_Out = X;
+
+```
+
+
+
+--- Page 50: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDXY-Node.html ---
+
+# DDXY Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDXY-Node.html#description)Description
+Returns the sum of both partial derivatives of input **In** , with respect to the screen-space x-coordinate and screen-space y-coordinate respectively. This node can only be used in the pixel shader stage.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDXY-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+In | Input | Dynamic Vector | Input value  
+Out | Output | Dynamic Vector | Output partial derivative value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDXY-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_DDXY_float4(float4 In, out float4 Out)
+{
+    Out = ddxy(In);
+}
+
+```
+
+
+
+--- Page 51: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDY-Node.html ---
+
+# DDY Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDY-Node.html#description)Description
+Returns the partial derivative of the input **In** with respect to the screen-space y-coordinate. This node can only be used in the pixel shader stage.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDY-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+In | Input | Dynamic Vector | Input value  
+Out | Output | Dynamic Vector | Output partial derivative value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDY-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_DDY_float4(float4 In, out float4 Out)
+{
+    Out = ddy(In);
+}
+
+```
+
+
+
+--- Page 52: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDX-Node.html ---
+
+# DDX Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDX-Node.html#description)Description
+Returns the partial derivative of the input **In** with respect to the screen-space x-coordinate. This node can only be used in the pixel shader stage.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDX-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+In | Input | Dynamic Vector | Input value  
+Out | Output | Dynamic Vector | Output partial derivative value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/DDX-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_DDX_float4(float4 In, out float4 Out)
+{
+    Out = ddx(In);
+}
+
+```
+
+
+
+--- Page 53: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Integer-Node.html ---
+
+# Integer Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Integer-Node.html#description)Description
+Defines a constant **Float** value in the shader using an **Integer** field. Can be converted to a **Float** type [Property](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Property-Types.html) with a **Mode** setting of **Integer** via the [Node's](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) context menu.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Integer-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Out | Output | Float | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Integer-Node.html#controls)Controls
+Name | Type | Options | Description  
+---|---|---|---  
+| Integer |  | Defines the output value.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Integer-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+float _Integer = 1;
+
+```
+
+
+
+--- Page 54: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Hue-Node.html ---
 
 # Hue Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Hue-Node.html#description)Description
@@ -2074,67 +2000,197 @@ void Unity_Hue_Radians_float(float3 In, float Offset, out float3 Out)
 
 
 
---- Page 56: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Linear-Blend-Skinning-Node.html ---
+--- Page 55: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Noise-Node.html ---
 
-# Linear Blend Skinning Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Linear-Blend-Skinning-Node.html#description)Description
-This node lets you apply Linear Blend Vertex Skinning, and only works with the [Entities Graphics package](https://docs.unity3d.com/Packages/com.unity.entities.graphics@latest/). You must provide skinned matrices in the `_SkinMatrices` buffer. The node uses the `_SkinMatrixIndex` property to calculate where the matrices associated with the current mesh are located in the `_SkinMatrices` buffer.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Linear-Blend-Skinning-Node.html#ports)Ports
-Name | Direction | Type | Stage | Description  
+# Gradient Noise Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Noise-Node.html#description)Description
+Generates a gradient, or [Perlin](https://en.wikipedia.org/wiki/Perlin_noise), noise based on input **UV**. The scale of the generated noise is controlled by input **Scale**. In terms of performance cost, Gradient Noise node can be slightly more computationally intensive than sampling a texture map.
+You can also choose to use two different hashing methods for calculating the noise. As of Unity version 2021.2, the Gradient Noise node defaults to the **Deterministic** hash, to ensure consistent results for noise generation across platforms. Because the **UV** value is used as the seed for the noise generation, you can offset, scale, or distort the **UV** value to generate different noise patterns.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Noise-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
 ---|---|---|---|---  
-Position | Input | Vector3 | Vertex | Position of the vertex in object space.  
-Normal | Input | Vector3 | Vertex | Normal of the vertex in object space.  
-Tangent | Input | Vector3 | Vertex | Tangent of the vertex in object space.  
-Position | Output | Vector3 | Vertex | Outputs the skinned vertex position.  
-Normal | Output | Vector3 | Vertex | Outputs the skinned vertex normal.  
-Tangent | Output | Vector3 | Vertex | Outputs the skinned vertex tangent.
-
-
---- Page 57: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Transpose-Node.html ---
-
-# Matrix Transpose
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Transpose-Node.html#description)Description
-Returns the transposed value of the matrix defined by input **In**. This can be seen as the operation of flipping the matrix over its diagonal. The result is that it switches the row and column indices of the matrix.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Transpose-Node.html#ports)Ports
-Name | Direction | Type | Description  
+UV | Input | Vector 2 | UV | Input UV value  
+Scale | Input | Float | None | Noise scale  
+Out | Output | Float | None | Output value in the range 0.0 to 1.0  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Noise-Node.html#controls)Controls
+Name | Type | Options | Description  
 ---|---|---|---  
-In | Input | Dynamic Matrix | Input value  
-Out | Output | Dynamic Matrix | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Transpose-Node.html#generated-code-example)Generated Code Example
+Hash Type | Dropdown | Deterministic, LegacyMod | Selects the hash function used to generate random numbers for noise generation.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Noise-Node.html#generated-code-example)Generated Code Example
 The following example code represents one possible outcome of this node.
 ```
-void Unity_MatrixTranspose_float4x4(float4x4 In, out float4x4 Out)
+float2 unity_gradientNoise_dir(float2 p)
 {
-    Out = transpose(In);
+    p = p % 289;
+    float x = (34 * p.x + 1) * p.x % 289 + p.y;
+    x = (34 * x + 1) * x % 289;
+    x = frac(x / 41) * 2 - 1;
+    return normalize(float2(x - floor(x + 0.5), abs(x) - 0.5));
+}
+
+float unity_gradientNoise(float2 p)
+{
+    float2 ip = floor(p);
+    float2 fp = frac(p);
+    float d00 = dot(unity_gradientNoise_dir(ip), fp);
+    float d01 = dot(unity_gradientNoise_dir(ip + float2(0, 1)), fp - float2(0, 1));
+    float d10 = dot(unity_gradientNoise_dir(ip + float2(1, 0)), fp - float2(1, 0));
+    float d11 = dot(unity_gradientNoise_dir(ip + float2(1, 1)), fp - float2(1, 1));
+    fp = fp * fp * fp * (fp * (fp * 6 - 15) + 10);
+    return lerp(lerp(d00, d01, fp.y), lerp(d10, d11, fp.y), fp.x);
+}
+
+void Unity_GradientNoise_float(float2 UV, float Scale, out float Out)
+{
+    Out = unity_gradientNoise(UV * Scale) + 0.5;
 }
 
 ```
 
 
 
---- Page 58: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-2x2-Node.html ---
+--- Page 56: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Node.html ---
 
-# Matrix 2x2 Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-2x2-Node.html#description)Description
-Defines a constant **Matrix 2x2** value in the shader.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-2x2-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Out | Output | Matrix 2 | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-2x2-Node.html#controls)Controls
+# Gradient Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Node.html#description)Description
+Defines a constant **Gradient** for use in [Shader Graph](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/index.html), although internally to the shader this is defined as a **struct**. To sample the **Gradient** it should be used in conjunction with a [Sample Gradient Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sample-Gradient-Node.html). When using a separate **Gradient Node** , you can sample a **Gradient** multiple times with different Time parameters.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+Out | Output | Gradient | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Node.html#controls)Controls
 Name | Type | Options | Description  
 ---|---|---|---  
-| Matrix 2x2 |  | Sets output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-2x2-Node.html#generated-code-example)Generated Code Example
+| Gradient Field |  | Defines the gradient.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Gradient-Node.html#generated-code-example)Generated Code Example
 The following example code represents one possible outcome of this node.
 ```
-float2x2 _Matrix2x2 = float2x2(1, 0, 0, 1);
+Gradient Unity_Gradient_float()
+{
+    Gradient g;
+    g.type = 1;
+    g.colorsLength = 4;
+    g.alphasLength = 4;
+    g.colors[0] = 0.1;
+    g.colors[1] = 0.2;
+    g.colors[2] = 0.3;
+    g.colors[3] = 0.4;
+    g.colors[4] = 0;
+    g.colors[5] = 0;
+    g.colors[6] = 0;
+    g.colors[7] = 0;
+    g.alphas[0] = 0.1;
+    g.alphas[1] = 0.2;
+    g.alphas[2] = 0.3;
+    g.alphas[3] = 0.4;
+    g.alphas[4] = 0;
+    g.alphas[5] = 0;
+    g.alphas[6] = 0;
+    g.alphas[7] = 0;
+    return g;
+}
+
+Gradient _Gradient = Unity_Gradient_float();
 
 ```
 
 
 
---- Page 59: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Invert-Colors-Node.html ---
+--- Page 57: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Maximum-Node.html ---
+
+# Maximum Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Maximum-Node.html#description)Description
+Returns the largest of the two inputs values **A** and **B**.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Maximum-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+A | Input | Dynamic Vector | First input value  
+B | Input | Dynamic Vector | Second input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Maximum-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Maximum_float4(float4 A, float4 B, out float4 Out)
+{
+    Out = max(A, B);
+}
+
+```
+
+
+
+--- Page 58: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-4x4-Node.html ---
+
+# Matrix 4x4 Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-4x4-Node.html#description)Description
+Defines a constant **Matrix 4x4** value in the shader.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-4x4-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Out | Output | Matrix 4 | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-4x4-Node.html#controls)Controls
+Name | Type | Options | Description  
+---|---|---|---  
+| Matrix 4x4 |  | Sets output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-4x4-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+float4x4 _Matrix4x4 = float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+
+```
+
+
+
+--- Page 59: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Log-Node.html ---
+
+# Log Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Log-Node.html#description)Description
+Returns the logarithm of input **In**. **Log** is the inverse operation to the [Exponential Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Exponential-Node.html).
+For example, the result of a base-2 **Exponential** using an input value of 3 is 8.
+![Two raised to the power of three = 2 x 2 x 2 = eight.](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/images/LogNodePage02.png)
+Therefore the result of a base-2 **Log** using an input value of 8 is 3.
+The logarithmic base can be switched between base-e, base-2 and base-10 from the **Base** dropdown on the node.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Log-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+In | Input | Dynamic Vector | Input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Log-Node.html#controls)Controls
+Name | Type | Options | Description  
+---|---|---|---  
+Base | Dropdown | BaseE, Base2, Base10 | Selects the logarithmic base  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Log-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node per **Base** mode.
+**Base E**
+```
+void Unity_Log_float4(float4 In, out float4 Out)
+{
+    Out = log(In);
+}
+
+```
+
+**Base 2**
+```
+void Unity_Log2_float4(float4 In, out float4 Out)
+{
+    Out = log2(In);
+}
+
+```
+
+**Base 10**
+```
+void Unity_Log10_float4(float4 In, out float4 Out)
+{
+    Out = log10(In);
+}
+
+```
+
+
+
+--- Page 60: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Invert-Colors-Node.html ---
 
 # Invert Colors Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Invert-Colors-Node.html#description)Description
@@ -2165,7 +2221,97 @@ void Unity_InvertColors_float4(float4 In, float4 InvertColors, out float4 Out)
 
 
 
---- Page 60: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Construction-Node.html ---
+--- Page 61: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Transpose-Node.html ---
+
+# Matrix Transpose
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Transpose-Node.html#description)Description
+Returns the transposed value of the matrix defined by input **In**. This can be seen as the operation of flipping the matrix over its diagonal. The result is that it switches the row and column indices of the matrix.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Transpose-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+In | Input | Dynamic Matrix | Input value  
+Out | Output | Dynamic Matrix | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Transpose-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_MatrixTranspose_float4x4(float4x4 In, out float4x4 Out)
+{
+    Out = transpose(In);
+}
+
+```
+
+
+
+--- Page 62: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html ---
+
+# Lerp Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html#description)Description
+Returns the result of linearly interpolating between input **A** and input **B** by input **T**.
+The output is calculated as `A + T * (B - A)`. The value of input **T** acts as a weight factor applied to the difference between **B** and **A** :
+  * When **T** is `0`, the output equals **A**.
+  * When **T** is `1`, the output equals **B**.
+  * When **T** is `0.5`, the output is the midpoint between **A** and **B**.
+
+
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+A | Input | Dynamic Vector | First input value  
+B | Input | Dynamic Vector | Second input value  
+T | Input | Dynamic Vector | Time value. Typical range: 0 to 1. Though you can use values outside of this range they may cause unpredictable results.  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Lerp_float4(float4 A, float4 B, float4 T, out float4 Out)
+{
+    Out = lerp(A, B, T);
+}
+
+```
+
+
+
+--- Page 63: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-3x3-Node.html ---
+
+# Matrix 3x3 Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-3x3-Node.html#description)Description
+Defines a constant **Matrix 3x3** value in the shader.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-3x3-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Out | Output | Matrix 3 | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-3x3-Node.html#controls)Controls
+Name | Type | Options | Description  
+---|---|---|---  
+| Matrix 3x3 |  | Sets output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-3x3-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+float3x3 _Matrix3x3 = float3x3(1, 0, 0, 0, 1, 0, 0, 0, 1);
+
+```
+
+
+
+--- Page 64: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Linear-Blend-Skinning-Node.html ---
+
+# Linear Blend Skinning Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Linear-Blend-Skinning-Node.html#description)Description
+This node lets you apply Linear Blend Vertex Skinning, and only works with the [Entities Graphics package](https://docs.unity3d.com/Packages/com.unity.entities.graphics@latest/). You must provide skinned matrices in the `_SkinMatrices` buffer. The node uses the `_SkinMatrixIndex` property to calculate where the matrices associated with the current mesh are located in the `_SkinMatrices` buffer.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Linear-Blend-Skinning-Node.html#ports)Ports
+Name | Direction | Type | Stage | Description  
+---|---|---|---|---  
+Position | Input | Vector3 | Vertex | Position of the vertex in object space.  
+Normal | Input | Vector3 | Vertex | Normal of the vertex in object space.  
+Tangent | Input | Vector3 | Vertex | Tangent of the vertex in object space.  
+Position | Output | Vector3 | Vertex | Outputs the skinned vertex position.  
+Normal | Output | Vector3 | Vertex | Outputs the skinned vertex normal.  
+Tangent | Output | Vector3 | Vertex | Outputs the skinned vertex tangent.
+
+
+--- Page 65: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Construction-Node.html ---
 
 # Matrix Construction Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Construction-Node.html#description)Description
@@ -2217,108 +2363,55 @@ void Unity_MatrixConstruction_Column_float(float4 M0, float4 M1, float4 M2, floa
 
 
 
---- Page 61: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-4x4-Node.html ---
+--- Page 66: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Inverse-Lerp-Node.html ---
 
-# Matrix 4x4 Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-4x4-Node.html#description)Description
-Defines a constant **Matrix 4x4** value in the shader.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-4x4-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Out | Output | Matrix 4 | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-4x4-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-| Matrix 4x4 |  | Sets output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-4x4-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-float4x4 _Matrix4x4 = float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-
-```
-
-
-
---- Page 62: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Log-Node.html ---
-
-# Log Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Log-Node.html#description)Description
-Returns the logarithm of input **In**. **Log** is the inverse operation to the [Exponential Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Exponential-Node.html).
-For example, the result of a base-2 **Exponential** using an input value of 3 is 8.
-![Two raised to the power of three = 2 x 2 x 2 = eight.](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/images/LogNodePage02.png)
-Therefore the result of a base-2 **Log** using an input value of 8 is 3.
-The logarithmic base can be switched between base-e, base-2 and base-10 from the **Base** dropdown on the node.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Log-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-In | Input | Dynamic Vector | Input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Log-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-Base | Dropdown | BaseE, Base2, Base10 | Selects the logarithmic base  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Log-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node per **Base** mode.
-**Base E**
-```
-void Unity_Log_float4(float4 In, out float4 Out)
-{
-    Out = log(In);
-}
-
-```
-
-**Base 2**
-```
-void Unity_Log2_float4(float4 In, out float4 Out)
-{
-    Out = log2(In);
-}
-
-```
-
-**Base 10**
-```
-void Unity_Log10_float4(float4 In, out float4 Out)
-{
-    Out = log10(In);
-}
-
-```
-
-
-
---- Page 63: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html ---
-
-# Lerp Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html#description)Description
-Returns the result of linearly interpolating between input **A** and input **B** by input **T**.
-The output is calculated as `A + T * (B - A)`. The value of input **T** acts as a weight factor applied to the difference between **B** and **A** :
-  * When **T** is `0`, the output equals **A**.
-  * When **T** is `1`, the output equals **B**.
-  * When **T** is `0.5`, the output is the midpoint between **A** and **B**.
-
-
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html#ports)Ports
+# Inverse Lerp Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Inverse-Lerp-Node.html#description)Description
+Returns the linear parameter that produces the interpolant specified by input **T** within the range of input **A** to input **B**.
+**Inverse Lerp** is the inverse operation of the [Lerp Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html). It can be used to determine what the input to a [Lerp](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html) was based on its output.
+For example, the value of a **Lerp** between 0 and 2 with a **T** value of 0.5 is 1. Therefore the value of an **Inverse Lerp** between 0 and 2 with a **T** value of 1 is 0.5.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Inverse-Lerp-Node.html#ports)Ports
 Name | Direction | Type | Description  
 ---|---|---|---  
 A | Input | Dynamic Vector | First input value  
 B | Input | Dynamic Vector | Second input value  
-T | Input | Dynamic Vector | Time value. Typical range: 0 to 1. Though you can use values outside of this range they may cause unpredictable results.  
+T | Input | Dynamic Vector | Time value  
 Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html#generated-code-example)Generated Code Example
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Inverse-Lerp-Node.html#generated-code-example)Generated Code Example
 The following example code represents one possible outcome of this node.
 ```
-void Unity_Lerp_float4(float4 A, float4 B, float4 T, out float4 Out)
+void Unity_InverseLerp_float4(float4 A, float4 B, float4 T, out float4 Out)
 {
-    Out = lerp(A, B, T);
+    Out = (T - A)/(B - A);
 }
 
 ```
 
 
 
---- Page 64: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Split-Node.html ---
+--- Page 67: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-2x2-Node.html ---
+
+# Matrix 2x2 Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-2x2-Node.html#description)Description
+Defines a constant **Matrix 2x2** value in the shader.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-2x2-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Out | Output | Matrix 2 | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-2x2-Node.html#controls)Controls
+Name | Type | Options | Description  
+---|---|---|---  
+| Matrix 2x2 |  | Sets output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-2x2-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+float2x2 _Matrix2x2 = float2x2(1, 0, 0, 1);
+
+```
+
+
+
+--- Page 68: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Split-Node.html ---
 
 # Matrix Split Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Split-Node.html#description)Description
@@ -2354,30 +2447,78 @@ float2 _MatrixSplit_M3 = float2(0, 0);
 
 
 
---- Page 65: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Minimum-Node.html ---
+--- Page 69: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-NaN-Node.html ---
 
-# Minimum Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Minimum-Node.html#description)Description
-Returns the smallest of the two inputs values **A** and **B**.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Minimum-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-A | Input | Dynamic Vector | First input value  
-B | Input | Dynamic Vector | Second input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Minimum-Node.html#generated-code-example)Generated Code Example
+# Is NaN Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-NaN-Node.html#description)Description
+Returns true if the input **In** is not a number (NaN). This is useful for [Branching](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-NaN-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+In | Input | Float | None | Input value  
+Out | Output | Boolean | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-NaN-Node.html#generated-code-example)Generated Code Example
 The following example code represents one possible outcome of this node.
 ```
-void Unity_Minimum_float4(float4 A, float4 B, out float4 Out)
+void Unity_IsNan_float(float In, out float Out)
 {
-    Out = min(A, B);
+    Out = (In < 0.0 || In > 0.0 || In == 0.0) ? 0 : 1;
 }
 
 ```
 
 
 
---- Page 66: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-Infinite-Node.html ---
+--- Page 70: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Determinant-Node.html ---
+
+# Matrix Determinant
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Determinant-Node.html#description)Description
+Returns the determinant of the matrix defined by input **In**. It can be viewed as the scaling factor of the transformation described by the matrix.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Determinant-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+In | Input | Dynamic Matrix | Input value  
+Out | Output | Float | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Determinant-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_MatrixDeterminant_float4x4(float4x4 In, out float Out)
+{
+    Out = determinant(In);
+}
+
+```
+
+
+
+--- Page 71: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Length-Node.html ---
+
+# Length Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Length-Node.html#description)Description
+Returns the length of input **In**. This is also known as magnitude. A vector's length is calculated with [Pythagorean Theorum](https://en.wikipedia.org/wiki/Pythagorean_theorem).
+The length of a **Vector 2** can be calculated as:
+![The square root of x squared plus y squared.](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/images/LengthNodePage02.png)
+Where _x_ and _y_ are the components of the input vector. Length can be calculated for other dimension vectors by adding or removing components.
+![The square root of \(x squared plus y squared plus z squared\).](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/images/LengthNodePage03.png)
+And so on.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Length-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+In | Input | Dynamic Vector | Input value  
+Out | Output | Float | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Length-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Length_float4(float4 In, out float Out)
+{
+    Out = length(In);
+}
+
+```
+
+
+
+--- Page 72: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-Infinite-Node.html ---
 
 # Is Infinite Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-Infinite-Node.html#description)Description
@@ -2399,29 +2540,7 @@ void Unity_IsInfinite_float(float In, out float Out)
 
 
 
---- Page 67: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Integer-Node.html ---
-
-# Integer Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Integer-Node.html#description)Description
-Defines a constant **Float** value in the shader using an **Integer** field. Can be converted to a **Float** type [Property](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Property-Types.html) with a **Mode** setting of **Integer** via the [Node's](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) context menu.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Integer-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Out | Output | Float | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Integer-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-| Integer |  | Defines the output value.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Integer-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-float _Integer = 1;
-
-```
-
-
-
---- Page 68: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Metal-Reflectance-Node.html ---
+--- Page 73: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Metal-Reflectance-Node.html ---
 
 # Metal Reflectance Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Metal-Reflectance-Node.html#description)Description
@@ -2499,149 +2618,7 @@ float3 _MetalReflectance_Out = float3(0.672, 0.637, 0.585);
 
 
 
---- Page 69: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-3x3-Node.html ---
-
-# Matrix 3x3 Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-3x3-Node.html#description)Description
-Defines a constant **Matrix 3x3** value in the shader.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-3x3-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Out | Output | Matrix 3 | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-3x3-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-| Matrix 3x3 |  | Sets output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-3x3-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-float3x3 _Matrix3x3 = float3x3(1, 0, 0, 0, 1, 0, 0, 0, 1);
-
-```
-
-
-
---- Page 70: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Inverse-Lerp-Node.html ---
-
-# Inverse Lerp Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Inverse-Lerp-Node.html#description)Description
-Returns the linear parameter that produces the interpolant specified by input **T** within the range of input **A** to input **B**.
-**Inverse Lerp** is the inverse operation of the [Lerp Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html). It can be used to determine what the input to a [Lerp](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html) was based on its output.
-For example, the value of a **Lerp** between 0 and 2 with a **T** value of 0.5 is 1. Therefore the value of an **Inverse Lerp** between 0 and 2 with a **T** value of 1 is 0.5.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Inverse-Lerp-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-A | Input | Dynamic Vector | First input value  
-B | Input | Dynamic Vector | Second input value  
-T | Input | Dynamic Vector | Time value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Inverse-Lerp-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_InverseLerp_float4(float4 A, float4 B, float4 T, out float4 Out)
-{
-    Out = (T - A)/(B - A);
-}
-
-```
-
-
-
---- Page 71: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Length-Node.html ---
-
-# Length Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Length-Node.html#description)Description
-Returns the length of input **In**. This is also known as magnitude. A vector's length is calculated with [Pythagorean Theorum](https://en.wikipedia.org/wiki/Pythagorean_theorem).
-The length of a **Vector 2** can be calculated as:
-![The square root of x squared plus y squared.](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/images/LengthNodePage02.png)
-Where _x_ and _y_ are the components of the input vector. Length can be calculated for other dimension vectors by adding or removing components.
-![The square root of \(x squared plus y squared plus z squared\).](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/images/LengthNodePage03.png)
-And so on.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Length-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-In | Input | Dynamic Vector | Input value  
-Out | Output | Float | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Length-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Length_float4(float4 In, out float Out)
-{
-    Out = length(In);
-}
-
-```
-
-
-
---- Page 72: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Maximum-Node.html ---
-
-# Maximum Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Maximum-Node.html#description)Description
-Returns the largest of the two inputs values **A** and **B**.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Maximum-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-A | Input | Dynamic Vector | First input value  
-B | Input | Dynamic Vector | Second input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Maximum-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Maximum_float4(float4 A, float4 B, out float4 Out)
-{
-    Out = max(A, B);
-}
-
-```
-
-
-
---- Page 73: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Determinant-Node.html ---
-
-# Matrix Determinant
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Determinant-Node.html#description)Description
-Returns the determinant of the matrix defined by input **In**. It can be viewed as the scaling factor of the transformation described by the matrix.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Determinant-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-In | Input | Dynamic Matrix | Input value  
-Out | Output | Float | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Matrix-Determinant-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_MatrixDeterminant_float4x4(float4x4 In, out float Out)
-{
-    Out = determinant(In);
-}
-
-```
-
-
-
---- Page 74: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-NaN-Node.html ---
-
-# Is NaN Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-NaN-Node.html#description)Description
-Returns true if the input **In** is not a number (NaN). This is useful for [Branching](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-NaN-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-In | Input | Float | None | Input value  
-Out | Output | Boolean | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Is-NaN-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_IsNan_float(float In, out float Out)
-{
-    Out = (In < 0.0 || In > 0.0 || In == 0.0) ? 0 : 1;
-}
-
-```
-
-
-
---- Page 75: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Modulo-Node.html ---
+--- Page 74: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Modulo-Node.html ---
 
 # Modulo Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Modulo-Node.html#description)Description
@@ -2664,84 +2641,7 @@ void Unity_Modulo_float4(float4 A, float4 B, out float4 Out)
 
 
 
---- Page 76: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Multiply-Node.html ---
-
-# Multiply Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Multiply-Node.html#description)Description
-Returns the result of input **A** multiplied by input **B**. If both inputs are a vector type, the output type will be a vector type with the same dimension as the evaluated type of those inputs. If both inputs are a matrix type, the output type will be a matrix type with the same dimension as the evaluated type of those inputs. If one input is a vector type and the other is a matrix type, then output type will be a vector with the same dimension as the vector type input.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Multiply-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-A | Input | Dynamic | First input value  
-B | Input | Dynamic | Second input value  
-Out | Output | Dynamic | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Multiply-Node.html#generated-code-example)Generated Code Example
-The following example code represents different possible outcomes of this node.
-**Vector * Vector**
-```
-void Unity_Multiply_float4_float4(float4 A, float4 B, out float4 Out)
-{
-    Out = A * B;
-}
-
-```
-
-**Vector * Matrix**
-```
-void Unity_Multiply_float4_float4x4(float4 A, float4x4 B, out float4 Out)
-{
-    Out = mul(A, B);
-}
-
-```
-
-**Matrix * Matrix**
-```
-void Unity_Multiply_float4x4_float4x4(float4x4 A, float4x4 B, out float4x4 Out)
-{
-    Out = mul(A, B);
-}
-
-```
-
-
-
---- Page 77: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Object-Node.html ---
-
-# Object node
-The Object node outputs the position, scale, or bounds of the overall GameObject that Unity is currently rendering.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Object-Node.html#render-pipeline-compatibility)Render pipeline compatibility
-The Object node is compatible with the following render pipelines:
-  * Universal Render Pipeline (URP)
-  * High Definition Render Pipeline (HDRP)
-
-
-**Note:** The output of the **Position** port might depend on the render pipeline you use. If you use your shader in both URP and HDRP, check the results in both pipelines before you use the shader in production.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Object-Node.html#ports)Ports
-**Name** | **Direction** | **Type** | **Binding** | **Description**  
----|---|---|---|---  
-**Position** | Output | Vector 3 | None | The position of the overall GameObject in world space.  
-**Scale** | Output | Vector 3 | None | The scale of the overall GameObject in world space  
-**World Bounds Min** | Output | Vector 3 | None | The minimum position of the axis-aligned bounding box that fully encloses the GameObject in world space.  
-**World Bounds Max** | Output | Vector 3 | None | The maximum position of the bounding box.  
-**Bounds Size** | Output | Vector 3 | None | The total size of the bounding box.  
-**Note:** The bounds values are equivalent to the [bounds in the Renderer component](https://docs.unity3d.com/ScriptReference/Renderer-bounds.html) of the GameObject. If you deform the vertices in the shader graph, the bounds in the Renderer component don't change.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Object-Node.html#generated-code-example)Generated code example
-The following example code represents one possible outcome of this node.
-```
-float3 _Object_Position = SHADERGRAPH_OBJECT_POSITION;
-float3 _Object_Scale = float3(length(float3(UNITY_MATRIX_M[0].x, UNITY_MATRIX_M[1].x, UNITY_MATRIX_M[2].x)),
-                             length(float3(UNITY_MATRIX_M[0].y, UNITY_MATRIX_M[1].y, UNITY_MATRIX_M[2].y)),
-                             length(float3(UNITY_MATRIX_M[0].z, UNITY_MATRIX_M[1].z, UNITY_MATRIX_M[2].z)));
-float3 _Object_WorldBoundsMin = SHADERGRAPH_RENDERER_BOUNDS_MIN;
-float3 _Object_WorldBoundsMax = SHADERGRAPH_RENDERER_BOUNDS_MAX;
-float3 _Object_BoundsSize = (SHADERGRAPH_RENDERER_BOUNDS_MAX - SHADERGRAPH_RENDERER_BOUNDS_MIN);
-
-```
-
-
-
---- Page 78: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Occlusion-Mapping-Node.html ---
+--- Page 75: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Occlusion-Mapping-Node.html ---
 
 # Parallax Occlusion Mapping Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Occlusion-Mapping-Node.html#description)Description
@@ -2788,24 +2688,102 @@ float _ParallaxOcclusionMapping_PixelDepthOffset = (ParallaxOcclusionMapping_Max
 
 
 
---- Page 79: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Nand-Node.html ---
+--- Page 76: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Negate-Node.html ---
 
-# Nand Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Nand-Node.html#description)Description
-Returns true if both the inputs **A** and **B** are false. This is useful for [Branching](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Nand-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-A | Input | Boolean | None | First input value  
-B | Input | Boolean | None | Second input value  
-Out | Output | Boolean | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Nand-Node.html#generated-code-example)Generated Code Example
+# Negate Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Negate-Node.html#description)Description
+Returns the flipped sign value of input **In**. Positive values become negative and negative values become positive.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Negate-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+In | Input | Dynamic Vector | Input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Negate-Node.html#generated-code-example)Generated Code Example
 The following example code represents one possible outcome of this node.
 ```
-void Unity_Nand_float(float A, float B, out float Out)
+void Unity_Negate_float4(float4 In, out float4 Out)
 {
-    Out = !A && !B;
+    Out = -1 * In;
 }
+
+```
+
+
+
+--- Page 77: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normalize-Node.html ---
+
+# Normalize Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normalize-Node.html#description)Description
+Returns the normalized value of input **In**. The output vector will have the same direction as input **In** but a length of 1.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normalize-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+In | Input | Dynamic Vector | Input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normalize-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Normalize_float4(float4 In, out float4 Out)
+{
+    Out = normalize(In);
+}
+
+```
+
+
+
+--- Page 78: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polygon-Node.html ---
+
+# Polygon Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polygon-Node.html#description)Description
+Generates a regular polygon shape based on input **UV** at the size specified by inputs **Width** and **Height**. The polygon's amount of sides is determined by input **Sides**. The generated shape can be offset or tiled by connecting a [Tiling And Offset Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tiling-And-Offset-Node.html). Note that in order to preserve the ability to offset the shape within the UV space the shape will not automatically repeat if tiled. To achieve a repeating polygon effect first connect your input through a [Fraction Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fraction-Node.html).
+NOTE: This [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) can only be used in the **Fragment** shader stage.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polygon-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+UV | Input | Vector 2 | UV | Input UV value  
+Sides | Input | Float | None | Amount of sides  
+Width | Input | Float | None | Polygon width  
+Height | Input | Float | None | Polygon height  
+Out | Output | Float | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polygon-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Polygon_float(float2 UV, float Sides, float Width, float Height, out float Out)
+{
+    float pi = 3.14159265359;
+    float aWidth = Width * cos(pi / Sides);
+    float aHeight = Height * cos(pi / Sides);
+    float2 uv = (UV * 2 - 1) / float2(aWidth, aHeight);
+    uv.y *= -1;
+    float pCoord = atan2(uv.x, uv.y);
+    float r = 2 * pi / Sides;
+    float distance = cos(floor(0.5 + pCoord / r) * r - pCoord) * length(uv);
+    Out = saturate((1 - distance) / fwidth(distance));
+}
+
+```
+
+
+
+--- Page 79: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Mapping-Node.html ---
+
+# Parallax Mapping Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Mapping-Node.html#description)Description
+The Parallax Mapping node lets you create a parallax effect that displaces a Material's UVs to create the illusion of depth inside a Material. This implementation uses the single step process that does not account for occlusion. For information on how the effect looks, see the [Height Map](https://docs.unity3d.com/Manual/StandardShaderMaterialParameterHeightMap.html) page.
+If you experience texture sampling errors while using this node in a graph which includes Custom Function Nodes or Sub Graphs, you can resolve them by upgrading to version 10.3 or later.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Mapping-Node.html#ports)Ports
+Name | **Direction** | Type | Description  
+---|---|---|---  
+**Heightmap** | Input | Texture2D | The Texture that specifies the depth of the displacement.  
+**Heightmap Sampler** | Input | Sampler State | The Sampler to sample **Heightmap** with.  
+**Amplitude** | Input | Float | A multiplier to apply to the height of the Heightmap (in centimeters).  
+**UVs** | Input | Vector2 | The UVs that the sampler uses to sample the Texture.  
+**Parallax UVs** | Output | Vector2 | The UVs after adding the parallax offset.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Mapping-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+float2 _ParallaxMapping_ParallaxUVs = UVs.xy + ParallaxMapping(Heightmap, Heightmap_Sampler, IN.TangentSpaceViewDirection, Amplitude * 0.01, UVs.xy);
 
 ```
 
@@ -2853,24 +2831,36 @@ void Unity_NormalBlend_Reoriented_float(float3 A, float3 B, out float3 Out)
 
 
 
---- Page 81: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Mapping-Node.html ---
+--- Page 81: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Object-Node.html ---
 
-# Parallax Mapping Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Mapping-Node.html#description)Description
-The Parallax Mapping node lets you create a parallax effect that displaces a Material's UVs to create the illusion of depth inside a Material. This implementation uses the single step process that does not account for occlusion. For information on how the effect looks, see the [Height Map](https://docs.unity3d.com/Manual/StandardShaderMaterialParameterHeightMap.html) page.
-If you experience texture sampling errors while using this node in a graph which includes Custom Function Nodes or Sub Graphs, you can resolve them by upgrading to version 10.3 or later.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Mapping-Node.html#ports)Ports
-Name | **Direction** | Type | Description  
----|---|---|---  
-**Heightmap** | Input | Texture2D | The Texture that specifies the depth of the displacement.  
-**Heightmap Sampler** | Input | Sampler State | The Sampler to sample **Heightmap** with.  
-**Amplitude** | Input | Float | A multiplier to apply to the height of the Heightmap (in centimeters).  
-**UVs** | Input | Vector2 | The UVs that the sampler uses to sample the Texture.  
-**Parallax UVs** | Output | Vector2 | The UVs after adding the parallax offset.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Parallax-Mapping-Node.html#generated-code-example)Generated Code Example
+# Object node
+The Object node outputs the position, scale, or bounds of the overall GameObject that Unity is currently rendering.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Object-Node.html#render-pipeline-compatibility)Render pipeline compatibility
+The Object node is compatible with the following render pipelines:
+  * Universal Render Pipeline (URP)
+  * High Definition Render Pipeline (HDRP)
+
+
+**Note:** The output of the **Position** port might depend on the render pipeline you use. If you use your shader in both URP and HDRP, check the results in both pipelines before you use the shader in production.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Object-Node.html#ports)Ports
+**Name** | **Direction** | **Type** | **Binding** | **Description**  
+---|---|---|---|---  
+**Position** | Output | Vector 3 | None | The position of the overall GameObject in world space.  
+**Scale** | Output | Vector 3 | None | The scale of the overall GameObject in world space  
+**World Bounds Min** | Output | Vector 3 | None | The minimum position of the axis-aligned bounding box that fully encloses the GameObject in world space.  
+**World Bounds Max** | Output | Vector 3 | None | The maximum position of the bounding box.  
+**Bounds Size** | Output | Vector 3 | None | The total size of the bounding box.  
+**Note:** The bounds values are equivalent to the [bounds in the Renderer component](https://docs.unity3d.com/ScriptReference/Renderer-bounds.html) of the GameObject. If you deform the vertices in the shader graph, the bounds in the Renderer component don't change.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Object-Node.html#generated-code-example)Generated code example
 The following example code represents one possible outcome of this node.
 ```
-float2 _ParallaxMapping_ParallaxUVs = UVs.xy + ParallaxMapping(Heightmap, Heightmap_Sampler, IN.TangentSpaceViewDirection, Amplitude * 0.01, UVs.xy);
+float3 _Object_Position = SHADERGRAPH_OBJECT_POSITION;
+float3 _Object_Scale = float3(length(float3(UNITY_MATRIX_M[0].x, UNITY_MATRIX_M[1].x, UNITY_MATRIX_M[2].x)),
+                             length(float3(UNITY_MATRIX_M[0].y, UNITY_MATRIX_M[1].y, UNITY_MATRIX_M[2].y)),
+                             length(float3(UNITY_MATRIX_M[0].z, UNITY_MATRIX_M[1].z, UNITY_MATRIX_M[2].z)));
+float3 _Object_WorldBoundsMin = SHADERGRAPH_RENDERER_BOUNDS_MIN;
+float3 _Object_WorldBoundsMax = SHADERGRAPH_RENDERER_BOUNDS_MAX;
+float3 _Object_BoundsSize = (SHADERGRAPH_RENDERER_BOUNDS_MAX - SHADERGRAPH_RENDERER_BOUNDS_MIN);
 
 ```
 
@@ -2899,29 +2889,97 @@ void Unity_NormalStrength_float(float3 In, float Strength, out float3 Out)
 
 
 
---- Page 83: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normalize-Node.html ---
+--- Page 83: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Vector-Node.html ---
 
-# Normalize Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normalize-Node.html#description)Description
-Returns the normalized value of input **In**. The output vector will have the same direction as input **In** but a length of 1.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normalize-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-In | Input | Dynamic Vector | Input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normalize-Node.html#generated-code-example)Generated Code Example
+# Normal Vector node
+The Normal Vector node outputs the normal of a vertex or fragment of a mesh.
+For more information about normals, refer to [Normal maps](https://docs.unity3d.com/Manual/StandardShaderMaterialParameterNormalMapLanding.html).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Vector-Node.html#ports)Ports
+**Name** | **Direction** | **Type** | **Binding** | **Description**  
+---|---|---|---|---  
+**Out** | Output | Vector 3 | None | The normal of the vertex or fragment of the mesh, depending on the [shader stage](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Stage.html) of the graph section.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Vector-Node.html#space)Space
+The **Space** dropdown determines the coordinate space of the normal vector.
+**Option** | **Description**  
+---|---  
+**Object** | Returns the vertex or fragment normal in object space, where up is the up axis of local space.  
+**View** | Returns the vertex or fragment normal in view space, where up is the up direction of the camera.  
+**World** | Returns the vertex or fragment normal in world space, where up is the up direction of the scene.  
+**Tangent** | Returns the vertex or fragment normal in tangent space, where up is away from the surface of the mesh.
+
+
+--- Page 84: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polar-Coordinates-Node.html ---
+
+# Polar Coordinates Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polar-Coordinates-Node.html#description)Description
+Converts the value of input **UV** to polar coordinates. In mathematics, the polar coordinate system is a two-dimensional coordinate system in which each point on a plane is determined by a distance from a reference point and an angle from a reference direction.
+The resulting effect is that the x channel of the input to **UV** is converted to a distance value from the point specified by the value of input **Center** and the y channel of same input is converted to the value of an angle of rotation around that point.
+These values can be scaled by the values of inputs **Radial Scale** and **Length Scale** respectively.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polar-Coordinates-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+UV | Input | Vector 2 | UV | Input UV value  
+Center | Input | Vector 2 | None | Center reference point  
+Radial Scale | Input | Float | None | Scale of distance value  
+Length Scale | Input | Float | None | Scale of angle value  
+Out | Output | Vector 2 | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polar-Coordinates-Node.html#generated-code-example)Generated Code Example
 The following example code represents one possible outcome of this node.
 ```
-void Unity_Normalize_float4(float4 In, out float4 Out)
+void Unity_PolarCoordinates_float(float2 UV, float2 Center, float RadialScale, float LengthScale, out float2 Out)
 {
-    Out = normalize(In);
+    float2 delta = UV - Center;
+    float radius = length(delta) * 2 * RadialScale;
+    float angle = atan2(delta.x, delta.y) * 1.0/6.28 * LengthScale;
+    Out = float2(radius, angle);
 }
 
 ```
 
 
 
---- Page 84: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Or-Node.html ---
+--- Page 85: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/One-Minus-Node.html ---
+
+# One Minus Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/One-Minus-Node.html#description)Description
+Returns the result of input **In** subtracted from 1.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/One-Minus-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+In | Input | Dynamic Vector | Input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/One-Minus-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_OneMinus_float4(float4 In, out float4 Out)
+{
+    Out = 1 - In;
+}
+
+```
+
+
+
+--- Page 86: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Position-Node.html ---
+
+# Position node
+The Position node returns the position of a vertex or fragment of a mesh.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Position-Node.html#ports)Ports
+**Name** | **Direction** | **Type** | **Binding** | **Description**  
+---|---|---|---|---  
+**Out** | Output | Vector 3 | None | Position of the vertex or fragment of the mesh, depending on the [shader stage](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Stage.html) of the graph section.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Position-Node.html#space)Space
+The **Space** dropdown determines the coordinate space of the output position.
+**Options** | **Description**  
+---|---  
+**Object** | Returns the vertex or fragment position relative to the origin of the object.  
+**View** | Returns the vertex or fragment position relative to the camera, in meters.  
+**World** | Returns the vertex or fragment position in the world, in meters. If you use the High Definition Render Pipeline (HDRP), **World** returns the position [relative to the camera](https://docs.unity3d.com/Packages/com.unity.render-pipelines.high-definition@latest?preview=1&subfolder=/manual/Camera-Relative-Rendering.html).  
+**Tangent** | Returns the vertex or fragment position relative to the tangent of the surface, in meters. For more information, refer to [Normal maps](https://docs.unity3d.com/6000.3/Documentation/Manual/StandardShaderMaterialParameterNormalMapLanding.html).  
+**Absolute World** | Returns the vertex or fragment position in the world, in meters.
+
+
+--- Page 87: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Or-Node.html ---
 
 # Or Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Or-Node.html#description)Description
@@ -2944,7 +3002,45 @@ void Unity_Or_float(float In, out float Out)
 
 
 
---- Page 85: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-From-Height-Node.html ---
+--- Page 88: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Unpack-Node.html ---
+
+# Normal Unpack Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Unpack-Node.html#description)Description
+Unpacks a normal map defined by input **In**. This node is used to unpack a texture that is defined as a **Normal Map** in its Texture Import Settings when it is sampled as if it were a default texture.
+Data is stored in textures from 0 to 1. But vectors need to be from -1 to 1. Unpacking the normal means to expand its range from the original range to a range of -1 to 1, so you can use it as a vector.
+Note that in most cases this node is unnecessary as the normal map should be sampled as such by setting its **Type** parameter to **Normal** when it is sampled using a [Sample Texture 2D](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sample-Texture-2D-Node.html) or [Triplanar](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Triplanar-Node.html) node.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Unpack-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+In | Input | Vector 4 | None | Input value  
+Out | Output | Vector 3 | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Unpack-Node.html#controls)Controls
+Name | Type | Options | Description  
+---|---|---|---  
+Space | Dropdown | Tangent, Object | Sets the coordinate space of the input normal.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Unpack-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node per **Space** mode.
+**Tangent**
+```
+void Unity_NormalUnpack_float(float4 In, out float3 Out)
+{
+    Out = UnpackNormalMapRGorAG(In);
+}
+
+```
+
+**Object**
+```
+void Unity_NormalUnpackRGB_float(float4 In, out float3 Out)
+{
+    Out = UnpackNormalmapRGB(In);
+}
+
+```
+
+
+
+--- Page 89: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-From-Height-Node.html ---
 
 # Normal From Height Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-From-Height-Node.html#description)Description
@@ -3006,7 +3102,25 @@ void Unity_NormalFromHeight_World_float(float In, float Strength, float3 Positio
 
 
 
---- Page 86: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Posterize-Node.html ---
+--- Page 90: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Not-Node.html ---
+
+# Not node
+The Not node outputs the opposite of an input. If the input is true the output is false, otherwise the output is true. This node is useful for [branching](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Not-Node.html#ports)Ports
+**Name** | **Direction** | **Type** | **Binding** | **Description**  
+---|---|---|---|---  
+**In** | Input | Boolean | None | The input value.  
+**Out** | Output | Boolean | None | The opposite of **In**.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Not-Node.html#generated-code-example)Generated code example
+The following example code represents one possible outcome of this node.
+```
+Out = !In;
+
+```
+
+
+
+--- Page 91: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Posterize-Node.html ---
 
 # Posterize Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Posterize-Node.html#description)Description
@@ -3031,282 +3145,146 @@ void Unity_Posterize_float4(float4 In, float4 Steps, out float4 Out)
 
 
 
---- Page 87: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/One-Minus-Node.html ---
+--- Page 92: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Multiply-Node.html ---
 
-# One Minus Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/One-Minus-Node.html#description)Description
-Returns the result of input **In** subtracted from 1.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/One-Minus-Node.html#ports)Ports
+# Multiply Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Multiply-Node.html#description)Description
+Returns the result of input **A** multiplied by input **B**. If both inputs are a vector type, the output type will be a vector type with the same dimension as the evaluated type of those inputs. If both inputs are a matrix type, the output type will be a matrix type with the same dimension as the evaluated type of those inputs. If one input is a vector type and the other is a matrix type, then output type will be a vector with the same dimension as the vector type input.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Multiply-Node.html#ports)Ports
 Name | Direction | Type | Description  
 ---|---|---|---  
-In | Input | Dynamic Vector | Input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/One-Minus-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
+A | Input | Dynamic | First input value  
+B | Input | Dynamic | Second input value  
+Out | Output | Dynamic | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Multiply-Node.html#generated-code-example)Generated Code Example
+The following example code represents different possible outcomes of this node.
+**Vector * Vector**
 ```
-void Unity_OneMinus_float4(float4 In, out float4 Out)
+void Unity_Multiply_float4_float4(float4 A, float4 B, out float4 Out)
 {
-    Out = 1 - In;
+    Out = A * B;
+}
+
+```
+
+**Vector * Matrix**
+```
+void Unity_Multiply_float4_float4x4(float4 A, float4x4 B, out float4 Out)
+{
+    Out = mul(A, B);
+}
+
+```
+
+**Matrix * Matrix**
+```
+void Unity_Multiply_float4x4_float4x4(float4x4 A, float4x4 B, out float4x4 Out)
+{
+    Out = mul(A, B);
 }
 
 ```
 
 
 
---- Page 88: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polygon-Node.html ---
+--- Page 93: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Minimum-Node.html ---
 
-# Polygon Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polygon-Node.html#description)Description
-Generates a regular polygon shape based on input **UV** at the size specified by inputs **Width** and **Height**. The polygon's amount of sides is determined by input **Sides**. The generated shape can be offset or tiled by connecting a [Tiling And Offset Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tiling-And-Offset-Node.html). Note that in order to preserve the ability to offset the shape within the UV space the shape will not automatically repeat if tiled. To achieve a repeating polygon effect first connect your input through a [Fraction Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fraction-Node.html).
-NOTE: This [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) can only be used in the **Fragment** shader stage.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polygon-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-UV | Input | Vector 2 | UV | Input UV value  
-Sides | Input | Float | None | Amount of sides  
-Width | Input | Float | None | Polygon width  
-Height | Input | Float | None | Polygon height  
-Out | Output | Float | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polygon-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Polygon_float(float2 UV, float Sides, float Width, float Height, out float Out)
-{
-    float pi = 3.14159265359;
-    float aWidth = Width * cos(pi / Sides);
-    float aHeight = Height * cos(pi / Sides);
-    float2 uv = (UV * 2 - 1) / float2(aWidth, aHeight);
-    uv.y *= -1;
-    float pCoord = atan2(uv.x, uv.y);
-    float r = 2 * pi / Sides;
-    float distance = cos(floor(0.5 + pCoord / r) * r - pCoord) * length(uv);
-    Out = saturate((1 - distance) / fwidth(distance));
-}
-
-```
-
-
-
---- Page 89: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Negate-Node.html ---
-
-# Negate Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Negate-Node.html#description)Description
-Returns the flipped sign value of input **In**. Positive values become negative and negative values become positive.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Negate-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-In | Input | Dynamic Vector | Input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Negate-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Negate_float4(float4 In, out float4 Out)
-{
-    Out = -1 * In;
-}
-
-```
-
-
-
---- Page 90: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Vector-Node.html ---
-
-# Normal Vector node
-The Normal Vector node outputs the normal of a vertex or fragment of a mesh.
-For more information about normals, refer to [Normal maps](https://docs.unity3d.com/Manual/StandardShaderMaterialParameterNormalMapLanding.html).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Vector-Node.html#ports)Ports
-**Name** | **Direction** | **Type** | **Binding** | **Description**  
----|---|---|---|---  
-**Out** | Output | Vector 3 | None | The normal of the vertex or fragment of the mesh, depending on the [shader stage](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Stage.html) of the graph section.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Vector-Node.html#space)Space
-The **Space** dropdown determines the coordinate space of the normal vector.
-**Option** | **Description**  
----|---  
-**Object** | Returns the vertex or fragment normal in object space, where up is the up axis of local space.  
-**View** | Returns the vertex or fragment normal in view space, where up is the up direction of the camera.  
-**World** | Returns the vertex or fragment normal in world space, where up is the up direction of the scene.  
-**Tangent** | Returns the vertex or fragment normal in tangent space, where up is away from the surface of the mesh.
-
-
---- Page 91: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Not-Node.html ---
-
-# Not node
-The Not node outputs the opposite of an input. If the input is true the output is false, otherwise the output is true. This node is useful for [branching](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Not-Node.html#ports)Ports
-**Name** | **Direction** | **Type** | **Binding** | **Description**  
----|---|---|---|---  
-**In** | Input | Boolean | None | The input value.  
-**Out** | Output | Boolean | None | The opposite of **In**.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Not-Node.html#generated-code-example)Generated code example
-The following example code represents one possible outcome of this node.
-```
-Out = !In;
-
-```
-
-
-
---- Page 92: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polar-Coordinates-Node.html ---
-
-# Polar Coordinates Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polar-Coordinates-Node.html#description)Description
-Converts the value of input **UV** to polar coordinates. In mathematics, the polar coordinate system is a two-dimensional coordinate system in which each point on a plane is determined by a distance from a reference point and an angle from a reference direction.
-The resulting effect is that the x channel of the input to **UV** is converted to a distance value from the point specified by the value of input **Center** and the y channel of same input is converted to the value of an angle of rotation around that point.
-These values can be scaled by the values of inputs **Radial Scale** and **Length Scale** respectively.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polar-Coordinates-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-UV | Input | Vector 2 | UV | Input UV value  
-Center | Input | Vector 2 | None | Center reference point  
-Radial Scale | Input | Float | None | Scale of distance value  
-Length Scale | Input | Float | None | Scale of angle value  
-Out | Output | Vector 2 | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Polar-Coordinates-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_PolarCoordinates_float(float2 UV, float2 Center, float RadialScale, float LengthScale, out float2 Out)
-{
-    float2 delta = UV - Center;
-    float radius = length(delta) * 2 * RadialScale;
-    float angle = atan2(delta.x, delta.y) * 1.0/6.28 * LengthScale;
-    Out = float2(radius, angle);
-}
-
-```
-
-
-
---- Page 93: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Unpack-Node.html ---
-
-# Normal Unpack Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Unpack-Node.html#description)Description
-Unpacks a normal map defined by input **In**. This node is used to unpack a texture that is defined as a **Normal Map** in its Texture Import Settings when it is sampled as if it were a default texture.
-Data is stored in textures from 0 to 1. But vectors need to be from -1 to 1. Unpacking the normal means to expand its range from the original range to a range of -1 to 1, so you can use it as a vector.
-Note that in most cases this node is unnecessary as the normal map should be sampled as such by setting its **Type** parameter to **Normal** when it is sampled using a [Sample Texture 2D](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sample-Texture-2D-Node.html) or [Triplanar](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Triplanar-Node.html) node.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Unpack-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-In | Input | Vector 4 | None | Input value  
-Out | Output | Vector 3 | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Unpack-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-Space | Dropdown | Tangent, Object | Sets the coordinate space of the input normal.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Normal-Unpack-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node per **Space** mode.
-**Tangent**
-```
-void Unity_NormalUnpack_float(float4 In, out float3 Out)
-{
-    Out = UnpackNormalMapRGorAG(In);
-}
-
-```
-
-**Object**
-```
-void Unity_NormalUnpackRGB_float(float4 In, out float3 Out)
-{
-    Out = UnpackNormalmapRGB(In);
-}
-
-```
-
-
-
---- Page 94: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Position-Node.html ---
-
-# Position node
-The Position node returns the position of a vertex or fragment of a mesh.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Position-Node.html#ports)Ports
-**Name** | **Direction** | **Type** | **Binding** | **Description**  
----|---|---|---|---  
-**Out** | Output | Vector 3 | None | Position of the vertex or fragment of the mesh, depending on the [shader stage](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Stage.html) of the graph section.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Position-Node.html#space)Space
-The **Space** dropdown determines the coordinate space of the output position.
-**Options** | **Description**  
----|---  
-**Object** | Returns the vertex or fragment position relative to the origin of the object.  
-**View** | Returns the vertex or fragment position relative to the camera, in meters.  
-**World** | Returns the vertex or fragment position in the world, in meters. If you use the High Definition Render Pipeline (HDRP), **World** returns the position [relative to the camera](https://docs.unity3d.com/Packages/com.unity.render-pipelines.high-definition@latest?preview=1&subfolder=/manual/Camera-Relative-Rendering.html).  
-**Tangent** | Returns the vertex or fragment position relative to the tangent of the surface, in meters. For more information, refer to [Normal maps](https://docs.unity3d.com/6000.3/Documentation/Manual/StandardShaderMaterialParameterNormalMapLanding.html).  
-**Absolute World** | Returns the vertex or fragment position in the world, in meters.
-
-
---- Page 95: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Preview-Node.html ---
-
-# Preview Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Preview-Node.html#description)Description
-This node enables you to inspect a preview at a specific point in a [Shader Graph](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/index.html). It does not modify any input values.
-By default, the Editor automatically selects a preview mode. That decision is determined by both the type of the node you are previewing and other upstream nodes. With [Preview Mode Control](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Preview-Mode-Control.html), you can manually select your preferred preview mode.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Preview-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-In | Input | Dynamic Vector | None | Input value  
-Out | Output | Dynamic Vector | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Preview-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Preview_float4(float4 In, out float4 Out)
-{
-    Out = In;
-}
-
-```
-
-
-
---- Page 96: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Power-Node.html ---
-
-# Power Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Power-Node.html#description)Description
-Returns the result of input **A** to the power of input **B**.
-Note: If the input **A** is negative, the output might be inconsistent or NaN.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Power-Node.html#ports)Ports
+# Minimum Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Minimum-Node.html#description)Description
+Returns the smallest of the two inputs values **A** and **B**.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Minimum-Node.html#ports)Ports
 Name | Direction | Type | Description  
 ---|---|---|---  
 A | Input | Dynamic Vector | First input value  
 B | Input | Dynamic Vector | Second input value  
 Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Power-Node.html#generated-code-example)Generated Code Example
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Minimum-Node.html#generated-code-example)Generated Code Example
 The following example code represents one possible outcome of this node.
 ```
-void Unity_Power_float4(float4 A, float4 B, out float4 Out)
+void Unity_Minimum_float4(float4 A, float4 B, out float4 Out)
 {
-    Out = pow(A, B);
+    Out = min(A, B);
 }
 
 ```
 
 
 
---- Page 97: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Random-Range-Node.html ---
+--- Page 94: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Nand-Node.html ---
 
-# Random Range Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Random-Range-Node.html#description)Description
-Returns a pseudo-random number value based on input **Seed** that is between the minimum and maximum values defined by inputs **Min** and **Max** respectively.
-Whilst the same value in input **Seed** will always result in the same output value, the output value itself will appear random. Input **Seed** is a **Vector 2** value for the convenience of generating a random number based on a UV input, however for most cases a **Float** input will suffice.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Random-Range-Node.html#ports)Ports
-Name | Direction | Type | Description  
+# Nand Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Nand-Node.html#description)Description
+Returns true if both the inputs **A** and **B** are false. This is useful for [Branching](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Branch-Node.html).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Nand-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+A | Input | Boolean | None | First input value  
+B | Input | Boolean | None | Second input value  
+Out | Output | Boolean | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Nand-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Nand_float(float A, float B, out float Out)
+{
+    Out = !A && !B;
+}
+
+```
+
+
+
+--- Page 95: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Remap-Node.html ---
+
+# Remap node
+The Remap node converts a value from one range to another, which is also known as linear interpolation. For example, you can use the node to convert a value in the range 0 to 1 to the equivalent value in the range 0 to 100.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Remap-Node.html#ports)Ports
+**Name** | **Direction** | **Type** | **Description**  
 ---|---|---|---  
-Seed | Input | Vector 2 | Seed value used for generation  
-Min | Input | Float | Minimum value  
-Max | Input | Float | Maximum value  
-Out | Output | Float | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Random-Range-Node.html#generated-code-example)Generated Code Example
+**In** | Input | Dynamic Vector | The value to convert.  
+**In Min Max** | Input | Vector 2 | The original minimum and maximum range of **In**.  
+**Out Min Max** | Input | Vector 2 | The new minimum and maximum range to use to interpolate **In**.  
+**Out** | Output | Dynamic Vector | The converted value.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Remap-Node.html#generated-code-example)Generated code example
 The following example code represents one possible outcome of this node.
 ```
-void Unity_RandomRange_float(float2 Seed, float Min, float Max, out float Out)
+void Unity_Remap_float4(float4 In, float2 InMinMax, float2 OutMinMax, out float4 Out)
 {
-    float randomno =  frac(sin(dot(Seed, float2(12.9898, 78.233)))*43758.5453);
-    Out = lerp(Min, Max, randomno);
+    Out = OutMinMax.x + (In - InMinMax.x) * (OutMinMax.y - OutMinMax.x) / (InMinMax.y - InMinMax.x);
 }
 
 ```
 
 
 
---- Page 98: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Radial-Shear-Node.html ---
+--- Page 96: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Replace-Color-Node.html ---
+
+# Replace Color node
+The Replace Color node replaces a color in the input with another color.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Replace-Color-Node.html#ports)Ports
+**Name** | **Direction** | **Type** | **Binding** | **Description**  
+---|---|---|---|---  
+**In** | Input | Vector 3 | None | Sets the input you want to replace a color in. For example, a texture.  
+**From** | Input | Vector 3 | Color | Sets the color to replace.  
+**To** | Input | Vector 3 | Color | Sets the color to replace **From** with.  
+**Range** | Input | Float | None | Sets the range around **From** to replace. For example, if you set **From** to (0, 0, 0) and **Range** to 0.1, Unity replaces colors from (0, 0, 0) to (0.1, 0.1, 0.1) with **To**.  
+**Fuzziness** | Input | Float | None | Sets how much to soften the boundary between the replaced color and the rest of the colors.  
+**Out** | Output | Vector 3 | None | The **In** input, with the **From** color replaced with the **To** color.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Replace-Color-Node.html#generated-code-example)Generated code example
+The following example code represents one possible outcome of this node.
+```
+void Unity_ReplaceColor_float(float3 In, float3 From, float3 To, float Range, float Fuzziness, out float3 Out)
+{
+    float Distance = distance(From, In);
+
+    // Use max to avoid division by zero
+    Out = lerp(To, In, saturate((Distance - Range) / max(Fuzziness, 1e-5f)));
+}
+
+```
+
+
+
+--- Page 97: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Radial-Shear-Node.html ---
 
 # Radial Shear Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Radial-Shear-Node.html#description)Description
@@ -3328,6 +3306,35 @@ void Unity_RadialShear_float(float2 UV, float2 Center, float Strength, float2 Of
     float delta2 = dot(delta.xy, delta.xy);
     float2 delta_offset = delta2 * Strength;
     Out = UV + float2(delta.y, -delta.x) * delta_offset + Offset;
+}
+
+```
+
+
+
+--- Page 98: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rounded-Rectangle-Node.html ---
+
+# Rounded Rectangle Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rounded-Rectangle-Node.html#description)Description
+Generates a rounded rectangle shape based on input **UV** at the size specified by inputs **Width** and **Height**. The radius of each corner is defined by input **Radius**. The generated shape can be offset or tiled by connecting a [Tiling And Offset Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tiling-And-Offset-Node.html). Note that in order to preserve the ability to offset the shape within the UV space the shape will not automatically repeat if tiled. To achieve a repeating rounded rectangle effect first connect your input through a [Fraction Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fraction-Node.html).
+NOTE: This [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) can only be used in the **Fragment** [Shader Stage](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Stage.html).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rounded-Rectangle-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+UV | Input | Vector 2 | UV | Input UV value  
+Width | Input | Float | None | Rounded Rectangle width  
+Height | Input | Float | None | Rounded Rectangle height  
+Radius | Input | Float | None | Corner radius  
+Out | Output | Float | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rounded-Rectangle-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_RoundedRectangle_float(float2 UV, float Width, float Height, float Radius, out float Out)
+{
+    Radius = max(min(min(abs(Radius * 2), abs(Width)), abs(Height)), 1e-5);
+    float2 uv = abs(UV * 2 - 1) - float2(Width, Height) + Radius;
+    float d = length(max(0, uv)) / Radius;
+    Out = saturate((1 - d) / fwidth(d));
 }
 
 ```
@@ -3365,7 +3372,119 @@ void Unity_Rectangle_float(float2 UV, float Width, float Height, out float Out)
 
 
 
---- Page 100: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Reflection-Probe-Node.html ---
+--- Page 100: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Power-Node.html ---
+
+# Power Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Power-Node.html#description)Description
+Returns the result of input **A** to the power of input **B**.
+Note: If the input **A** is negative, the output might be inconsistent or NaN.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Power-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+A | Input | Dynamic Vector | First input value  
+B | Input | Dynamic Vector | Second input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Power-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Power_float4(float4 A, float4 B, out float4 Out)
+{
+    Out = pow(A, B);
+}
+
+```
+
+
+
+--- Page 101: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sample-Gradient-Node.html ---
+
+# Sample Gradient Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sample-Gradient-Node.html#description)Description
+Samples a **Gradient** given the input of **Time**. Returns a **Vector 4** color value for use in the shader.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sample-Gradient-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Gradient | Input | Gradient | None | Gradient to sample  
+Time | Input | Float | None | Point at which to sample gradient (0.0–1.0)  
+Out | Output | Vector 4 | None | Output value as Vector4  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sample-Gradient-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_SampleGradient_float(float4 Gradient, float Time, out float4 Out)
+{
+    float3 color = Gradient.colors[0].rgb;
+    [unroll]
+    for (int c = 1; c < 8; c++)
+    {
+        float colorPos = saturate((Time - Gradient.colors[c-1].w) / (Gradient.colors[c].w - Gradient.colors[c-1].w)) * step(c, Gradient.colorsLength-1);
+        color = lerp(color, Gradient.colors[c].rgb, lerp(colorPos, step(0.01, colorPos), Gradient.type));
+    }
+#ifndef UNITY_COLORSPACE_GAMMA
+    color = SRGBToLinear(color);
+#endif
+    float alpha = Gradient.alphas[0].x;
+    [unroll]
+    for (int a = 1; a < 8; a++)
+    {
+        float alphaPos = saturate((Time - Gradient.alphas[a-1].y) / (Gradient.alphas[a].y - Gradient.alphas[a-1].y)) * step(a, Gradient.alphasLength-1);
+        alpha = lerp(alpha, Gradient.alphas[a].x, lerp(alphaPos, step(0.01, alphaPos), Gradient.type));
+    }
+    Out = float4(color, alpha);
+}
+
+```
+
+
+
+--- Page 102: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Random-Range-Node.html ---
+
+# Random Range Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Random-Range-Node.html#description)Description
+Returns a pseudo-random number value based on input **Seed** that is between the minimum and maximum values defined by inputs **Min** and **Max** respectively.
+Whilst the same value in input **Seed** will always result in the same output value, the output value itself will appear random. Input **Seed** is a **Vector 2** value for the convenience of generating a random number based on a UV input, however for most cases a **Float** input will suffice.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Random-Range-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+Seed | Input | Vector 2 | Seed value used for generation  
+Min | Input | Float | Minimum value  
+Max | Input | Float | Maximum value  
+Out | Output | Float | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Random-Range-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_RandomRange_float(float2 Seed, float Min, float Max, out float Out)
+{
+    float randomno =  frac(sin(dot(Seed, float2(12.9898, 78.233)))*43758.5453);
+    Out = lerp(Min, Max, randomno);
+}
+
+```
+
+
+
+--- Page 103: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Reciprocal-Square-Root-Node.html ---
+
+# Reciprocal Square Root Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Reciprocal-Square-Root-Node.html#description)Description
+Returns the result of 1 divided by the square root of the input **In**.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Reciprocal-Square-Root-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+In | Input | Dynamic Vector | Input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Reciprocal-Square-Root-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_ReciprocalSquareRoot_float4(float4 In, out float4 Out)
+{
+    Out = rsqrt(In);
+}
+
+```
+
+
+
+--- Page 104: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Reflection-Probe-Node.html ---
 
 # Reflection Probe Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Reflection-Probe-Node.html#description)Description
@@ -3396,86 +3515,29 @@ void Unity_ReflectionProbe_float(float3 ViewDir, float3 Normal, float LOD, out f
 
 
 
---- Page 101: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Color-Node.html ---
+--- Page 105: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturate-Node.html ---
 
-# Scene Color node
-The Scene Color node samples the color buffer of the current camera, using the screen space coordinates you input.
-If you use the Universal Render Pipeline (URP), the node samples the opaque texture, which is a copy of the color buffer before Unity renders transparent objects. For more information, refer to [Universal Render Pipeline asset reference](https://docs.unity3d.com/Manual/urp/universalrp-asset.html).
-To make sure the Scene Color node outputs the correct values, follow these steps:
-  1. Connect the node to the fragment [shader stage](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Stage.html). The Scene Color node doesn't support the vertex shader stage.
-  2. In the **Graph Settings** tab of the [**Graph Inspector**](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Internal-Inspector.html) window, set **Surface Type** to **Transparent**. Otherwise, the node samples the color buffer before Unity renders all the opaque contents in the scene.
-
-
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Color-Node.html#render-pipeline-support)Render pipeline support
-The Scene Color node supports the following render pipelines:
-  * Universal Render Pipeline (URP)
-  * High Definition Render Pipeline (HDRP)
-
-
-If you use the Scene Color node with an unsupported pipeline, it returns 0 (black).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Color-Node.html#ports)Ports
-**Name** | **Direction** | **Type** | **Binding** | **Description**  
----|---|---|---|---  
-**UV** | Input | Vector 4 | Screen position | The normalized screen space coordinates to sample from.  
-**Out** | Output | Vector 3 | None | The color value from the color buffer at the **UV** coordinates.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Color-Node.html#generated-code-example)Generated code example
-The HLSL code this node generates depends on the render pipeline you use. If you use your own custom render pipeline, you must define the behavior of the node yourself. Otherwise, the node returns a value of 0 (black).
-The following example code represents one possible outcome of this node.
-```
-void Unity_SceneColor_float(float4 UV, out float3 Out)
-{
-    Out = SHADERGRAPH_SAMPLE_SCENE_COLOR(UV);
-}
-
-```
-
-
-
---- Page 102: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Round-Node.html ---
-
-# Round Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Round-Node.html#description)Description
-Returns the value of input **In** rounded to the nearest integer, or whole number.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Round-Node.html#ports)Ports
+# Saturate Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturate-Node.html#description)Description
+Returns the value of input **In** clamped between 0 and 1.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturate-Node.html#ports)Ports
 Name | Direction | Type | Description  
 ---|---|---|---  
 In | Input | Dynamic Vector | Input value  
 Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Round-Node.html#generated-code-example)Generated Code Example
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturate-Node.html#generated-code-example)Generated Code Example
 The following example code represents one possible outcome of this node.
 ```
-void Unity_Round_float4(float4 In, out float4 Out)
+void Unity_Saturate_float4(float4 In, out float4 Out)
 {
-    Out = round(In);
+    Out = saturate(In);
 }
 
 ```
 
 
 
---- Page 103: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Reciprocal-Square-Root-Node.html ---
-
-# Reciprocal Square Root Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Reciprocal-Square-Root-Node.html#description)Description
-Returns the result of 1 divided by the square root of the input **In**.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Reciprocal-Square-Root-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-In | Input | Dynamic Vector | Input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Reciprocal-Square-Root-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_ReciprocalSquareRoot_float4(float4 In, out float4 Out)
-{
-    Out = rsqrt(In);
-}
-
-```
-
-
-
---- Page 104: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Reciprocal-Node.html ---
+--- Page 106: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Reciprocal-Node.html ---
 
 # Reciprocal Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Reciprocal-Node.html#description)Description
@@ -3511,138 +3573,7 @@ void Unity_Reciprocal_Fast_float4(float4 In, out float4 Out)
 
 
 
---- Page 105: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturation-Node.html ---
-
-# Saturation Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturation-Node.html#description)Description
-Adjusts the saturation of input **In** by the amount of input **Saturation**. A **Saturation** value of 1 will return the input unaltered. A **Saturation** value of 0 will return the input completely desaturated.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturation-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-In | Input | Vector 3 | None | Input value  
-Saturation | Input | Float | None | Saturation value  
-Out | Output | Vector 3 | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturation-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Saturation_float(float3 In, float Saturation, out float3 Out)
-{
-    float luma = dot(In, float3(0.2126729, 0.7151522, 0.0721750));
-    Out =  luma.xxx + Saturation.xxx * (In - luma.xxx);
-}
-
-```
-
-
-
---- Page 106: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Screen-Position-Node.html ---
-
-# Screen Position Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Screen-Position-Node.html#description)Description
-Provides access to the screen position of the mesh vertex or fragment. The X and Y values represent the horizontal and vertical positions respectively. Use the **Mode** dropdown control to select the mode of the output value. The available modes are as follows:
-  * **Default** - Returns X and Y values that represent the normalized **Screen Position**. The normalized **Screen Position** is the **Screen Position** divided by the clip space position W component. The X and Y value ranges are between 0 and 1 with position `float2(0,0)` at the lower left corner of the screen. The Z and W values aren't used in this mode, so they're always 0.
-  * **Raw** - Returns the raw **Screen Position** values, which are the **Screen Position** values before the clip space position W component is divided out. Position `float2(0,0)` is at the lower left corner of the screen. This mode is useful for projection.
-  * **Center** - Returns X and Y values that represent the normalized **Screen Position** offset so position `float2(0,0)` is at the center of the screen. The range of the X and Y values is –1 to 1. The Z and W values aren't used in this mode, so they're always 0.
-  * **Tiled** - Returns **Screen Position** offset so position `float2(0,0)` is at the center of the screen and tiled using `frac`.
-  * **Pixel** - Returns **Screen Position** in terms of the actual pixel width and height values of the screen. In this mode, position `float2(0,0)` is at the lower left corner of the screen. Whereas the range of Default mode is always 0 to 1, the range of Pixel mode depends on the screen resolution. The Z and W values aren't used in this mode, so they're always 0.
-
-
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Screen-Position-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Out | Output | Vector 4 | None | Get the **Screen Position** of the mesh.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Screen-Position-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-Mode | Dropdown | Default, Raw, Center, Tiled, Pixel | Select which coordinate space to use for the **Screen Position** output.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Screen-Position-Node.html#generated-code-example)Generated Code Example
-The following code examples represent one possible outcome for each mode.
-**Default**
-```
-float4 Out = float4(IN.NDCPosition.xy, 0, 0);
-
-```
-
-**Raw**
-```
-float4 Out = IN.ScreenPosition;
-
-```
-
-**Center**
-```
-float4 Out = float4(IN.NDCPosition.xy * 2 - 1, 0, 0);
-
-```
-
-**Tiled**
-```
-float4 Out = frac(float4((IN.NDCPosition.x * 2 - 1) * _ScreenParams.x / _ScreenParams.y, IN.{0}.y * 2 - 1, 0, 0));
-
-```
-
-**Pixel**
-```
-float4 Out = float4(IN.PixelPosition.xy, 0, 0);
-
-```
-
-
-
---- Page 107: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rotate-Node.html ---
-
-# Rotate Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rotate-Node.html#description)Description
-Rotates value of input **UV** around a reference point defined by input **Center** by the amount of input **Rotation**. The unit for rotation angle can be selected by the parameter **Unit**.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rotate-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-UV | Input | Vector 2 | UV | Input UV value  
-Center | Input | Vector 2 | None | Center point to rotate around  
-Rotation | Input | Float | None | Amount of rotation to apply  
-Out | Output | Vector 2 | None | Output UV value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rotate-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-Unit | Dropdown | Radians, Degrees | Switches the unit for input **Rotation**  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rotate-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node per **Unit** mode.
-**Radians**
-```
-void Unity_Rotate_Radians_float(float2 UV, float2 Center, float Rotation, out float2 Out)
-{
-    UV -= Center;
-    float s, c;
-    sincos(Rotation, s, c);
-    float3 r3 = float(-s, c, s);
-    float2 r1;
-    r1.y = dot(UV, r3.xy);
-    r1.x = dot(UV, r3.yz);
-    Out = r1 + Center;
-}
-
-```
-
-**Degrees**
-```
-void Unity_Rotate_Degrees_float(float2 UV, float2 Center, float Rotation, out float2 Out)
-{
-    Rotation = Rotation * (3.1415926f/180.0f);
-    UV -= Center;
-    float s, c;
-    sincos(Rotation, s, c);
-    float3 r3 = float(-s, c, s);
-    float2 r1;
-    r1.y = dot(UV, r3.xy);
-    r1.x = dot(UV, r3.yz);
-    Out = r1 + Center;
-}
-
-```
-
-
-
---- Page 108: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rounded-Polygon-Node.html ---
+--- Page 107: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rounded-Polygon-Node.html ---
 
 # Rounded Polygon Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rounded-Polygon-Node.html#description)Description
@@ -3721,7 +3652,304 @@ void RoundedPolygon_Func_float(float2 UV, float Width, float Height, float Sides
 
 
 
---- Page 109: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Simple-Noise-Node.html ---
+--- Page 108: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Round-Node.html ---
+
+# Round Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Round-Node.html#description)Description
+Returns the value of input **In** rounded to the nearest integer, or whole number.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Round-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+In | Input | Dynamic Vector | Input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Round-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Round_float4(float4 In, out float4 Out)
+{
+    Out = round(In);
+}
+
+```
+
+
+
+--- Page 109: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Preview-Node.html ---
+
+# Preview Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Preview-Node.html#description)Description
+This node enables you to inspect a preview at a specific point in a [Shader Graph](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/index.html). It does not modify any input values.
+By default, the Editor automatically selects a preview mode. That decision is determined by both the type of the node you are previewing and other upstream nodes. With [Preview Mode Control](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Preview-Mode-Control.html), you can manually select your preferred preview mode.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Preview-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+In | Input | Dynamic Vector | None | Input value  
+Out | Output | Dynamic Vector | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Preview-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Preview_float4(float4 In, out float4 Out)
+{
+    Out = In;
+}
+
+```
+
+
+
+--- Page 110: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rotate-Node.html ---
+
+# Rotate Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rotate-Node.html#description)Description
+Rotates value of input **UV** around a reference point defined by input **Center** by the amount of input **Rotation**. The unit for rotation angle can be selected by the parameter **Unit**.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rotate-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+UV | Input | Vector 2 | UV | Input UV value  
+Center | Input | Vector 2 | None | Center point to rotate around  
+Rotation | Input | Float | None | Amount of rotation to apply  
+Out | Output | Vector 2 | None | Output UV value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rotate-Node.html#controls)Controls
+Name | Type | Options | Description  
+---|---|---|---  
+Unit | Dropdown | Radians, Degrees | Switches the unit for input **Rotation**  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rotate-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node per **Unit** mode.
+**Radians**
+```
+void Unity_Rotate_Radians_float(float2 UV, float2 Center, float Rotation, out float2 Out)
+{
+    UV -= Center;
+    float s, c;
+    sincos(Rotation, s, c);
+    float3 r3 = float(-s, c, s);
+    float2 r1;
+    r1.y = dot(UV, r3.xy);
+    r1.x = dot(UV, r3.yz);
+    Out = r1 + Center;
+}
+
+```
+
+**Degrees**
+```
+void Unity_Rotate_Degrees_float(float2 UV, float2 Center, float Rotation, out float2 Out)
+{
+    Rotation = Rotation * (3.1415926f/180.0f);
+    UV -= Center;
+    float s, c;
+    sincos(Rotation, s, c);
+    float3 r3 = float(-s, c, s);
+    float2 r1;
+    r1.y = dot(UV, r3.xy);
+    r1.x = dot(UV, r3.yz);
+    Out = r1 + Center;
+}
+
+```
+
+
+
+--- Page 111: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturation-Node.html ---
+
+# Saturation Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturation-Node.html#description)Description
+Adjusts the saturation of input **In** by the amount of input **Saturation**. A **Saturation** value of 1 will return the input unaltered. A **Saturation** value of 0 will return the input completely desaturated.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturation-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+In | Input | Vector 3 | None | Input value  
+Saturation | Input | Float | None | Saturation value  
+Out | Output | Vector 3 | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturation-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Saturation_float(float3 In, float Saturation, out float3 Out)
+{
+    float luma = dot(In, float3(0.2126729, 0.7151522, 0.0721750));
+    Out =  luma.xxx + Saturation.xxx * (In - luma.xxx);
+}
+
+```
+
+
+
+--- Page 112: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Color-Node.html ---
+
+# Scene Color node
+The Scene Color node samples the color buffer of the current camera, using the screen space coordinates you input.
+If you use the Universal Render Pipeline (URP), the node samples the opaque texture, which is a copy of the color buffer before Unity renders transparent objects. For more information, refer to [Universal Render Pipeline asset reference](https://docs.unity3d.com/Manual/urp/universalrp-asset.html).
+To make sure the Scene Color node outputs the correct values, follow these steps:
+  1. Connect the node to the fragment [shader stage](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Stage.html). The Scene Color node doesn't support the vertex shader stage.
+  2. In the **Graph Settings** tab of the [**Graph Inspector**](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Internal-Inspector.html) window, set **Surface Type** to **Transparent**. Otherwise, the node samples the color buffer before Unity renders all the opaque contents in the scene.
+
+
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Color-Node.html#render-pipeline-support)Render pipeline support
+The Scene Color node supports the following render pipelines:
+  * Universal Render Pipeline (URP)
+  * High Definition Render Pipeline (HDRP)
+
+
+If you use the Scene Color node with an unsupported pipeline, it returns 0 (black).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Color-Node.html#ports)Ports
+**Name** | **Direction** | **Type** | **Binding** | **Description**  
+---|---|---|---|---  
+**UV** | Input | Vector 4 | Screen position | The normalized screen space coordinates to sample from.  
+**Out** | Output | Vector 3 | None | The color value from the color buffer at the **UV** coordinates.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Color-Node.html#generated-code-example)Generated code example
+The HLSL code this node generates depends on the render pipeline you use. If you use your own custom render pipeline, you must define the behavior of the node yourself. Otherwise, the node returns a value of 0 (black).
+The following example code represents one possible outcome of this node.
+```
+void Unity_SceneColor_float(float4 UV, out float3 Out)
+{
+    Out = SHADERGRAPH_SAMPLE_SCENE_COLOR(UV);
+}
+
+```
+
+
+
+--- Page 113: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Smoothstep-Node.html ---
+
+# Smoothstep Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Smoothstep-Node.html#description)Description
+Returns the result of a smooth Hermite interpolation between 0 and 1, if the value of input **In** is between the values of inputs **Edge1** and **Edge2** respectively. Returns 0 if the value of input **In** is less than the value of input **Edge1** and 1 if greater than the value of input **Edge2**.
+The Smoothstep node is similar to the [Lerp Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html) but there are two notable differences. Firstly, with the Smoothstep node, the user specifies the range and the return value is between 0 and 1. You can consider this the opposite of the [Lerp Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html). Secondly, the Smoothstep node uses smooth Hermite interpolation instead of linear interpolation, which means the interpolation gradually speeds up from the start and slows down toward the end. This interpolation is useful for creating natural-looking animation, fading, and other transitions.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Smoothstep-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+Edge1 | Input | Dynamic Vector | Minimum step value  
+Edge2 | Input | Dynamic Vector | Maximum step value  
+In | Input | Dynamic Vector | Input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Smoothstep-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Smoothstep_float4(float4 Edge1, float4 Edge2, float4 In, out float4 Out)
+{
+    Out = smoothstep(Edge1, Edge2, In);
+}
+
+```
+
+
+
+--- Page 114: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Slider-Node.html ---
+
+# Slider Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Slider-Node.html#description)Description
+Defines a constant **Float** value in the shader using a **Slider** field. Can be converted to a **Float** type [Property](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Property-Types.html) with a **Mode** setting of **Slider** via the [Node's](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) context menu.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Slider-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Out | Output | Float | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Slider-Node.html#controls)Controls
+Name | Type | Options | Description  
+---|---|---|---  
+| Slider |  | Defines the output value.  
+Min | Float |  | Defines the slider parameter's minimum value.  
+Max | Float |  | Defines the slider parameter's maximum value.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Slider-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+float _Slider_Out = 1.0;
+
+```
+
+
+
+--- Page 115: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Screen-Position-Node.html ---
+
+# Screen Position Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Screen-Position-Node.html#description)Description
+Provides access to the screen position of the mesh vertex or fragment. The X and Y values represent the horizontal and vertical positions respectively. Use the **Mode** dropdown control to select the mode of the output value. The available modes are as follows:
+  * **Default** - Returns X and Y values that represent the normalized **Screen Position**. The normalized **Screen Position** is the **Screen Position** divided by the clip space position W component. The X and Y value ranges are between 0 and 1 with position `float2(0,0)` at the lower left corner of the screen. The Z and W values aren't used in this mode, so they're always 0.
+  * **Raw** - Returns the raw **Screen Position** values, which are the **Screen Position** values before the clip space position W component is divided out. Position `float2(0,0)` is at the lower left corner of the screen. This mode is useful for projection.
+  * **Center** - Returns X and Y values that represent the normalized **Screen Position** offset so position `float2(0,0)` is at the center of the screen. The range of the X and Y values is –1 to 1. The Z and W values aren't used in this mode, so they're always 0.
+  * **Tiled** - Returns **Screen Position** offset so position `float2(0,0)` is at the center of the screen and tiled using `frac`.
+  * **Pixel** - Returns **Screen Position** in terms of the actual pixel width and height values of the screen. In this mode, position `float2(0,0)` is at the lower left corner of the screen. Whereas the range of Default mode is always 0 to 1, the range of Pixel mode depends on the screen resolution. The Z and W values aren't used in this mode, so they're always 0.
+
+
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Screen-Position-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Out | Output | Vector 4 | None | Get the **Screen Position** of the mesh.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Screen-Position-Node.html#controls)Controls
+Name | Type | Options | Description  
+---|---|---|---  
+Mode | Dropdown | Default, Raw, Center, Tiled, Pixel | Select which coordinate space to use for the **Screen Position** output.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Screen-Position-Node.html#generated-code-example)Generated Code Example
+The following code examples represent one possible outcome for each mode.
+**Default**
+```
+float4 Out = float4(IN.NDCPosition.xy, 0, 0);
+
+```
+
+**Raw**
+```
+float4 Out = IN.ScreenPosition;
+
+```
+
+**Center**
+```
+float4 Out = float4(IN.NDCPosition.xy * 2 - 1, 0, 0);
+
+```
+
+**Tiled**
+```
+float4 Out = frac(float4((IN.NDCPosition.x * 2 - 1) * _ScreenParams.x / _ScreenParams.y, IN.{0}.y * 2 - 1, 0, 0));
+
+```
+
+**Pixel**
+```
+float4 Out = float4(IN.PixelPosition.xy, 0, 0);
+
+```
+
+
+
+--- Page 116: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Depth-Node.html ---
+
+# Scene Depth node
+The Scene Depth node samples the depth texture of the current camera, using the screen space coordinates you input. The node returns the depth of the closest object the camera sees along the path towards the coordinates, or 1 (white) if no object is present.
+If you use the Universal Render Pipeline (URP), make sure the depth texture is enabled in the [URP asset](https://docs.unity3d.com/Manual/urp/universalrp-asset.html). Otherwise the Scene Depth node returns a value of 0.5 (mid-grey).
+The Scene Depth node works only in the fragment [shader stage](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Stage.html), and might not work if you set **Surface Type** to **Opaque** in the **Graph Inspector** window.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Depth-Node.html#render-pipeline-support)Render pipeline support
+This node supports the following render pipelines:
+  * High Definition Render Pipeline (HDRP)
+  * Universal Render Pipeline (URP)
+
+
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Depth-Node.html#ports)Ports
+**Name** | **Direction** | **Type** | **Binding** | **Description**  
+---|---|---|---|---  
+**UV** | Input | Vector 4 | Screen position | The normalized screen space coordinates to sample from.  
+**Out** | Output | Float | None | The depth value from the depth texture at the **UV** coordinates.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Depth-Node.html#sampling-modes)Sampling modes
+**Name** | **Description**  
+---|---  
+**Linear 01** | Returns the linear depth value. The range is from 0 to 1. 0 is the near clipping plane of the camera, and 1 is the far clipping plane of the camera.  
+**Raw** | Returns the non-linear depth value. The range is from 0 to 1. 0 is the near clipping plane of the camera, and 1 is the far clipping plane of the camera.  
+**Eye** | Returns the depth value as the distance from the camera in meters.  
+For more information about clipping planes, refer to [Introduction to the camera view](https://docs.unity3d.com/Manual/UnderstandingFrustum.html).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Depth-Node.html#generated-code-example)Generated code example
+The HLSL code this node generates depends on the render pipeline you use. If you use your own custom render pipeline, you must define the behaviour of the node yourself, otherwise the node returns a value of 1 (white).
+The following example code represents one possible outcome of this node.
+```
+void Unity_SceneDepth_Raw_float(float4 UV, out float Out)
+{
+    Out = SHADERGRAPH_SAMPLE_SCENE_DEPTH(UV);
+}
+
+```
+
+
+
+--- Page 117: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Simple-Noise-Node.html ---
 
 # Simple Noise node
 The Simple Noise node generates a pseudo-random value, also known as value noise, for each UV coordinate in the input **UV**.
@@ -3795,130 +4023,26 @@ void Unity_SimpleNoise_float(float2 UV, float Scale, out float Out)
 
 
 
---- Page 110: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturate-Node.html ---
+--- Page 118: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sprite-Skinning-Node.html ---
 
-# Saturate Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturate-Node.html#description)Description
-Returns the value of input **In** clamped between 0 and 1.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturate-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-In | Input | Dynamic Vector | Input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Saturate-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Saturate_float4(float4 In, out float4 Out)
-{
-    Out = saturate(In);
-}
-
-```
-
-
-
---- Page 111: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Slider-Node.html ---
-
-# Slider Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Slider-Node.html#description)Description
-Defines a constant **Float** value in the shader using a **Slider** field. Can be converted to a **Float** type [Property](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Property-Types.html) with a **Mode** setting of **Slider** via the [Node's](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) context menu.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Slider-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
+# Sprite Skinning Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sprite-Skinning-Node.html#description)Description
+This node lets you apply Vertex Skinning, and only works with the [2D Animation](https://docs.unity3d.com/Packages/com.unity.2d.animation@latest/). You must use the [SpriteSkin](https://docs.unity3d.com/Packages/com.unity.2d.animation@latest?subfolder=/manual/SpriteSkin.html) component provided with the 2D Animation Package.  
+Please ensure the following settings are enabled:  
+1. GPU Skinning is enabled in Player/Rendering/GPU Skinning in Project Settings.  
+2. SRP-Batcher enabled in RenderpipelineAsset.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sprite-Skinning-Node.html#ports)Ports
+Name | Direction | Type | Stage | Description  
 ---|---|---|---|---  
-Out | Output | Float | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Slider-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-| Slider |  | Defines the output value.  
-Min | Float |  | Defines the slider parameter's minimum value.  
-Max | Float |  | Defines the slider parameter's maximum value.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Slider-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-float _Slider_Out = 1.0;
-
-```
+Position | Input | Vector3 | Vertex | Position of the vertex in object space.  
+Normal | Input | Vector3 | Vertex | Normal of the vertex in object space.  
+Tangent | Input | Vector3 | Vertex | Tangent of the vertex in object space.  
+Position | Output | Vector3 | Vertex | Outputs the skinned vertex position.  
+Normal | Output | Vector3 | Vertex | Outputs the skinned vertex normal.  
+Tangent | Output | Vector3 | Vertex | Outputs the skinned vertex tangent.
 
 
-
---- Page 112: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sample-Gradient-Node.html ---
-
-# Sample Gradient Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sample-Gradient-Node.html#description)Description
-Samples a **Gradient** given the input of **Time**. Returns a **Vector 4** color value for use in the shader.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sample-Gradient-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Gradient | Input | Gradient | None | Gradient to sample  
-Time | Input | Float | None | Point at which to sample gradient (0.0–1.0)  
-Out | Output | Vector 4 | None | Output value as Vector4  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sample-Gradient-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_SampleGradient_float(float4 Gradient, float Time, out float4 Out)
-{
-    float3 color = Gradient.colors[0].rgb;
-    [unroll]
-    for (int c = 1; c < 8; c++)
-    {
-        float colorPos = saturate((Time - Gradient.colors[c-1].w) / (Gradient.colors[c].w - Gradient.colors[c-1].w)) * step(c, Gradient.colorsLength-1);
-        color = lerp(color, Gradient.colors[c].rgb, lerp(colorPos, step(0.01, colorPos), Gradient.type));
-    }
-#ifndef UNITY_COLORSPACE_GAMMA
-    color = SRGBToLinear(color);
-#endif
-    float alpha = Gradient.alphas[0].x;
-    [unroll]
-    for (int a = 1; a < 8; a++)
-    {
-        float alphaPos = saturate((Time - Gradient.alphas[a-1].y) / (Gradient.alphas[a].y - Gradient.alphas[a-1].y)) * step(a, Gradient.alphasLength-1);
-        alpha = lerp(alpha, Gradient.alphas[a].x, lerp(alphaPos, step(0.01, alphaPos), Gradient.type));
-    }
-    Out = float4(color, alpha);
-}
-
-```
-
-
-
---- Page 113: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Depth-Node.html ---
-
-# Scene Depth node
-The Scene Depth node samples the depth texture of the current camera, using the screen space coordinates you input. The node returns the depth of the closest object the camera sees along the path towards the coordinates, or 1 (white) if no object is present.
-If you use the Universal Render Pipeline (URP), make sure the depth texture is enabled in the [URP asset](https://docs.unity3d.com/Manual/urp/universalrp-asset.html). Otherwise the Scene Depth node returns a value of 0.5 (mid-grey).
-The Scene Depth node works only in the fragment [shader stage](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Stage.html), and might not work if you set **Surface Type** to **Opaque** in the **Graph Inspector** window.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Depth-Node.html#render-pipeline-support)Render pipeline support
-This node supports the following render pipelines:
-  * High Definition Render Pipeline (HDRP)
-  * Universal Render Pipeline (URP)
-
-
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Depth-Node.html#ports)Ports
-**Name** | **Direction** | **Type** | **Binding** | **Description**  
----|---|---|---|---  
-**UV** | Input | Vector 4 | Screen position | The normalized screen space coordinates to sample from.  
-**Out** | Output | Float | None | The depth value from the depth texture at the **UV** coordinates.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Depth-Node.html#sampling-modes)Sampling modes
-**Name** | **Description**  
----|---  
-**Linear 01** | Returns the linear depth value. The range is from 0 to 1. 0 is the near clipping plane of the camera, and 1 is the far clipping plane of the camera.  
-**Raw** | Returns the non-linear depth value. The range is from 0 to 1. 0 is the near clipping plane of the camera, and 1 is the far clipping plane of the camera.  
-**Eye** | Returns the depth value as the distance from the camera in meters.  
-For more information about clipping planes, refer to [Introduction to the camera view](https://docs.unity3d.com/Manual/UnderstandingFrustum.html).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Scene-Depth-Node.html#generated-code-example)Generated code example
-The HLSL code this node generates depends on the render pipeline you use. If you use your own custom render pipeline, you must define the behaviour of the node yourself, otherwise the node returns a value of 1 (white).
-The following example code represents one possible outcome of this node.
-```
-void Unity_SceneDepth_Raw_float(float4 UV, out float Out)
-{
-    Out = SHADERGRAPH_SAMPLE_SCENE_DEPTH(UV);
-}
-
-```
-
-
-
---- Page 114: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sign-Node.html ---
+--- Page 119: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sign-Node.html ---
 
 # Sign Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sign-Node.html#description)Description
@@ -3940,231 +4064,7 @@ void Unity_Sign_float4(float4 In, out float4 Out)
 
 
 
---- Page 115: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Remap-Node.html ---
-
-# Remap node
-The Remap node converts a value from one range to another, which is also known as linear interpolation. For example, you can use the node to convert a value in the range 0 to 1 to the equivalent value in the range 0 to 100.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Remap-Node.html#ports)Ports
-**Name** | **Direction** | **Type** | **Description**  
----|---|---|---  
-**In** | Input | Dynamic Vector | The value to convert.  
-**In Min Max** | Input | Vector 2 | The original minimum and maximum range of **In**.  
-**Out Min Max** | Input | Vector 2 | The new minimum and maximum range to use to interpolate **In**.  
-**Out** | Output | Dynamic Vector | The converted value.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Remap-Node.html#generated-code-example)Generated code example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Remap_float4(float4 In, float2 InMinMax, float2 OutMinMax, out float4 Out)
-{
-    Out = OutMinMax.x + (In - InMinMax.x) * (OutMinMax.y - OutMinMax.x) / (InMinMax.y - InMinMax.x);
-}
-
-```
-
-
-
---- Page 116: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Smoothstep-Node.html ---
-
-# Smoothstep Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Smoothstep-Node.html#description)Description
-Returns the result of a smooth Hermite interpolation between 0 and 1, if the value of input **In** is between the values of inputs **Edge1** and **Edge2** respectively. Returns 0 if the value of input **In** is less than the value of input **Edge1** and 1 if greater than the value of input **Edge2**.
-The Smoothstep node is similar to the [Lerp Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html) but there are two notable differences. Firstly, with the Smoothstep node, the user specifies the range and the return value is between 0 and 1. You can consider this the opposite of the [Lerp Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Lerp-Node.html). Secondly, the Smoothstep node uses smooth Hermite interpolation instead of linear interpolation, which means the interpolation gradually speeds up from the start and slows down toward the end. This interpolation is useful for creating natural-looking animation, fading, and other transitions.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Smoothstep-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-Edge1 | Input | Dynamic Vector | Minimum step value  
-Edge2 | Input | Dynamic Vector | Maximum step value  
-In | Input | Dynamic Vector | Input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Smoothstep-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Smoothstep_float4(float4 Edge1, float4 Edge2, float4 In, out float4 Out)
-{
-    Out = smoothstep(Edge1, Edge2, In);
-}
-
-```
-
-
-
---- Page 117: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Replace-Color-Node.html ---
-
-# Replace Color node
-The Replace Color node replaces a color in the input with another color.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Replace-Color-Node.html#ports)Ports
-**Name** | **Direction** | **Type** | **Binding** | **Description**  
----|---|---|---|---  
-**In** | Input | Vector 3 | None | Sets the input you want to replace a color in. For example, a texture.  
-**From** | Input | Vector 3 | Color | Sets the color to replace.  
-**To** | Input | Vector 3 | Color | Sets the color to replace **From** with.  
-**Range** | Input | Float | None | Sets the range around **From** to replace. For example, if you set **From** to (0, 0, 0) and **Range** to 0.1, Unity replaces colors from (0, 0, 0) to (0.1, 0.1, 0.1) with **To**.  
-**Fuzziness** | Input | Float | None | Sets how much to soften the boundary between the replaced color and the rest of the colors.  
-**Out** | Output | Vector 3 | None | The **In** input, with the **From** color replaced with the **To** color.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Replace-Color-Node.html#generated-code-example)Generated code example
-The following example code represents one possible outcome of this node.
-```
-void Unity_ReplaceColor_float(float3 In, float3 From, float3 To, float Range, float Fuzziness, out float3 Out)
-{
-    float Distance = distance(From, In);
-
-    // Use max to avoid division by zero
-    Out = lerp(To, In, saturate((Distance - Range) / max(Fuzziness, 1e-5f)));
-}
-
-```
-
-
-
---- Page 118: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rounded-Rectangle-Node.html ---
-
-# Rounded Rectangle Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rounded-Rectangle-Node.html#description)Description
-Generates a rounded rectangle shape based on input **UV** at the size specified by inputs **Width** and **Height**. The radius of each corner is defined by input **Radius**. The generated shape can be offset or tiled by connecting a [Tiling And Offset Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tiling-And-Offset-Node.html). Note that in order to preserve the ability to offset the shape within the UV space the shape will not automatically repeat if tiled. To achieve a repeating rounded rectangle effect first connect your input through a [Fraction Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Fraction-Node.html).
-NOTE: This [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) can only be used in the **Fragment** [Shader Stage](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Stage.html).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rounded-Rectangle-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-UV | Input | Vector 2 | UV | Input UV value  
-Width | Input | Float | None | Rounded Rectangle width  
-Height | Input | Float | None | Rounded Rectangle height  
-Radius | Input | Float | None | Corner radius  
-Out | Output | Float | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Rounded-Rectangle-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_RoundedRectangle_float(float2 UV, float Width, float Height, float Radius, out float Out)
-{
-    Radius = max(min(min(abs(Radius * 2), abs(Width)), abs(Height)), 1e-5);
-    float2 uv = abs(UV * 2 - 1) - float2(Width, Height) + Radius;
-    float d = length(max(0, uv)) / Radius;
-    Out = saturate((1 - d) / fwidth(d));
-}
-
-```
-
-
-
---- Page 119: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sprite-Skinning-Node.html ---
-
-# Sprite Skinning Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sprite-Skinning-Node.html#description)Description
-This node lets you apply Vertex Skinning, and only works with the [2D Animation](https://docs.unity3d.com/Packages/com.unity.2d.animation@latest/). You must use the [SpriteSkin](https://docs.unity3d.com/Packages/com.unity.2d.animation@latest?subfolder=/manual/SpriteSkin.html) component provided with the 2D Animation Package.  
-Please ensure the following settings are enabled:  
-1. GPU Skinning is enabled in Player/Rendering/GPU Skinning in Project Settings.  
-2. SRP-Batcher enabled in RenderpipelineAsset.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sprite-Skinning-Node.html#ports)Ports
-Name | Direction | Type | Stage | Description  
----|---|---|---|---  
-Position | Input | Vector3 | Vertex | Position of the vertex in object space.  
-Normal | Input | Vector3 | Vertex | Normal of the vertex in object space.  
-Tangent | Input | Vector3 | Vertex | Tangent of the vertex in object space.  
-Position | Output | Vector3 | Vertex | Outputs the skinned vertex position.  
-Normal | Output | Vector3 | Vertex | Outputs the skinned vertex normal.  
-Tangent | Output | Vector3 | Vertex | Outputs the skinned vertex tangent.
-
-
---- Page 120: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Spherize-Node.html ---
-
-# Spherize Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Spherize-Node.html#description)Description
-Applies a spherical warping effect similar to a fisheye camera lens to the value of input **UV**. The center reference point of the warping effect is defined by input **Center** and the overall strength of the effect is defined by the value of input **Strength**. Input **Offset** can be used to offset the individual channels of the result.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Spherize-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-UV | Input | Vector 2 | UV | Input UV value  
-Center | Input | Vector 2 | None | Center reference point  
-Strength | Input | Float | None | Strength of the effect  
-Offset | Input | Vector 2 | None | Individual channel offsets  
-Out | Output | Vector 2 | None | Output UV value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Spherize-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Spherize_float(float2 UV, float2 Center, float Strength, float2 Offset, out float2 Out)
-{
-    float2 delta = UV - Center;
-    float delta2 = dot(delta.xy, delta.xy);
-    float delta4 = delta2 * delta2;
-    float2 delta_offset = delta4 * Strength;
-    Out = UV + delta * delta_offset + Offset;
-}
-
-```
-
-
-
---- Page 121: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Split-Node.html ---
-
-# Split Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Split-Node.html#description)Description
-Splits the input vector **In** into four **Float** outputs **R** , **G** , **B** and **A**. These output vectors are defined by the individual channels of the input **In** ; red, green, blue and alpha respectively. If the input vector **In** 's dimension is less than 4 (**Vector 4**) the output values not present in the input will be 0.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Split-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-In | Input | Dynamic Vector | None | Input value  
-R | Output | Float | None | Red channel from input  
-G | Output | Float | None | Green channel from input  
-B | Output | Float | None | Blue channel from input  
-A | Output | Float | None | Alpha channel from input  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Split-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-float _Split_R = In[0];
-float _Split_G = In[1];
-float _Split_B = 0;
-float _Split_A = 0;
-
-```
-
-
-
---- Page 122: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-2-Node.html ---
-
-# Vector 2 Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-2-Node.html#description)Description
-Defines a **Vector 2** value in the shader. If [Ports](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Port.html) **X** and **Y** are not connected with [Edges](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Edge.html) this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) defines a constant **Vector 2** , otherwise this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) can be used to combine various **Float** values.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-2-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-X | Input | Float | None | Input x component value  
-Y | Input | Float | None | Input y component value  
-Out | Output | Vector 2 | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-2-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-float2 _Vector2_Out = float2(X, Y);
-
-```
-
-
-
---- Page 123: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Time-Node.html ---
-
-# Time Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Time-Node.html#description)Description
-Provides access to various **Time** parameters in the shader.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Time-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Time | Output | Float | None | Elapsed time in seconds.  
-Sine Time | Output | Float | None | Sine of the **Time** value. Output ranges from −1 to 1.  
-Cosine Time | Output | Float | None | Cosine of the **Time** value. Output ranges from −1 to 1.  
-Delta Time | Output | Float | None | The time that has elapsed between the current frame and the last frame, in seconds.  
-Smooth Delta | Output | Float | None | The time that has elapsed between the current frame and the last frame, in seconds, averaged over several frames to reduce jitter.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Time-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-float Time_Time = _Time.y;
-float Time_SineTime = _SinTime.w;
-float Time_CosineTime = _CosTime.w;
-float Time_DeltaTime = unity_DeltaTime.x;
-float Time_SmoothDelta = unity_DeltaTime.z;
-
-```
-
-
-
---- Page 124: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Transformation-Matrix-Node.html ---
+--- Page 120: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Transformation-Matrix-Node.html ---
 
 # Transformation Matrix Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Transformation-Matrix-Node.html#description)Description
@@ -4230,19 +4130,121 @@ float4x4 _TransformationMatrix_Out = UNITY_MATRIX_I_VP;
 
 
 
---- Page 125: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/UV-Node.html ---
+--- Page 121: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sub-graph-Node.html ---
 
-# UV node
-The UV node outputs the vertex or fragment UV coordinates of a mesh.
-UV coordinates usually have two channels, but the UV node outputs four channels so you can use the remaining two channels, for example to store custom mesh data.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/UV-Node.html#ports)Ports
-**Name** | **Direction** | **Type** | **Binding** | **Description**  
+# Subgraph node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sub-graph-Node.html#description)Description
+Provides a reference to a [Subgraph Asset](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sub-graph-Asset.html). All ports on the reference node are defined by the properties and outputs defined in the Subgraph Asset. This is useful for sharing functionality between graphs or duplicating the same functionality within a graph.
+The preview used for a Subgraph Node is determined by the first port of that [Subgraph](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sub-graph.html) Output node. Valid [Data Types](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Data-Types.html) for the first port are `Float`, `Vector 2`, `Vector 3`, `Vector 4`, `Matrix2`, `Matrix3`, `Matrix4`, and `Boolean`. Any other data type will produce an error in the preview shader and the Subgraph will become invalid.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sub-graph-Node.html#subgraph-nodes-and-shader-stages)Subgraph Nodes and Shader Stages
+If a [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) within a Subgraph specifies a [Shader Stage](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Stage.html), such as how [Sample Texture 2D Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sample-Texture-2D-Node.html) specifies the **fragment** Shader Stage, then that entire Subgraph) is now locked to that stage. As such a Subgraph node that references the graph will also be locked to that Shader Stage.
+Furthermore, when an [Edge](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Edge.html) connected to an output [Port](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Port.html) on a **Subgraph Node** flows into a port on the [Master Stack](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Master-Stack.html) that **Subgraph Node** is now locked to the Shader Stage of that [Block Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Block-Node.html) in the Master Stack.
+
+
+--- Page 122: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Swizzle-Node.html ---
+
+# Swizzle Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Swizzle-Node.html#description)Description
+Creates a new [vector](https://docs.unity3d.com/Manual/VectorCookbook.html) from the reordered elements of the input vector. This is called swizzling.
+To specify how input elements should be swizzled, enter a formatting string in the input mask. To invert the order of the input elements, for example, use the string "wzyx" or "abgr".
+The length of the input mask determines the dimensions of the output vector. The error "Invalid Mask" indicates an input mask value which includes one or more channels that do not exist in the input vector.
+To output a vector3 with the x, y and z elements of the input vector, for example, use the input mask “xyz” or “rgb”.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Swizzle-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
 ---|---|---|---|---  
-**Out** | Output | Vector 4 | None | The u and v coordinates from the mesh in the first two channels, and two extra channels.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/UV-Node.html#controls)Controls
-**Name** | **Type** | **Options** | **Description**  
+In | Input | Dynamic Vector | None | Input value  
+Out | Output | Dynamic Vector | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Swizzle-Node.html#controls)Controls
+Name | Type | Options | Description  
 ---|---|---|---  
-**Channel** | Dropdown |  **UV0** , **UV1** , **UV2** , **UV3** , **UV4** , **UV5** , **UV6** , **UV7** | Selects the coordinate set to output.
+Mask | Inputfield | x, y, z, w (depending on input vector dimension) | The swizzle mask is a combination of one to four characters that can be x, y, z, w (or r, g, b, a). The size of output value depends on the length of the mask input.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Swizzle-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+float4 _Swizzle_Out = In.wzyx;
+
+```
+
+
+
+--- Page 123: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Time-Node.html ---
+
+# Time Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Time-Node.html#description)Description
+Provides access to various **Time** parameters in the shader.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Time-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Time | Output | Float | None | Elapsed time in seconds.  
+Sine Time | Output | Float | None | Sine of the **Time** value. Output ranges from −1 to 1.  
+Cosine Time | Output | Float | None | Cosine of the **Time** value. Output ranges from −1 to 1.  
+Delta Time | Output | Float | None | The time that has elapsed between the current frame and the last frame, in seconds.  
+Smooth Delta | Output | Float | None | The time that has elapsed between the current frame and the last frame, in seconds, averaged over several frames to reduce jitter.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Time-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+float Time_Time = _Time.y;
+float Time_SineTime = _SinTime.w;
+float Time_CosineTime = _CosTime.w;
+float Time_DeltaTime = unity_DeltaTime.x;
+float Time_SmoothDelta = unity_DeltaTime.z;
+
+```
+
+
+
+--- Page 124: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Split-Node.html ---
+
+# Split Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Split-Node.html#description)Description
+Splits the input vector **In** into four **Float** outputs **R** , **G** , **B** and **A**. These output vectors are defined by the individual channels of the input **In** ; red, green, blue and alpha respectively. If the input vector **In** 's dimension is less than 4 (**Vector 4**) the output values not present in the input will be 0.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Split-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+In | Input | Dynamic Vector | None | Input value  
+R | Output | Float | None | Red channel from input  
+G | Output | Float | None | Green channel from input  
+B | Output | Float | None | Blue channel from input  
+A | Output | Float | None | Alpha channel from input  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Split-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+float _Split_R = In[0];
+float _Split_G = In[1];
+float _Split_B = 0;
+float _Split_A = 0;
+
+```
+
+
+
+--- Page 125: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Spherize-Node.html ---
+
+# Spherize Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Spherize-Node.html#description)Description
+Applies a spherical warping effect similar to a fisheye camera lens to the value of input **UV**. The center reference point of the warping effect is defined by input **Center** and the overall strength of the effect is defined by the value of input **Strength**. Input **Offset** can be used to offset the individual channels of the result.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Spherize-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+UV | Input | Vector 2 | UV | Input UV value  
+Center | Input | Vector 2 | None | Center reference point  
+Strength | Input | Float | None | Strength of the effect  
+Offset | Input | Vector 2 | None | Individual channel offsets  
+Out | Output | Vector 2 | None | Output UV value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Spherize-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Spherize_float(float2 UV, float2 Center, float Strength, float2 Offset, out float2 Out)
+{
+    float2 delta = UV - Center;
+    float delta2 = dot(delta.xy, delta.xy);
+    float delta4 = delta2 * delta2;
+    float2 delta_offset = delta4 * Strength;
+    Out = UV + delta * delta_offset + Offset;
+}
+
+```
+
 
 
 --- Page 126: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Square-Root-Node.html ---
@@ -4267,7 +4269,140 @@ void Unity_SquareRoot_float4(float4 In, out float4 Out)
 
 
 
---- Page 127: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-4-Node.html ---
+--- Page 127: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tangent-Vector-Node.html ---
+
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tangent-Vector-Node.html#description)Description
+Provides access to the mesh vertex or fragment's **Tangent Vector**. The coordinate space of the output value can be selected with the **Space** dropdown parameter.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tangent-Vector-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Out | Output | Vector 3 | None | Mesh's **Tangent Vector**.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tangent-Vector-Node.html#parameters)Parameters
+Name | Type | Options | Description  
+---|---|---|---  
+Space | Dropdown | Object, View, World, Tangent | Selects coordinate space of **Tangent Vector** to output.
+
+
+--- Page 128: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tiling-And-Offset-Node.html ---
+
+# Tiling And Offset Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tiling-And-Offset-Node.html#description)Description
+Tiles and offsets the value of input **UV** by the inputs **Tiling** and **Offset** respectively. This is commonly used for detail maps and scrolling textures over [Time](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Time-Node.html).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tiling-And-Offset-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+UV | Input | Vector 2 | UV | Input UV value  
+Tiling | Input | Vector 2 | None | Amount of tiling to apply per channel  
+Offset | Input | Vector 2 | None | Amount of offset to apply per channel  
+Out | Output | Vector 2 | None | Output UV value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tiling-And-Offset-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_TilingAndOffset_float(float2 UV, float2 Tiling, float2 Offset, out float2 Out)
+{
+    Out = UV * Tiling + Offset;
+}
+
+```
+
+
+
+--- Page 129: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Step-Node.html ---
+
+# Step Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Step-Node.html#description)Description
+Per component, returns 1 if the value of input **In** is greater than or equal to the value of input **Edge** , otherwise returns 0.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Step-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+Edge | Input | Dynamic Vector | Step value  
+In | Input | Dynamic Vector | Input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Step-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Step_float4(float4 Edge, float4 In, out float4 Out)
+{
+    Out = step(Edge, In);
+}
+
+```
+
+
+
+--- Page 130: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Subtract-Node.html ---
+
+# Subtract Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Subtract-Node.html#description)Description
+Returns the result of input **A** minus input **B**.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Subtract-Node.html#ports)Ports
+Name | Direction | Type | Description  
+---|---|---|---  
+A | Input | Dynamic Vector | First input value  
+B | Input | Dynamic Vector | Second input value  
+Out | Output | Dynamic Vector | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Subtract-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Subtract_float4(float4 A, float4 B, out float4 Out)
+{
+    Out = A - B;
+}
+
+```
+
+
+
+--- Page 131: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Twirl-Node.html ---
+
+# Twirl Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Twirl-Node.html#description)Description
+Applies a twirl warping effect similar to a black hole to the value of input **UV**. The center reference point of the warping effect is defined by input **Center** and the overall strength of the effect is defined by the value of input **Strength**. Input **Offset** can be used to offset the individual channels of the result.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Twirl-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+UV | Input | Vector 2 | UV | Input UV value  
+Center | Input | Vector 2 | None | Center reference point  
+Strength | Input | Float | None | Strength of the effect  
+Offset | Input | Vector 2 | None | Individual channel offsets  
+Out | Output | Vector 2 | None | Output UV value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Twirl-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+void Unity_Twirl_float(float2 UV, float2 Center, float Strength, float2 Offset, out float2 Out)
+{
+    float2 delta = UV - Center;
+    float angle = Strength * length(delta);
+    float x = cos(angle) * delta.x - sin(angle) * delta.y;
+    float y = sin(angle) * delta.x + cos(angle) * delta.y;
+    Out = float2(x + Center.x + Offset.x, y + Center.y + Offset.y);
+}
+
+```
+
+
+
+--- Page 132: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-2-Node.html ---
+
+# Vector 2 Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-2-Node.html#description)Description
+Defines a **Vector 2** value in the shader. If [Ports](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Port.html) **X** and **Y** are not connected with [Edges](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Edge.html) this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) defines a constant **Vector 2** , otherwise this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) can be used to combine various **Float** values.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-2-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+X | Input | Float | None | Input x component value  
+Y | Input | Float | None | Input y component value  
+Out | Output | Vector 2 | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-2-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+float2 _Vector2_Out = float2(X, Y);
+
+```
+
+
+
+--- Page 133: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-4-Node.html ---
 
 # Vector 4 Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-4-Node.html#description)Description
@@ -4289,7 +4424,65 @@ float4 _Vector4_Out = float4(X, Y, Z, W);
 
 
 
---- Page 128: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Triplanar-Node.html ---
+--- Page 134: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/UV-Node.html ---
+
+# UV node
+The UV node outputs the vertex or fragment UV coordinates of a mesh.
+UV coordinates usually have two channels, but the UV node outputs four channels so you can use the remaining two channels, for example to store custom mesh data.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/UV-Node.html#ports)Ports
+**Name** | **Direction** | **Type** | **Binding** | **Description**  
+---|---|---|---|---  
+**Out** | Output | Vector 4 | None | The u and v coordinates from the mesh in the first two channels, and two extra channels.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/UV-Node.html#controls)Controls
+**Name** | **Type** | **Options** | **Description**  
+---|---|---|---  
+**Channel** | Dropdown |  **UV0** , **UV1** , **UV2** , **UV3** , **UV4** , **UV5** , **UV6** , **UV7** | Selects the coordinate set to output.
+
+
+--- Page 135: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vertex-ID-Node.html ---
+
+# Vertex ID Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vertex-ID-Node.html#description)Description
+Provides access to the mesh vertex or fragment's **Vertex ID** value.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vertex-ID-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Out | Output | Float | None |  **Vertex ID** for the Mesh Vertex/Fragment.
+
+
+--- Page 136: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vertex-Color-Node.html ---
+
+# Vertex Color Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vertex-Color-Node.html#description)Description
+Provides access to the mesh vertex or fragment's **Vertex Color** value.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vertex-Color-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+Out | Output | Vector 4 | None |  **Vertex Color** for the Mesh Vertex/Fragment.
+
+
+--- Page 137: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-3-Node.html ---
+
+# Vector 3 Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-3-Node.html#description)Description
+Defines a **Vector 3** value in the shader. If [Ports](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Port.html) **X** , **Y** and **Z** are not connected with [Edges](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Edge.html) this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) defines a constant **Vector 3** , otherwise this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) can be used to combine various **Float** values.
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-3-Node.html#ports)Ports
+Name | Direction | Type | Binding | Description  
+---|---|---|---|---  
+X | Input | Float | None | Input x component value  
+Y | Input | Float | None | Input y component value  
+Z | Input | Float | None | Input z component value  
+Out | Output | Vector 3 | None | Output value  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-3-Node.html#generated-code-example)Generated Code Example
+The following example code represents one possible outcome of this node.
+```
+float3 _Vector3_Out = float3(X, Y, Z);
+
+```
+
+
+
+--- Page 138: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Triplanar-Node.html ---
 
 # Triplanar Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Triplanar-Node.html#description)Description
@@ -4352,111 +4545,7 @@ Out.rgb = TransformWorldToTangent(Out.rgb, Node_Transform);
 
 
 
---- Page 129: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tangent-Vector-Node.html ---
-
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tangent-Vector-Node.html#description)Description
-Provides access to the mesh vertex or fragment's **Tangent Vector**. The coordinate space of the output value can be selected with the **Space** dropdown parameter.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tangent-Vector-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Out | Output | Vector 3 | None | Mesh's **Tangent Vector**.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tangent-Vector-Node.html#parameters)Parameters
-Name | Type | Options | Description  
----|---|---|---  
-Space | Dropdown | Object, View, World, Tangent | Selects coordinate space of **Tangent Vector** to output.
-
-
---- Page 130: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Twirl-Node.html ---
-
-# Twirl Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Twirl-Node.html#description)Description
-Applies a twirl warping effect similar to a black hole to the value of input **UV**. The center reference point of the warping effect is defined by input **Center** and the overall strength of the effect is defined by the value of input **Strength**. Input **Offset** can be used to offset the individual channels of the result.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Twirl-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-UV | Input | Vector 2 | UV | Input UV value  
-Center | Input | Vector 2 | None | Center reference point  
-Strength | Input | Float | None | Strength of the effect  
-Offset | Input | Vector 2 | None | Individual channel offsets  
-Out | Output | Vector 2 | None | Output UV value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Twirl-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Twirl_float(float2 UV, float2 Center, float Strength, float2 Offset, out float2 Out)
-{
-    float2 delta = UV - Center;
-    float angle = Strength * length(delta);
-    float x = cos(angle) * delta.x - sin(angle) * delta.y;
-    float y = sin(angle) * delta.x + cos(angle) * delta.y;
-    Out = float2(x + Center.x + Offset.x, y + Center.y + Offset.y);
-}
-
-```
-
-
-
---- Page 131: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Swizzle-Node.html ---
-
-# Swizzle Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Swizzle-Node.html#description)Description
-Creates a new [vector](https://docs.unity3d.com/Manual/VectorCookbook.html) from the reordered elements of the input vector. This is called swizzling.
-To specify how input elements should be swizzled, enter a formatting string in the input mask. To invert the order of the input elements, for example, use the string "wzyx" or "abgr".
-The length of the input mask determines the dimensions of the output vector. The error "Invalid Mask" indicates an input mask value which includes one or more channels that do not exist in the input vector.
-To output a vector3 with the x, y and z elements of the input vector, for example, use the input mask “xyz” or “rgb”.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Swizzle-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-In | Input | Dynamic Vector | None | Input value  
-Out | Output | Dynamic Vector | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Swizzle-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-Mask | Inputfield | x, y, z, w (depending on input vector dimension) | The swizzle mask is a combination of one to four characters that can be x, y, z, w (or r, g, b, a). The size of output value depends on the length of the mask input.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Swizzle-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-float4 _Swizzle_Out = In.wzyx;
-
-```
-
-
-
---- Page 132: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tiling-And-Offset-Node.html ---
-
-# Tiling And Offset Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tiling-And-Offset-Node.html#description)Description
-Tiles and offsets the value of input **UV** by the inputs **Tiling** and **Offset** respectively. This is commonly used for detail maps and scrolling textures over [Time](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Time-Node.html).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tiling-And-Offset-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-UV | Input | Vector 2 | UV | Input UV value  
-Tiling | Input | Vector 2 | None | Amount of tiling to apply per channel  
-Offset | Input | Vector 2 | None | Amount of offset to apply per channel  
-Out | Output | Vector 2 | None | Output UV value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Tiling-And-Offset-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_TilingAndOffset_float(float2 UV, float2 Tiling, float2 Offset, out float2 Out)
-{
-    Out = UV * Tiling + Offset;
-}
-
-```
-
-
-
---- Page 133: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sub-graph-Node.html ---
-
-# Subgraph node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sub-graph-Node.html#description)Description
-Provides a reference to a [Subgraph Asset](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sub-graph-Asset.html). All ports on the reference node are defined by the properties and outputs defined in the Subgraph Asset. This is useful for sharing functionality between graphs or duplicating the same functionality within a graph.
-The preview used for a Subgraph Node is determined by the first port of that [Subgraph](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sub-graph.html) Output node. Valid [Data Types](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Data-Types.html) for the first port are `Float`, `Vector 2`, `Vector 3`, `Vector 4`, `Matrix2`, `Matrix3`, `Matrix4`, and `Boolean`. Any other data type will produce an error in the preview shader and the Subgraph will become invalid.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sub-graph-Node.html#subgraph-nodes-and-shader-stages)Subgraph Nodes and Shader Stages
-If a [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) within a Subgraph specifies a [Shader Stage](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Shader-Stage.html), such as how [Sample Texture 2D Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Sample-Texture-2D-Node.html) specifies the **fragment** Shader Stage, then that entire Subgraph) is now locked to that stage. As such a Subgraph node that references the graph will also be locked to that Shader Stage.
-Furthermore, when an [Edge](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Edge.html) connected to an output [Port](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Port.html) on a **Subgraph Node** flows into a port on the [Master Stack](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Master-Stack.html) that **Subgraph Node** is now locked to the Shader Stage of that [Block Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Block-Node.html) in the Master Stack.
-
-
---- Page 134: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/White-Balance-Node.html ---
+--- Page 139: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/White-Balance-Node.html ---
 
 # White Balance Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/White-Balance-Node.html#description)Description
@@ -4518,73 +4607,25 @@ void Unity_WhiteBalance_float(float3 In, float Temperature, float Tint, out floa
 
 
 
---- Page 135: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vertex-ID-Node.html ---
+--- Page 140: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/View-Direction-Node.html ---
 
-# Vertex ID Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vertex-ID-Node.html#description)Description
-Provides access to the mesh vertex or fragment's **Vertex ID** value.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vertex-ID-Node.html#ports)Ports
+# View Direction Node
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/View-Direction-Node.html#description)Description
+Provides access to the mesh vertex or fragment's **View Direction** vector. This is the vector from the vertex or fragment to the camera. Select a **Space** to modify the coordinate space of the output value.
+Prior to version 11.0, the **View Direction Node** works differently in HDRP than in URP. In URP, it only stored Object space vectors normalized. HDRP stores all vectors normalized.
+From 11.0 onwards, this node stores all vectors normalized in both the **High-Definition Render Pipeline** and the **Universal Render Pipeline**.
+If you want to keep using the old behavior in URP outside of object space, replace this node with a [View Vector Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/View-Vector-Node.html).
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/View-Direction-Node.html#ports)Ports
 Name | Direction | Type | Binding | Description  
 ---|---|---|---|---  
-Out | Output | Float | None |  **Vertex ID** for the Mesh Vertex/Fragment.
-
-
---- Page 136: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-3-Node.html ---
-
-# Vector 3 Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-3-Node.html#description)Description
-Defines a **Vector 3** value in the shader. If [Ports](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Port.html) **X** , **Y** and **Z** are not connected with [Edges](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Edge.html) this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) defines a constant **Vector 3** , otherwise this [Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Node.html) can be used to combine various **Float** values.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-3-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-X | Input | Float | None | Input x component value  
-Y | Input | Float | None | Input y component value  
-Z | Input | Float | None | Input z component value  
-Out | Output | Vector 3 | None | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vector-3-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-float3 _Vector3_Out = float3(X, Y, Z);
-
-```
-
-
-
---- Page 137: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Subtract-Node.html ---
-
-# Subtract Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Subtract-Node.html#description)Description
-Returns the result of input **A** minus input **B**.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Subtract-Node.html#ports)Ports
-Name | Direction | Type | Description  
+Out | Output | Vector 3 | None | View Vector for the Mesh Vertex/Fragment.  
+##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/View-Direction-Node.html#controls)Controls
+Name | Type | Options | Description  
 ---|---|---|---  
-A | Input | Dynamic Vector | First input value  
-B | Input | Dynamic Vector | Second input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Subtract-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Subtract_float4(float4 A, float4 B, out float4 Out)
-{
-    Out = A - B;
-}
-
-```
+Space | Dropdown | Object, View, World, Tangent | Selects coordinate space of **View Direction** to output.
 
 
-
---- Page 138: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vertex-Color-Node.html ---
-
-# Vertex Color Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vertex-Color-Node.html#description)Description
-Provides access to the mesh vertex or fragment's **Vertex Color** value.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Vertex-Color-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Out | Output | Vector 4 | None |  **Vertex Color** for the Mesh Vertex/Fragment.
-
-
---- Page 139: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Voronoi-Node.html ---
+--- Page 141: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Voronoi-Node.html ---
 
 # Voronoi Node
 ##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Voronoi-Node.html#description)Description
@@ -4633,47 +4674,6 @@ void Unity_Voronoi_float(float2 UV, float AngleOffset, float CellDensity, out fl
             }
         }
     }
-}
-
-```
-
-
-
---- Page 140: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/View-Direction-Node.html ---
-
-# View Direction Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/View-Direction-Node.html#description)Description
-Provides access to the mesh vertex or fragment's **View Direction** vector. This is the vector from the vertex or fragment to the camera. Select a **Space** to modify the coordinate space of the output value.
-Prior to version 11.0, the **View Direction Node** works differently in HDRP than in URP. In URP, it only stored Object space vectors normalized. HDRP stores all vectors normalized.
-From 11.0 onwards, this node stores all vectors normalized in both the **High-Definition Render Pipeline** and the **Universal Render Pipeline**.
-If you want to keep using the old behavior in URP outside of object space, replace this node with a [View Vector Node](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/View-Vector-Node.html).
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/View-Direction-Node.html#ports)Ports
-Name | Direction | Type | Binding | Description  
----|---|---|---|---  
-Out | Output | Vector 3 | None | View Vector for the Mesh Vertex/Fragment.  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/View-Direction-Node.html#controls)Controls
-Name | Type | Options | Description  
----|---|---|---  
-Space | Dropdown | Object, View, World, Tangent | Selects coordinate space of **View Direction** to output.
-
-
---- Page 141: https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Step-Node.html ---
-
-# Step Node
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Step-Node.html#description)Description
-Per component, returns 1 if the value of input **In** is greater than or equal to the value of input **Edge** , otherwise returns 0.
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Step-Node.html#ports)Ports
-Name | Direction | Type | Description  
----|---|---|---  
-Edge | Input | Dynamic Vector | Step value  
-In | Input | Dynamic Vector | Input value  
-Out | Output | Dynamic Vector | Output value  
-##  [](https://docs.unity3d.com/Packages/com.unity.shadergraph%4017.4/manual/Step-Node.html#generated-code-example)Generated Code Example
-The following example code represents one possible outcome of this node.
-```
-void Unity_Step_float4(float4 Edge, float4 In, out float4 Out)
-{
-    Out = step(Edge, In);
 }
 
 ```
