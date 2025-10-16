@@ -199,7 +199,7 @@ sources:
     word_count_threshold: 1
     page_timeout: 80000
     expand_nodes: true
-    preview_limit: 2
+    preview_limit: null
     category_schema:
       name: "ShaderGraph Categories"
       baseSelector: "div:first-of-type table tbody tr"  # First div's table body rows for graph nodes categories

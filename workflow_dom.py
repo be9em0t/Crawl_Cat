@@ -87,10 +87,11 @@ async def workflow_dom(source, urls, common):
                 
                 async with AsyncWebCrawler() as node_crawler:
                     result = await node_crawler.arun(url=cat_url, config=node_config)
-                    save_utils.save_text("debug_artistic.html", result.cleaned_html)
                     nodes = json.loads(result.extracted_content)
                 
-                # For each node, get details
+                # Collect node URLs to crawl in parallel
+                node_urls_to_crawl = []
+                nodes_to_update = []
                 for node in nodes:
                     if preview_limit and processed_nodes >= preview_limit:
                         break
@@ -99,13 +100,20 @@ async def workflow_dom(source, urls, common):
                         if not node_url.startswith('http'):
                             node_url = urljoin(cat_url, node_url)
                         node['node_url'] = node_url  # Update to full URL
-                        
-                        async with AsyncWebCrawler() as detail_crawler:
-                            result = await detail_crawler.arun(url=node_url, config=detail_config)
-                            details = json.loads(result.extracted_content)
-                            if details:
-                                node.update(details[0])  # Assuming one item
+                        node_urls_to_crawl.append(node_url)
+                        nodes_to_update.append(node)
                     processed_nodes += 1
+                
+                # Crawl node details in parallel
+                if node_urls_to_crawl:
+                    async with AsyncWebCrawler() as detail_crawler:
+                        import asyncio
+                        tasks = [detail_crawler.arun(url=url, config=detail_config) for url in node_urls_to_crawl]
+                        results = await asyncio.gather(*tasks)
+                    for node, result in zip(nodes_to_update, results):
+                        details = json.loads(result.extracted_content)
+                        if details:
+                            node.update(details[0])  # Assuming one item
                 
                 cat['nodes'] = nodes
             if preview_limit and processed_nodes >= preview_limit:
