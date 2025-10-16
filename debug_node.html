@@ -1,0 +1,1626 @@
+<html>
+<head>
+    <title>Replace Color node | Shader Graph | 17.4.0 </title>
+      </head>
+  <body>
+    <div>
+      <header>
+
+        <nav>
+          <div>
+            <div>
+              <button>
+                <span>Toggle navigation</span>
+                </button>
+
+              <a href="../index.html">
+                </a>
+            </div>
+            <div>
+              <form>
+                <div>
+                  <input>
+                </div>
+                  <div>
+                    <a href="http://docs.unity3d.com/">docs.unity3d.com</a>
+                  </div>
+              </form>
+            <ul>
+                <li>
+                    <a href="../manual/index.html" title="Manual">Manual</a>
+                </li>
+                <li>
+                    <a href="../api/index.html" title="Scripting API">Scripting API</a>
+                </li>
+                <li>
+                    <a href="../changelog/CHANGELOG.html" title="Changelog">Changelog</a>
+                </li>
+                <li>
+                    <a href="../license/LICENSE.html" title="License">License</a>
+                </li>
+          </ul>
+</div>
+          </div>
+        </nav>
+
+        <div>
+          <div>
+            <!-- Unity Customization: Remove content of breadcrumb bar. This space is used for version and language switchers
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+            -->
+          <div>
+<label>Language: <select>
+<option>English</option>
+<option>日本語</option>
+<option>한국어</option>
+<option>中文</option></select></label>
+</div>
+<div>
+    <div>
+        <div>
+        Shader Graph 17.4.0
+        </div>
+        </div>
+</div>
+</div>
+        </div>
+      </header>
+      <div>
+
+        <div>
+          <div>Search Results for </div>
+          </div>
+      </div>
+      <div>
+
+        <div>
+          <a href="#sidetoggle">Show / Hide Table of Contents</a>
+          <div>
+            <div><div>
+    <div>
+      <form>
+        <input>
+      </form>
+    </div>
+    <div>
+      <div>
+
+          <ul>
+                <li>
+                    <a href="index.html" title="About Shader Graph">About Shader Graph</a>
+                </li>
+                <li>
+                    <a href="whats-new.html" title="What's new in Shader Graph">What's new in Shader Graph</a>
+                </li>
+                <li>
+                    <a href="install-and-upgrade.html" title="Install and upgrade">Install and upgrade</a>
+
+                    <ul>
+                          <li>
+                              <a href="install-shader-graph.html" title="Install Shader Graph">Install Shader Graph</a>
+                          </li>
+                          <li>
+                              <a href="Upgrade-Guide-10-0-x.html" title="Upgrade to Shader Graph 10.0.x">Upgrade to Shader Graph 10.<wbr>0.<wbr>x</wbr></wbr></a>
+                          </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="Getting-Started.html" title="Get started with Shader Graph">Get started with Shader Graph</a>
+
+                    <ul>
+                          <li>
+                              <a href="Create-Shader-Graph.html" title="Creating a new Shader Graph Asset">Creating a new Shader Graph Asset</a>
+                          </li>
+                          <li>
+                              <a href="First-Shader-Graph.html" title="My first Shader Graph">My first Shader Graph</a>
+                          </li>
+                          <li>
+                              <a href="create-shader-graph-template.html" title="Create a new shader graph from a template">Create a new shader graph from a template</a>
+                          </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="ui-reference.html" title="Shader Graph UI reference">Shader Graph UI reference</a>
+
+                    <ul>
+                          <li>
+                              <a href="Shader-Graph-Window.html" title="Shader Graph Window">Shader Graph Window</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Blackboard.html" title="Blackboard">Blackboard</a>
+                                    </li>
+                                    <li>
+                                        <a href="Main-Preview.html" title="Main Preview">Main Preview</a>
+                                    </li>
+                                    <li>
+                                        <a href="Internal-Inspector.html" title="Graph Inspector">Graph Inspector</a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Create-Node-Menu.html" title="Create Node Menu">Create Node Menu</a>
+                          </li>
+                          <li>
+                              <a href="Graph-Settings-Tab.html" title="Graph Settings Tab">Graph Settings Tab</a>
+                          </li>
+                          <li>
+                              <a href="Master-Stack.html" title="Master Stack">Master Stack</a>
+                          </li>
+                          <li>
+                              <a href="Shader-Graph-Preferences.html" title="Shader Graph Preferences">Shader Graph Preferences</a>
+                          </li>
+                          <li>
+                              <a href="Shader-Graph-Project-Settings.html" title="Shader Graph Project Settings">Shader Graph Project Settings</a>
+                          </li>
+                          <li>
+                              <a href="Keyboard-shortcuts.html" title="Shader Graph Keyboard Shortcuts">Shader Graph Keyboard Shortcuts</a>
+                          </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="inside-shader-graph.html" title="Inside Shader Graph">Inside Shader Graph</a>
+
+                    <ul>
+                          <li>
+                              <a href="Shader-Graph-Asset.html" title="Shader Graph Asset">Shader Graph Asset</a>
+                          </li>
+                          <li>
+                              <a href="Graph-Target.html" title="Graph Target">Graph Target</a>
+                          </li>
+                          <li>
+                              <a href="Node.html" title="Node">Node</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Port.html" title="Port">Port</a>
+                                    </li>
+                                    <li>
+                                        <a href="Custom-Port-Menu.html" title="Custom Port Menu">Custom Port Menu</a>
+                                    </li>
+                                    <li>
+                                        <a href="Edge.html" title="Edge">Edge</a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Sub-graph.html" title="Sub Graph">Sub Graph</a>
+                          </li>
+                          <li>
+                              <a href="Sub-graph-Asset.html" title="Sub Graph Asset">Sub Graph Asset</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="SpeedTree8-SubGraphAssets.html" title="SpeedTree 8 Sub Graph Assets">Speed<wbr>Tree 8 Sub Graph Assets</wbr></a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Sticky-Notes.html" title="Sticky Notes">Sticky Notes</a>
+                          </li>
+                          <li>
+                              <a href="Color-Modes.html" title="Color Modes">Color Modes</a>
+                          </li>
+                          <li>
+                              <a href="Precision-Modes.html" title="Precision Modes">Precision Modes</a>
+                          </li>
+                          <li>
+                              <a href="Preview-Mode-Control.html" title="Preview Mode Control">Preview Mode Control</a>
+                          </li>
+                          <li>
+                              <a href="Custom-Render-Texture.html" title="Custom Render Textures">Custom Render Textures</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Custom-Render-Texture-Accessing.html" title="Accessing">Accessing</a>
+                                    </li>
+                                    <li>
+                                        <a href="Custom-Render-Texture-Example.html" title="Example">Example</a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="materialvariant-SG.html" title="Material Variants">Material Variants</a>
+                          </li>
+                          <li>
+                              <a href="Property-Types.html" title="Property Types">Property Types</a>
+                          </li>
+                          <li>
+                              <a href="Keywords.html" title="Keywords">Keywords</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Keywords-concepts.html" title="Introduction to keywords">Introduction to keywords</a>
+                                    </li>
+                                    <li>
+                                        <a href="Keywords-manage.html" title="Manage keywords">Manage keywords</a>
+                                    </li>
+                                    <li>
+                                        <a href="Keywords-reference.html" title="Keyword parameter reference">Keyword parameter reference</a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Data-Types.html" title="Data Types">Data Types</a>
+                          </li>
+                          <li>
+                              <a href="Port-Bindings.html" title="Port Bindings">Port Bindings</a>
+                          </li>
+                          <li>
+                              <a href="Shader-Stage.html" title="Shader Stage">Shader Stage</a>
+                          </li>
+                          <li>
+                              <a href="surface-options.html" title="Surface options">Surface options</a>
+                          </li>
+                          <li>
+                              <a href="Custom-Interpolators.html" title="Custom Interpolators">Custom Interpolators</a>
+                          </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="Node-Library.html" title="Node Library">Node Library</a>
+
+                    <ul>
+                          <li>
+                              <a href="Artistic-Nodes.html" title="Artistic">Artistic</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Artistic-Nodes.html" title="Adjustment">Adjustment</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Channel-Mixer-Node.html" title="Channel Mixer">Channel Mixer</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Contrast-Node.html" title="Contrast">Contrast</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Hue-Node.html" title="Hue">Hue</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Invert-Colors-Node.html" title="Invert Colors">Invert Colors</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Replace-Color-Node.html" title="Replace Color">Replace Color</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Saturation-Node.html" title="Saturation">Saturation</a>
+                                              </li>
+                                              <li>
+                                                  <a href="White-Balance-Node.html" title="White Balance">White Balance</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Artistic-Nodes.html" title="Blend">Blend</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Blend-Node.html" title="Blend">Blend</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Artistic-Nodes.html" title="Filter">Filter</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Dither-Node.html" title="Dither">Dither</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Fade-Transition-Node.html" title="Fade Transition">Fade Transition</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Artistic-Nodes.html" title="Mask">Mask</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Channel-Mask-Node.html" title="Channel Mask">Channel Mask</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Color-Mask-Node.html" title="Color Mask">Color Mask</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Artistic-Nodes.html" title="Normal">Normal</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Normal-Blend-Node.html" title="Normal Blend">Normal Blend</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Normal-From-Height-Node.html" title="Normal From Height">Normal From Height</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Normal-From-Texture-Node.html" title="Normal From Texture">Normal From Texture</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Normal-Reconstruct-Z-Node.html" title="Normal Reconstruct Z">Normal Reconstruct Z</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Normal-Strength-Node.html" title="Normal Strength">Normal Strength</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Normal-Unpack-Node.html" title="Normal Unpack">Normal Unpack</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Artistic-Nodes.html" title="Utility">Utility</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Colorspace-Conversion-Node.html" title="Colorspace Conversion">Colorspace Conversion</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Channel-Nodes.html" title="Channel">Channel</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Append-Node.html" title="Append">Append</a>
+                                    </li>
+                                    <li>
+                                        <a href="Combine-Node.html" title="Combine">Combine</a>
+                                    </li>
+                                    <li>
+                                        <a href="Flip-Node.html" title="Flip">Flip</a>
+                                    </li>
+                                    <li>
+                                        <a href="Split-Node.html" title="Split">Split</a>
+                                    </li>
+                                    <li>
+                                        <a href="Swizzle-Node.html" title="Swizzle">Swizzle</a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Custom-Render-Texture-Nodes.html" title="Custom Render Texture Nodes">Custom Render Texture Nodes</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Custom-Texture-Self.html" title="Self">Self</a>
+                                    </li>
+                                    <li>
+                                        <a href="Custom-Texture-Size.html" title="Size">Size</a>
+                                    </li>
+                                    <li>
+                                        <a href="Custom-Texture-Slice.html" title="Slice">Slice</a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Input-Nodes.html" title="Input">Input</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Input-Nodes.html" title="Basic">Basic</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Boolean-Node.html" title="Boolean">Boolean</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Color-Node.html" title="Color">Color</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Constant-Node.html" title="Constant">Constant</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Integer-Node.html" title="Integer">Integer</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Slider-Node.html" title="Slider">Slider</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Time-Node.html" title="Time">Time</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Float-Node.html" title="Float">Float</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Vector-2-Node.html" title="Vector 2">Vector 2</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Vector-3-Node.html" title="Vector 3">Vector 3</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Vector-4-Node.html" title="Vector 4">Vector 4</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Input-Nodes.html" title="Geometry">Geometry</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Bitangent-Vector-Node.html" title="Bitangent Vector">Bitangent Vector</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Instance-ID-Node.html" title="Instance ID">Instance ID</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Normal-Vector-Node.html" title="Normal Vector">Normal Vector</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Position-Node.html" title="Position">Position</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Screen-Position-Node.html" title="Screen Position">Screen Position</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Tangent-Vector-Node.html" title="Tangent Vector">Tangent Vector</a>
+                                              </li>
+                                              <li>
+                                                  <a href="UV-Node.html" title="UV">UV</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Vertex-Color-Node.html" title="Vertex Color">Vertex Color</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Vertex-ID-Node.html" title="Vertex ID">Vertex ID</a>
+                                              </li>
+                                              <li>
+                                                  <a href="View-Direction-Node.html" title="View Direction">View Direction</a>
+                                              </li>
+                                              <li>
+                                                  <a href="View-Vector-Node.html" title="View Vector">View Vector</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Input-Nodes.html" title="Gradient">Gradient</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Blackbody-Node.html" title="Blackbody">Blackbody</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Gradient-Node.html" title="Gradient">Gradient</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Sample-Gradient-Node.html" title="Sample Gradient">Sample Gradient</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Input-Nodes.html" title="High Definition Render Pipeline">High Definition Render Pipeline</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="HD-Custom-Color-Node.html" title="Custom Color Buffer">Custom Color Buffer</a>
+                                              </li>
+                                              <li>
+                                                  <a href="HD-Custom-Depth-Node.html" title="Custom Depth Buffer">Custom Depth Buffer</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Diffusion-Profile-Node.html" title="Diffusion Profile">Diffusion Profile</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Exposure-Node.html" title="Exposure">Exposure</a>
+                                              </li>
+                                              <li>
+                                                  <a href="HD-Scene-Color-Node.html" title="HD Scene Color">HD Scene Color</a>
+                                              </li>
+                                              <li>
+                                                  <a href="HD-Scene-Depth-Node.html" title="HD Scene Depth">HD Scene Depth</a>
+                                              </li>
+                                              <li>
+                                                  <a href="HD-Sample-Buffer-Node.html" title="HD Sample Buffer">HD Sample Buffer</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Input-Nodes.html" title="Lighting">Lighting</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Ambient-Node.html" title="Ambient">Ambient</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Baked-GI-Node.html" title="Baked GI">Baked GI</a>
+                                              </li>
+                                              <li>
+                                                  <a href="https://docs.unity3d.com/Packages/com.unity.shadergraph@13.1/manual/Main-Light-Direction-Node.html" title="Main Light Direction">Main Light Direction</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Reflection-Probe-Node.html" title="Reflection Probe">Reflection Probe</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Input-Nodes.html" title="Matrix">Matrix</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Matrix-2x2-Node.html" title="Matrix 2x2">Matrix 2x2</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Matrix-3x3-Node.html" title="Matrix 3x3">Matrix 3x3</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Matrix-4x4-Node.html" title="Matrix 4x4">Matrix 4x4</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Transformation-Matrix-Node.html" title="Transformation Matrix">Transformation Matrix</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Input-Nodes.html" title="Mesh Deformation">Mesh Deformation</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Compute-Deformation-Node.html" title="Compute Deformation">Compute Deformation</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Linear-Blend-Skinning-Node.html" title="Linear Blend Skinning">Linear Blend Skinning</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Input-Nodes.html" title="Sprite Deformation">Sprite Deformation</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Sprite-Skinning-Node.html" title="Sprite Skinning">Sprite Skinning</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Input-Nodes.html" title="PBR">PBR</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Dielectric-Specular-Node.html" title="Dielectric Specular">Dielectric Specular</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Metal-Reflectance-Node.html" title="Metal Reflectance">Metal Reflectance</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Fresnel-Equation-Node.html" title="Fresnel Equation">Fresnel Equation</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Input-Nodes.html" title="Scene">Scene</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Camera-Node.html" title="Camera">Camera</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Eye-Index-Node.html" title="Eye Index">Eye Index</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Fog-Node.html" title="Fog">Fog</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Object-Node.html" title="Object">Object</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Scene-Color-Node.html" title="Scene Color">Scene Color</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Scene-Depth-Node.html" title="Scene Depth">Scene Depth</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Scene-Depth-Difference-Node.html" title="Scene Depth Difference">Scene Depth Difference</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Screen-Node.html" title="Screen">Screen</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Input-Nodes.html" title="Texture">Texture</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Calculate-Level-Of-Detail-Texture-2D-Node.html" title="Calculate Level Of Detail Texture 2D Node">Calculate Level Of Detail Texture 2D Node</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Cubemap-Asset-Node.html" title="Cubemap Asset">Cubemap Asset</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Gather-Texture-2D-Node.html" title="Gather Texture 2D Node">Gather Texture 2D Node</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Sample-Cubemap-Node.html" title="Sample Cubemap">Sample Cubemap</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Sample-Reflected-Cubemap-Node.html" title="Sample Reflected Cubemap">Sample Reflected Cubemap</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Sample-Texture-2D-Node.html" title="Sample Texture 2D">Sample Texture 2D</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Sample-Texture-2D-Array-Node.html" title="Sample Texture 2D Array">Sample Texture 2D Array</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Sample-Texture-2D-LOD-Node.html" title="Sample Texture 2D LOD">Sample Texture 2D LOD</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Sample-Texture-3D-Node.html" title="Sample Texture 3D">Sample Texture 3D</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Sample-Virtual-Texture-Node.html" title="Sample Virtual Texture">Sample Virtual Texture</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Sampler-State-Node.html" title="Sampler State">Sampler State</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Split-Texture-Transform-Node.html" title="Split Texture Transform">Split Texture Transform</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Texture-2D-Array-Asset-Node.html" title="Texture 2D Array Asset">Texture 2D Array Asset</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Texture-2D-Asset-Node.html" title="Texture 2D Asset">Texture 2D Asset</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Texture-3D-Asset-Node.html" title="Texture 3D Asset">Texture 3D Asset</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Texture-Size-Node.html" title="Texture Size">Texture Size</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Input-Nodes.html" title="UI">UI</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="element-layout-uv-node.html" title="Element Layout UV">Element Layout UV</a>
+                                              </li>
+                                              <li>
+                                                  <a href="element-texture-size-node.html" title="Element Texture Size">Element Texture Size</a>
+                                              </li>
+                                              <li>
+                                                  <a href="element-texture-uv-node.html" title="Element Texture UV">Element Texture UV</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Math-Nodes.html" title="Math">Math</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Math-Nodes.html" title="Advanced">Advanced</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Absolute-Node.html" title="Absolute">Absolute</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Exponential-Node.html" title="Exponential">Exponential</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Length-Node.html" title="Length">Length</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Log-Node.html" title="Log">Log</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Modulo-Node.html" title="Modulo">Modulo</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Negate-Node.html" title="Negate">Negate</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Normalize-Node.html" title="Normalize">Normalize</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Posterize-Node.html" title="Posterize">Posterize</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Reciprocal-Node.html" title="Reciprocal">Reciprocal</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Reciprocal-Square-Root-Node.html" title="Reciprocal Square Root">Reciprocal Square Root</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Math-Nodes.html" title="Basic">Basic</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Add-Node.html" title="Add">Add</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Divide-Node.html" title="Divide">Divide</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Multiply-Node.html" title="Multiply">Multiply</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Power-Node.html" title="Power">Power</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Square-Root-Node.html" title="Square Root">Square Root</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Subtract-Node.html" title="Subtract">Subtract</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Math-Nodes.html" title="Derivative">Derivative</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="DDX-Node.html" title="DDX">DDX</a>
+                                              </li>
+                                              <li>
+                                                  <a href="DDXY-Node.html" title="DDXY">DDXY</a>
+                                              </li>
+                                              <li>
+                                                  <a href="DDY-Node.html" title="DDY">DDY</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Math-Nodes.html" title="Interpolation">Interpolation</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Inverse-Lerp-Node.html" title="Inverse Lerp">Inverse Lerp</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Lerp-Node.html" title="Lerp">Lerp</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Smoothstep-Node.html" title="Smoothstep">Smoothstep</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Math-Nodes.html" title="Matrix">Matrix</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Matrix-Construction-Node.html" title="Matrix Construction">Matrix Construction</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Matrix-Determinant-Node.html" title="Matrix Determinant">Matrix Determinant</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Matrix-Split-Node.html" title="Matrix Split">Matrix Split</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Matrix-Transpose-Node.html" title="Matrix Transpose">Matrix Transpose</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Math-Nodes.html" title="Range">Range</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Clamp-Node.html" title="Clamp">Clamp</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Fraction-Node.html" title="Fraction">Fraction</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Maximum-Node.html" title="Maximum">Maximum</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Minimum-Node.html" title="Minimum">Minimum</a>
+                                              </li>
+                                              <li>
+                                                  <a href="One-Minus-Node.html" title="One Minus">One Minus</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Random-Range-Node.html" title="Random Range">Random Range</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Remap-Node.html" title="Remap">Remap</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Saturate-Node.html" title="Saturate">Saturate</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Math-Nodes.html" title="Round">Round</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Ceiling-Node.html" title="Ceiling">Ceiling</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Floor-Node.html" title="Floor">Floor</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Round-Node.html" title="Round">Round</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Sign-Node.html" title="Sign">Sign</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Step-Node.html" title="Step">Step</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Truncate-Node.html" title="Truncate">Truncate</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Math-Nodes.html" title="Trigonometry">Trigonometry</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Arccosine-Node.html" title="Arccosine">Arccosine</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Arcsine-Node.html" title="Arcsine">Arcsine</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Arctangent-Node.html" title="Arctangent">Arctangent</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Arctangent2-Node.html" title="Arctangent2">Arctangent2</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Cosine-Node.html" title="Cosine">Cosine</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Degrees-To-Radians-Node.html" title="Degrees To Radians">Degrees To Radians</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Hyperbolic-Cosine-Node.html" title="Hyperbolic Cosine">Hyperbolic Cosine</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Hyperbolic-Sine-Node.html" title="Hyperbolic Sine">Hyperbolic Sine</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Hyperbolic-Tangent-Node.html" title="Hyperbolic Tangent">Hyperbolic Tangent</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Radians-To-Degrees-Node.html" title="Radians To Degrees">Radians To Degrees</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Sine-Node.html" title="Sine">Sine</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Tangent-Node.html" title="Tangent">Tangent</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Math-Nodes.html" title="Vector">Vector</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Cross-Product-Node.html" title="Cross Product">Cross Product</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Distance-Node.html" title="Distance">Distance</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Dot-Product-Node.html" title="Dot Product">Dot Product</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Fresnel-Effect-Node.html" title="Fresnel Effect">Fresnel Effect</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Projection-Node.html" title="Projection">Projection</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Reflection-Node.html" title="Reflection">Reflection</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Refract-Node.html" title="Refract">Refract</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Rejection-Node.html" title="Rejection">Rejection</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Rotate-About-Axis-Node.html" title="Rotate About Axis">Rotate About Axis</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Sphere-Mask-Node.html" title="Sphere Mask">Sphere Mask</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Transform-Node.html" title="Transform">Transform</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Math-Nodes.html" title="Wave">Wave</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Noise-Sine-Wave-Node.html" title="Noise Sine Wave">Noise Sine Wave</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Sawtooth-Wave-Node.html" title="Sawtooth Wave">Sawtooth Wave</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Square-Wave-Node.html" title="Square Wave">Square Wave</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Triangle-Wave-Node.html" title="Triangle Wave">Triangle Wave</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Procedural-Nodes.html" title="Procedural">Procedural</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Procedural-Nodes.html" title="Noise">Noise</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Gradient-Noise-Node.html" title="Gradient Noise">Gradient Noise</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Simple-Noise-Node.html" title="Simple Noise">Simple Noise</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Voronoi-Node.html" title="Voronoi">Voronoi</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Procedural-Nodes.html" title="Shapes">Shapes</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Ellipse-Node.html" title="Ellipse">Ellipse</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Polygon-Node.html" title="Polygon">Polygon</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Rectangle-Node.html" title="Rectangle">Rectangle</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Rounded-Polygon-Node.html" title="Rounded Polygon">Rounded Polygon</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Rounded-Rectangle-Node.html" title="Rounded Rectangle">Rounded Rectangle</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Checkerboard-Node.html" title="Checkerboard">Checkerboard</a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="ui-nodes.html" title="UI">UI</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="default-bitmap-text-node.html" title="Default Bitmap Text">Default Bitmap Text</a>
+                                    </li>
+                                    <li>
+                                        <a href="default-gradient-node.html" title="Default Gradient">Default Gradient</a>
+                                    </li>
+                                    <li>
+                                        <a href="default-sdf-text-node.html" title="Default SDF Text">Default SDF Text</a>
+                                    </li>
+                                    <li>
+                                        <a href="default-solid-node.html" title="Default Solid">Default Solid</a>
+                                    </li>
+                                    <li>
+                                        <a href="default-texture-node.html" title="Default Texture">Default Texture</a>
+                                    </li>
+                                    <li>
+                                        <a href="render-type-node.html" title="Render Type">Render Type</a>
+                                    </li>
+                                    <li>
+                                        <a href="render-type-branch-node.html" title="Render Type Branch">Render Type Branch</a>
+                                    </li>
+                                    <li>
+                                        <a href="sample-element-texture-node.html" title="Sample Element Texture">Sample Element Texture</a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Utility-Nodes.html" title="Utility">Utility</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Utility-Nodes.html" title="Logic">Logic</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="All-Node.html" title="All">All</a>
+                                              </li>
+                                              <li>
+                                                  <a href="And-Node.html" title="And">And</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Any-Node.html" title="Any">Any</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Branch-Node.html" title="Branch">Branch</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Branch-On-Input-Connection-Node.html" title="Branch On Input Connection">Branch On Input Connection</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Comparison-Node.html" title="Comparison">Comparison</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Is-Front-Face-Node.html" title="Is Front Face">Is Front Face</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Is-Infinite-Node.html" title="Is Infinite">Is Infinite</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Is-NaN-Node.html" title="Is NaN">Is Na<wbr>N</wbr></a>
+                                              </li>
+                                              <li>
+                                                  <a href="Nand-Node.html" title="Nand">Nand</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Not-Node.html" title="Not">Not</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Or-Node.html" title="Or">Or</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Utility-Nodes.html" title="High Definition Render Pipeline">High Definition Render Pipeline</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Emission-Node.html" title="Emission">Emission</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Utility-Nodes.html" title="Eye">Eye</a>
+
+                                                  <ul>
+                                                        <li>
+                                                            <a href="Circle-Pupil-Animation-Node.html" title="CirclePupilAnimation">Circle<wbr>Pupil<wbr>Animation</wbr></wbr></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="Cornea-Refraction-Node.html" title="CorneaRefraction">Cornea<wbr>Refraction</wbr></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="Eye-Surface-Type-Debug-Node.html" title="EyeSurfaceTypeDebug">Eye<wbr>Surface<wbr>Type<wbr>Debug</wbr></wbr></wbr></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="Iris-Limbal-Ring-Node.html" title="IrisLimbalRing">Iris<wbr>Limbal<wbr>Ring</wbr></wbr></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="Iris-Offset-Node.html" title="IrisOffset">Iris<wbr>Offset</wbr></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="Iris-Out-Of-Bound-Color-Clamp-Node.html" title="IrisOutOfBoundColorClamp">Iris<wbr>Out<wbr>Of<wbr>Bound<wbr>Color<wbr>Clamp</wbr></wbr></wbr></wbr></wbr></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="Iris-UV-Location-Node.html" title="IrisUVLocation">Iris<wbr>UVLocation</wbr></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="Sclera-Iris-Blend-Node.html" title="ScleraIrisBlend">Sclera<wbr>Iris<wbr>Blend</wbr></wbr></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="Sclera-Limbal-Ring-Node.html" title="ScleraLimbalRing">Sclera<wbr>Limbal<wbr>Ring</wbr></wbr></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="Sclera-UV-Location-Node.html" title="ScleraUVLocation">Sclera<wbr>UVLocation</wbr></a>
+                                                        </li>
+                                                  </ul>
+                                              </li>
+                                              <li>
+                                                  <a href="Utility-Nodes.html" title="Fabric">Fabric</a>
+
+                                                  <ul>
+                                                        <li>
+                                                            <a href="ThreadMapDetail-Node.html" title="ThreadMapDetail">Thread<wbr>Map<wbr>Detail</wbr></wbr></a>
+                                                        </li>
+                                                  </ul>
+                                              </li>
+                                              <li>
+                                                  <a href="UVCombine-Node.html" title="UVCombine">UVCombine</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Custom-Function-Node.html" title="Custom Function">Custom Function</a>
+                                    </li>
+                                    <li>
+                                        <a href="Keyword-Node.html" title="Keyword">Keyword</a>
+                                    </li>
+                                    <li>
+                                        <a href="Preview-Node.html" title="Preview">Preview</a>
+                                    </li>
+                                    <li>
+                                        <a href="Sub-graph-Node.html" title="Subgraph">Subgraph</a>
+                                    </li>
+                                    <li>
+                                        <a href="Sub-Graph-Dropdown-Node.html" title="Subgraph Dropdown node">Subgraph Dropdown node</a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="UV-Nodes.html" title="UV">UV</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Flipbook-Node.html" title="Flipbook">Flipbook</a>
+                                    </li>
+                                    <li>
+                                        <a href="Polar-Coordinates-Node.html" title="Polar Coordinates">Polar Coordinates</a>
+                                    </li>
+                                    <li>
+                                        <a href="Radial-Shear-Node.html" title="Radial Shear">Radial Shear</a>
+                                    </li>
+                                    <li>
+                                        <a href="Rotate-Node.html" title="Rotate">Rotate</a>
+                                    </li>
+                                    <li>
+                                        <a href="Spherize-Node.html" title="Spherize">Spherize</a>
+                                    </li>
+                                    <li>
+                                        <a href="Tiling-And-Offset-Node.html" title="Tiling And Offset">Tiling And Offset</a>
+                                    </li>
+                                    <li>
+                                        <a href="Triplanar-Node.html" title="Triplanar">Triplanar</a>
+                                    </li>
+                                    <li>
+                                        <a href="Twirl-Node.html" title="Twirl">Twirl</a>
+                                    </li>
+                                    <li>
+                                        <a href="Parallax-Mapping-Node.html" title="Parallax Mapping">Parallax Mapping</a>
+                                    </li>
+                                    <li>
+                                        <a href="Parallax-Occlusion-Mapping-Node.html" title="Parallax Occlusion Mapping">Parallax Occlusion Mapping</a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Block-Node.html" title="Block Nodes">Block Nodes</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Built-In-Blocks.html" title="Built In Blocks">Built In Blocks</a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Terrain-Texture-Node.html" title="Terrain Texture">Terrain Texture</a>
+                          </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="ShaderGraph-Samples.html" title="Samples">Samples</a>
+
+                    <ul>
+                          <li>
+                              <a href="Shader-Graph-Sample-Feature-Examples.html" title="Feature Examples">Feature Examples</a>
+                          </li>
+                          <li>
+                              <a href="Shader-Graph-Sample-Production-Ready.html" title="Production Ready Shaders">Production Ready Shaders</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Production-Ready-Lit.html" title="Lit Shaders">Lit Shaders</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Production-Ready-Decal.html" title="Decal shaders">Decal shaders</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Production-Ready-Detail.html" title="Detail shaders">Detail shaders</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Production-Ready-Rock.html" title="Rock shaders">Rock shaders</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Production-Ready-Water.html" title="Water shaders">Water shaders</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Production-Ready-Post.html" title="Post-process shaders">Post-process shaders</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Production-Ready-Weather.html" title="Weather shaders">Weather shaders</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Production-Ready-Misc.html" title="Miscellaneous shaders">Miscellaneous shaders</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Production-Ready-Tutorial.html" title="Forest Stream Construction Tutorial ">Forest Stream Construction Tutorial </a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Shader-Graph-Sample-UGUI-Shaders.html" title="UGUI Shaders">UGUI Shaders</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-UGUI-Shaders-Getting-Started.html" title="Getting started">Getting started</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-UGUI-Shaders-Custom-UI-components.html" title="Custom UI components">Custom UI components</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-UGUI-Shaders-Custom-nodes.html" title="Custom nodes">Custom nodes</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-UGUI-Shaders-Subgraph-nodes.html" title="Subgraph nodes">Subgraph nodes</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-UGUI-Shaders-Examples.html" title="Examples">Examples</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-UGUI-Shaders-How-tos.html" title="How tos">How tos</a>
+
+                                        <ul>
+                                              <li>
+                                                  <a href="Shader-Graph-Sample-UGUI-Shaders-How-tos-Res-indepenent.html" title="How to create a resolution-independent shape">How to create a resolution-independent shape</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Shader-Graph-Sample-UGUI-Shaders-How-tos-Button.html" title="How to create a functioning button">How to create a functioning button</a>
+                                              </li>
+                                              <li>
+                                                  <a href="Shader-Graph-Sample-UGUI-Shaders-How-tos-aspect-ratio.html" title="How to make shapes that adapt to the aspect ratio of the UI element">How to make shapes that adapt to the aspect ratio of the UI element</a>
+                                              </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-UGUI-Shaders-Notes-on-performance.html" title="Notes on performance">Notes on performance</a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Shader-Graph-Sample-Custom-Lighting.html" title="Custom Lighting">Custom Lighting</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Custom-Lighting-Lighting-Models.html" title="Lighting Models">Lighting Models</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Custom-Lighting-Components.html" title="Components">Components</a>
+                                    </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="Shader-Graph-Sample-Terrain.html" title="Terrain Shaders">Terrain Shaders</a>
+
+                              <ul>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Terrain-Packing.html" title="Texture Packing Schemes">Texture Packing Schemes</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Terrain-Shaders.html" title="Shaders">Shaders</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Terrain-Layers.html" title="Layer Types">Layer Types</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Terrain-Components.html" title="Components and Blends">Components and Blends</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Terrain-Solutions.html" title="Problems and Solutions">Problems and Solutions</a>
+                                    </li>
+                                    <li>
+                                        <a href="Shader-Graph-Sample-Terrain-Performance.html" title="Performance Comparison">Performance Comparison</a>
+                                    </li>
+                              </ul>
+                          </li>
+                    </ul>
+                </li>
+          </ul>
+      </div>
+    </div>
+  </div></div>
+          </div>
+        </div>
+        <div>
+          <div>
+          <div><ul>
+<li><a href="https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/index.html">Manual</a></li>
+<li><a href="https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html">Node Library</a></li>
+<li><a href="https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Artistic-Nodes.html">Artistic</a></li>
+<li><a href="https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Artistic-Nodes.html">Adjustment</a></li>
+<li><a href="https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Replace-Color-Node.html">Replace Color</a></li>
+</ul></div>
+            <article>
+<h1>Replace Color node</h1>
+
+<p>The Replace Color node replaces a color in the input with another color.</p>
+<h2>
+<a href="#ports"></a>Ports</h2>
+<div><table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Direction</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Binding</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>In</strong></td>
+<td>Input</td>
+<td>Vector 3</td>
+<td>None</td>
+<td>Sets the input you want to replace a color in. For example, a texture.</td>
+</tr>
+<tr>
+<td><strong>From</strong></td>
+<td>Input</td>
+<td>Vector 3</td>
+<td>Color</td>
+<td>Sets the color to replace.</td>
+</tr>
+<tr>
+<td><strong>To</strong></td>
+<td>Input</td>
+<td>Vector 3</td>
+<td>Color</td>
+<td>Sets the color to replace <strong>From</strong> with.</td>
+</tr>
+<tr>
+<td><strong>Range</strong></td>
+<td>Input</td>
+<td>Float</td>
+<td>None</td>
+<td>Sets the range around <strong>From</strong> to replace. For example, if you set <strong>From</strong> to (0, 0, 0) and <strong>Range</strong> to 0.1, Unity replaces colors from (0, 0, 0) to (0.1, 0.1, 0.1) with <strong>To</strong>.</td>
+</tr>
+<tr>
+<td><strong>Fuzziness</strong></td>
+<td>Input</td>
+<td>Float</td>
+<td>None</td>
+<td>Sets how much to soften the boundary between the replaced color and the rest of the colors.</td>
+</tr>
+<tr>
+<td><strong>Out</strong></td>
+<td>Output</td>
+<td>Vector 3</td>
+<td>None</td>
+<td>The <strong>In</strong> input, with the <strong>From</strong> color replaced with the <strong>To</strong> color.</td>
+</tr>
+</tbody>
+</table></div>
+<h2>
+<a href="#generated-code-example"></a>Generated code example</h2>
+<p>The following example code represents one possible outcome of this node.</p>
+<pre><code><span>void</span> Unity_ReplaceColor_float(float3 <span>In</span>, float3 <span>From</span>, float3 <span>To</span>, <span>float</span> Range, <span>float</span> Fuzziness, <span>out</span> float3 <span>Out</span>)
+{
+    <span>float</span> Distance = distance(<span>From</span>, <span>In</span>);
+
+    // Use max <span>to</span> avoid division <span>by</span> zero
+    <span>Out</span> = lerp(<span>To</span>, <span>In</span>, saturate((Distance - Range) / max(Fuzziness, <span>1e-5</span>f)));
+}
+</code><button title="Copy"></button></pre>
+</article>
+<!-- start of feedback box -->
+<hr>
+<div>
+    <div>
+        <p>Did you find this page useful? Please give it a rating:</p>
+        </div>
+    <div><p>Thanks for rating this page!</p></div>
+    <div><p><a>Report a problem on this page</a></p></div>
+    <div>
+<p>What kind of problem would you like to report?
+        </p>
+<ul>
+            <li><a>This page needs code samples</a></li>
+            <li><a>Code samples do not work</a></li>
+            <li><a>Information is missing</a></li>
+            <li><a>Information is incorrect</a></li>
+            <li><a>Information is unclear or confusing</a></li>
+            <li><a>There is a spelling/grammar error on this page</a></li>
+            <li><a>Something else</a></li>
+        </ul>
+    </div>
+    <div>
+        <p>
+            Thanks for letting us know! This page has been marked for review based on your feedback.
+            <br><br>If you have time, you can provide more information to help us fix the problem faster.
+            <br><br>
+            <a>Provide more information</a>
+            <br>
+        </p>
+    </div>
+    <div>
+        <p>You've told us this page needs code samples. If you'd like to help us further, you could provide a code sample, or tell us about what kind of code sample you'd like to see:</p>
+        <p>You've told us there are code samples on this page which don't work. If you know how to fix it, or have something better we could use instead, please let us know:</p>
+        <p>You've told us there is information missing from this page. Please tell us more about what's missing:</p>
+        <p>You've told us there is incorrect information on this page. If you know what we should change to make it correct, please tell us:</p>
+        <p>You've told us this page has unclear or confusing information. Please tell us more about what you found unclear or confusing, or let us know how we could make it clearer:</p>
+        <p>You've told us there is a spelling or grammar error on this page. Please tell us what's wrong:</p>
+        <p>You've told us this page has a problem. Please tell us more about what's wrong:</p>
+        <form>
+            <input>
+        </form>
+    </div>
+    <div>
+      <p>Thank you for helping to make the Unity documentation better!</p>
+      <p>Your feedback has been submitted as a ticket for our documentation team to review.</p>
+      <p>We are not able to reply to every ticket submitted.</p>
+    </div>
+</div>
+<!-- end of feedback box -->
+
+          </div>
+
+          <div>
+            <div>
+              <nav>
+                <h5>In This Article</h5>
+                <div><ul>
+<li><a href="#ports">Ports</a></li>
+<li><a href="#generated-code-example">Generated code example</a></li>
+</ul></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div>
+          <div>
+            <span>
+              <a href="#top">Back to top</a>
+            </span>
+            <div>
+        
+      	
+      	Copyright © 2025 Unity Technologies — <a href="https://docs.unity3d.com/Manual/TermsOfUse.html">Trademarks and terms of use</a><br>
+              <ul>
+                    <li><a href="https://unity.com/legal">Legal</a></li>
+                    <li><a href="https://unity.com/legal/privacy-policy">Privacy Policy</a></li>
+                    <li><a href="https://unity.com/legal/cookie-policy">Cookie Policy</a></li>
+                    <li><a href="https://unity.com/legal/do-not-sell-my-personal-information">Do Not Sell or Share My Personal Information</a></li>
+                    <li><a href="javascript:void(0);">Your Privacy Choices (Cookie Settings)</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <div>
+<div><div>
+<div><div>
+<div><div><div>By clicking “Accept Cookies”, you agree to the storing of cookies on your device to enhance site navigation, analyze site usage, and assist in our marketing efforts. </div></div></div>
+<div><div>
+<button>Cookie Settings</button> <button>Reject All</button> <button>Accept All Cookies</button>
+</div></div>
+</div></div>
+<!-- Close Button --><!-- Close Button END-->
+</div></div>
+<div><div>
+<!-- pc header --><div>
+<!-- Header logo --><div><img alt="Company Logo" src="https://cdn.cookielaw.org/logos/0be70f5e-5e8c-4b5b-a70e-3c3899308c62/bd2f7f6c-aedd-4cb5-9a23-928ed573901d/8506c1ab-21ee-4752-8318-a825f65bde2f/unity-logo.png"></div>
+<div><h2>Privacy Preference Center</h2></div>
+</div>
+<!-- content --><!-- Groups / Sub groups with cookies --><div>
+<div><span>Your Opt Out Preference Signal is Honored</span></div>
+<div>
+<div><ul>
+<li>
+<!-- About Privacy container --><div><h3>Your Privacy</h3></div>
+</li>
+<li><div><h3>Functional Cookies</h3></div></li>
+<li><div><h3>Performance Cookies</h3></div></li>
+<li><div><h3>Targeting Cookies</h3></div></li>
+<li><div><h3>Strictly Necessary Cookies</h3></div></li>
+</ul></div>
+<div>
+<div>
+<h4>Your Privacy</h4>
+<p>When you visit any website, it may store or retrieve information on your browser, mostly in the form of cookies. This information might be about you, your preferences or your device and is mostly used to make the site work as you expect it to. The information does not usually directly identify you, but it can give you a more personalized web experience. Because we respect your right to privacy, you can choose not to allow some types of cookies. Click on the different category headings to find out more and change our default settings. However, blocking some types of cookies may impact your experience of the site and the services we are able to offer.
+            <br><a href="https://unity.com/legal/cookie-policy">More information</a></p>
+</div>
+<div>
+<div>
+<h4>Functional Cookies</h4>
+<div>
+<input> <label><span>Functional Cookies</span></label> <span>Inactive</span>
+</div>
+</div>
+<p>These cookies enable the website to provide enhanced functionality and personalisation. They may be set by us or by third party providers whose services we have added to our pages. If you do not allow these cookies then some or all of these services may not function properly.</p>
+<div><button>Cookies Details‎</button></div>
+</div>
+<div>
+<div>
+<h4>Performance Cookies</h4>
+<div>
+<input> <label><span>Performance Cookies</span></label> <span>Inactive</span>
+</div>
+</div>
+<p>These cookies allow us to count visits and traffic sources so we can measure and improve the performance of our site. They help us to know which pages are the most and least popular and see how visitors move around the site. All information these cookies collect is aggregated and therefore anonymous. If you do not allow these cookies we will not know when you have visited our site, and will not be able to monitor its performance.</p>
+<div><button>Cookies Details‎</button></div>
+</div>
+<div>
+<div>
+<h4>Targeting Cookies</h4>
+<div>
+<input> <label><span>Targeting Cookies</span></label> <span>Inactive</span>
+</div>
+</div>
+<p>These cookies may be set through our site by our advertising partners. They may be used by those companies to build a profile of your interests and show you relevant adverts on other sites. They do not store directly personal information, but are based on uniquely identifying your browser and internet device. If you do not allow these cookies, you will experience less targeted advertising. Some 3rd party video providers do not allow video views without targeting cookies. If you are experiencing difficulty viewing a video, you will need to set your cookie preferences for targeting to yes if you wish to view videos from these providers. Unity does not control this.
+</p>
+<div><button>Cookies Details‎</button></div>
+</div>
+<div>
+<div>
+<h4>Strictly Necessary Cookies</h4>
+<div><div>Always Active</div></div>
+</div>
+<p>These cookies are necessary for the website to function and cannot be switched off in our systems. They are usually only set in response to actions made by you which amount to a request for services, such as setting your privacy preferences, logging in or filling in forms. You can set your browser to block or alert you about these cookies, but some parts of the site will not then work. These cookies do not store any personally identifiable information.</p>
+<div><button>Cookies Details‎</button></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Vendors / Hosts --><section><div>
+<div>
+<div>
+<button><svg><title>Back Button</title></svg></button><h3>Cookie List</h3>
+</div>
+<div>
+<div>
+<input> </div>
+<div><button><svg><title>Filter Button</title></svg></button></div>
+</div>
+</div>
+<section><div><div><div><div>
+<div>
+<span>Consent</span> <span>Leg.Interest</span>
+</div>
+<div>
+<div>
+<input> <label><span>checkbox label</span></label> <span>label</span>
+</div>
+<div>
+<input> <label><span>checkbox label</span></label> <span>label</span>
+</div>
+<div>
+<input> <label><span>checkbox label</span></label> <span>label</span>
+</div>
+</div>
+</div></div></div></div></section>
+</div>
+<section><div>
+<button>Clear</button><div>
+<div><div><div>
+<input> <label><span>checkbox label</span></label> <span>label</span>
+</div></div></div>
+<div>
+<button>Apply</button> <button>Cancel</button>
+</div>
+</div>
+</div></section></section><!-- Footer buttons and logo --><div>
+<div>
+<button>Confirm my choices</button><div>
+<button>Reject all</button> <button>Allow all</button>
+</div>
+</div>
+<div><a href="https://www.onetrust.com/products/cookie-consent/"><img alt="Powered by Onetrust" src="https://cdn.cookielaw.org/logos/static/powered_by_logo.svg" title="Powered by OneTrust Opens in a new Tab"></a></div>
+</div>
+<!-- Cookie subgroup container --><!-- Vendor list link --><!-- Cookie lost link --><!-- Toggle HTML element --><!-- Checkbox HTML --><!-- Arrow SVG element --><!-- Accordion basic element --><!-- Vendor Service container and item template -->
+</div></div>
+<div><div><button><!--?xml version="1.0" encoding="UTF-8"?--> </button></div></div>
+</div>
+</body>
+</html>

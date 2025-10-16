@@ -198,7 +198,9 @@ sources:
     cache_mode: "BYPASS"
     word_count_threshold: 1
     page_timeout: 80000
-    schema:
+    expand_nodes: true
+    preview_limit: 2
+    category_schema:
       name: "ShaderGraph Categories"
       baseSelector: "div:first-of-type table tbody tr"  # First div's table body rows for graph nodes categories
       fields:
@@ -211,6 +213,27 @@ sources:
           attribute: "href"
         - name: "description"
           selector: "td:nth-child(2)"  # Second column for description
+          type: "text"
+    node_schema:
+      name: "ShaderGraph Nodes"
+      baseSelector: "table tbody tr"  # Table body rows for nodes on category pages
+      fields:
+        - name: "node_name"
+          selector: "a"  # Link text
+          type: "text"
+        - name: "node_url"
+          selector: "a"
+          type: "attribute"
+          attribute: "href"
+    node_detail_schema:
+      name: "Node Details"
+      baseSelector: "body"
+      fields:
+        - name: "name"
+          selector: "h1:first-of-type"
+          type: "text"
+        - name: "description"
+          selector: "h2:first-of-type + p"
           type: "text"
 
   - id: "houdini_content_dom"
