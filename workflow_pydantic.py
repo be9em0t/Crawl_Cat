@@ -4,15 +4,16 @@ import llm_utils
 import save_utils
 from pydantic import BaseModel
 
-async def workflow_pydantic(source, urls):
+async def workflow_pydantic(source, urls, common):
+    out_folder = common.get('out_folder', 'output')
     out_file = source.get('out_file', 'pydantic_output')
     workflow = source.get('workflow', 'pydantic')
     out_file_with_workflow = f"{out_file}_{workflow}"
     
     # Look for explore outputs (assuming they have _explore suffix)
     explore_base = out_file  # The base name without workflow
-    explore_md_path = f"output/{explore_base}_explore.md"
-    explore_json_path = f"output/{explore_base}_explore.json"
+    explore_md_path = f"{out_folder}/{explore_base}_explore.md"
+    explore_json_path = f"{out_folder}/{explore_base}_explore.json"
     
     if not os.path.exists(explore_md_path) or not os.path.exists(explore_json_path):
         raise ValueError(f"Explore outputs not found: {explore_md_path} and {explore_json_path}. Run explore workflow first with out_file: '{explore_base}'.")
@@ -93,7 +94,7 @@ async def workflow_pydantic(source, urls):
             cache_mode=source.get('cache_mode', 'BYPASS'),
             word_count_threshold=source.get('word_count_threshold', 1),
             page_timeout=source.get('page_timeout', 80000),
-            output_file=f"{out_file}_pydantic.json",
+            output_file=f"{out_folder}/{out_file}_pydantic.json",
             css_selector=source.get('css_selector'),
             extraction_type="schema"
         )
@@ -101,4 +102,4 @@ async def workflow_pydantic(source, urls):
     except Exception as e:
         print(f"Error processing generated model or extracting: {e}")
         # Save empty structured JSON
-        save_utils.save_json(f"output/{out_file}_pydantic.json", {})
+        save_utils.save_json(f"{out_folder}/{out_file}_pydantic.json", {})

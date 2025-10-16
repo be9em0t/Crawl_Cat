@@ -5,7 +5,7 @@ import llm_utils
 import save_utils
 from pydantic import BaseModel
 
-async def workflow_llm(source, urls):
+async def workflow_llm(source, urls, common):
     llm_alias = source['llm']
     provider, env_var = llm_utils.get_provider_info(llm_alias)
     api_token = os.getenv(env_var) if env_var else None
@@ -38,6 +38,9 @@ async def workflow_llm(source, urls):
     output_file = f"{output_file}_{workflow}"
     if not output_file.endswith('.json'):
         output_file += '.json'
+    out_folder = common.get('out_folder', '')
+    if out_folder:
+        output_file = f"{out_folder}/{output_file}"
     css_selector = source.get('css_selector')
     headless = source.get('headless', True)
     cache_mode = source.get('cache_mode', 'BYPASS')

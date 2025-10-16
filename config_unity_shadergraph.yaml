@@ -1,3 +1,6 @@
+common:
+  out_folder: "output"
+
 sources:
   - id: "shadergraph_nodes_opengpt4o-mini"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
@@ -174,6 +177,87 @@ sources:
       #   threshold: 0.5
       #   keywords: ["shader", "node", "unity"]
 
+  - id: "shadergraph_content_dom"
+    workflow: "dom"
+    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+    urls:
+    title: "Unity Shadergraph node library structure based on DOM selectors"
+    description: "Extract the hierarchical structure of Unity ShaderGraph nodes using DOM selectors."
+    instruction: null
+    prompt_file: "none"
+    pydantic_model: null
+    llm: null
+    temperature: 0.0
+    top_p: 0.9
+    max_tokens: 8000
+    out_file: "shadergraph_content"
+    out_format: "json"
+    extraction_type: null
+    css_selector: "#_content"
+    headless: true
+    cache_mode: "BYPASS"
+    word_count_threshold: 1
+    page_timeout: 80000
+    schema:
+      name: "ShaderGraph Categories"
+      baseSelector: "div:first-of-type table tbody tr"  # First div's table body rows for graph nodes categories
+      fields:
+        - name: "category_name"
+          selector: "a"  # Link text
+          type: "text"
+        - name: "category_url"
+          selector: "a"
+          type: "attribute"
+          attribute: "href"
+        - name: "description"
+          selector: "td:nth-child(2)"  # Second column for description
+          type: "text"
+
+  - id: "houdini_content_dom"
+    workflow: "dom"
+    url: "https://www.sidefx.com/docs/houdini21.0/nodes/index.html"
+    urls:
+    title: "Unity Shadergraph node library structure based on DOM selectors"
+    description: "Extract the hierarchical structure of Unity ShaderGraph nodes using DOM selectors."
+    instruction: null
+    prompt_file: "none"
+    pydantic_model: null
+    llm: null
+    temperature: 0.0
+    top_p: 0.9
+    max_tokens: 8000
+    out_file: "houdini_content"
+    out_format: "json"
+    extraction_type: null
+    css_selector: "#subtopics-body"
+    headless: true
+    cache_mode: "BYPASS"
+    word_count_threshold: 1
+    page_timeout: 80000
+    schema:
+      name: "Houdini Node Categories"
+      baseSelector: "li"  # List items for categories
+      fields:
+        - name: "category_name"
+          selector: "a"  # Link text
+          type: "text"
+        - name: "category_url"
+          selector: "a"
+          type: "attribute"
+          attribute: "href"
+        - name: "description"
+          selector: "p:nth-of-type(2)"  # Second paragraph for description
+          type: "text"
+
+  - id: "shadergraph_hierarchy"
+    title: "Build hierarchical structure from explore output"
+    description: "Process the flat crawled data from explore workflow and build a hierarchical JSON structure of ShaderGraph nodes"
+    input_file: "shadergraph_content.json"
+    out_file: "shadergraph_hierarchy"
+    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+    workflow: "hierarchy"
+
+
   - id: "shadergraph_content_pydantic"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
     urls:
@@ -230,60 +314,3 @@ sources:
     word_count_threshold: 1
     page_timeout: 80000
     workflow: "pydantic"
-
-  - id: "shadergraph_content_dom"
-    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
-    urls:
-    title: "Unity Shadergraph node library structure based on iframe"
-    description: "Extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes arrays with nested categories and nodes."
-    instruction: |
-      From the URL focus on the sidebar. It represents structure of the topics in Shadergaph documentation.
-      - Extract the entire sidebar structure, starting with "About Shadergraph" and ending with Samples/Terrain Shaders/Performance Comparison
-      - Save as well structured Markdown, preserving nested hierarchy.
-    prompt_file: "none"
-    pydantic_model: null
-    llm: null
-    temperature: 0.0
-    top_p: 0.9
-    max_tokens: 8000
-    out_file: "shadergraph_content_dom"
-    out_format: "markdown"
-    extraction_type: "schema" 
-    css_selector: "#_content"
-    headless: true
-    cache_mode: "BYPASS"
-    word_count_threshold: 1
-    page_timeout: 80000
-    # Allowed workflow values: 'llm' (uses LLM for structured extraction with Pydantic models), 'explore' (basic crawling without LLM/Pydantic)
-    workflow: "explore"
-    # For explore workflow: enable deep crawling to follow links up to max_depth levels
-    deep_crawl: true
-    # Maximum depth for deep crawling (default: 3)
-    max_depth: 4
-    # Maximum number of pages to crawl (default: 10)
-    max_pages: 50
-    # Filters for deep crawling (optional)
-    filters:
-      - type: DomainFilter
-        allowed_domains: ["docs.unity3d.com"]
-      - type: URLPatternFilter
-        patterns: ["*Nodes.html", "*Node.html"]
-        # blocked_patterns: ["*Block-Node.html"]
-      # - type: ContentRelevanceFilter
-      #   query: "Unity ShaderGraph node documentation, categories like Artistic, Channel, Math, Procedural"
-      #   threshold: 0.6
-      # - type: ContentTypeFilter
-      #   allowed_types: ["text/html", "application/json"]
-      # - type: SEOFilter
-      #   threshold: 0.5
-      #   keywords: ["shader", "node", "unity"]
-
-  - id: "shadergraph_hierarchy"
-    title: "Build hierarchical structure from explore output"
-    description: "Process the flat crawled data from explore workflow and build a hierarchical JSON structure of ShaderGraph nodes"
-    input_file: "shadergraph_content.json"
-    out_file: "shadergraph_hierarchy"
-    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
-    workflow: "hierarchy"
-
-

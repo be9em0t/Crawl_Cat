@@ -114,26 +114,42 @@ The documentation confirms that Crawl4AI's content selection capabilities will m
 # dom workflow creation prompt:
 Next we will work on dom workflow.
 
+The goal is to extract information specified by the user based on dom elements, using the strengths if crawl4ai.
+
+Our first use case will be set using this yaml id: "shadergraph_content_dom"
+
+We will use this source
+url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+
+We will be extracting Node names and descriptions, hierarchically ordered under Categories.
+
+We will limit contents to css_selector: "#_content"
+
+
+Analyze the task first, check documentation at #fetch https://docs.crawl4ai.com/core/content-selection/ and tell me what will work and what will not work within these constraints:
+- We should be able to do this only using DOM selectors.
+- If we need a specific python function optimized for this case it's also fine, but it needs to be modular. If we can do it with universal python code driven by a well-formed yaml config - even better.
+- You will provide a DOM selectror schema template that the user can fill to extract the right information from the rigth category
+- In a future development we can include LLM inthe DOM discovery process
+
+----
+
+
+We will limit contents of css_selector: "#toc"
+
+- filter out the contents of "#toc" and keep only
+  * [Node Library](https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html "Node Library") and all of its sub-pages, remove all other content. (we might need to use LLM request for this)
+
+- structure them hierarchically, exactly as they are structured in captured #toc
+
+- capture for each Node (this are always the furthest down the hierachy) the 
+ -- name (<h1> containing something like "Normal Strength Node". Node seems to be always present.)
+ -- description (first <p> after the <h1>)
+
+
 Let's execute with the following restraints:
 - It seems we should be able to do this only using DOM selectors.
 - If we need a specific python function optimized for this case it's also fine, but it needs to be modular.
 - I hope we can achieve this without LLM, and will try LLM approach in our next case.
 - Analyze the task first, check documentation at #fetch https://docs.crawl4ai.com/core/content-selection/
  and tell me what will work and what will not work within these constraints:
-
-Extract Node names and descriptions, hyerarchically ordered under Root and Categories.
-
-- use url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
-
-- extract contents of css_selector: "#toc"
-
-- filter out the contents of "#toc" and keep only
-  * [Node Library](https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html "Node Library") and all of its sub-pages, remove all other content. (we might need to use LLM request for this)
-
-- structure them hyerarchically, exactly as they are structured in captured #toc
-
-- capture for each Node (this are always the furthest down the hyerachy) the 
- -- name (<h1> containing something like "Normal Strength Node". Node seems to be always present.)
- -- description (first <p> after the <h1>)
-
-

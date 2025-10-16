@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 import save_utils
 import json
 
-async def workflow_explore(source, urls):
+async def workflow_explore(source, urls, common):
     class BlockedURLFilter:
         def __init__(self, blocked_patterns):
             self.blocked_patterns = blocked_patterns
@@ -22,6 +22,7 @@ async def workflow_explore(source, urls):
     out_file = source.get('out_file', 'explore_output')
     workflow = source.get('workflow', 'explore')
     out_file_with_workflow = f"{out_file}_{workflow}"
+    out_folder = common.get('out_folder', 'output')
     headless = source.get('headless', True)
     cache_mode = source.get('cache_mode', 'BYPASS')
     word_count_threshold = source.get('word_count_threshold', 1)
@@ -110,9 +111,9 @@ async def workflow_explore(source, urls):
                 combined_content += f"\n--- Page {i+1}: {result.url} ---\n\n"
                 combined_content += result.markdown.raw_markdown + "\n"
             file_ext = ".md"
-            save_utils.save_data(f"output/{out_file_with_workflow}{file_ext}", combined_content, 'markdown')
+            save_utils.save_data(f"{out_folder}/{out_file_with_workflow}{file_ext}", combined_content, 'markdown')
         elif fmt == 'json':
             pages_data = [{"url": result.url, "content": result.markdown.raw_markdown} for result in results]
             file_ext = ".json"
-            save_utils.save_json(f"output/{out_file_with_workflow}{file_ext}", pages_data)
-        print(f"Saved {fmt} output to output/{out_file_with_workflow}{file_ext}")
+            save_utils.save_json(f"{out_folder}/{out_file_with_workflow}{file_ext}", pages_data)
+        print(f"Saved {fmt} output to {out_folder}/{out_file_with_workflow}{file_ext}")

@@ -144,7 +144,7 @@ def parse_category_content(content: str) -> List[Dict[str, Any]]:
     return subcategories
 
 
-async def workflow_hierarchy(source, urls):
+async def workflow_hierarchy(source, urls, common):
     input_file = source.get('input_file')
     if not input_file:
         raise ValueError("input_file required for hierarchy workflow")
@@ -165,10 +165,11 @@ async def workflow_hierarchy(source, urls):
     hierarchy = build_hierarchy(flat_data, root_url)
     
     # Save
+    out_folder = common.get('out_folder', 'output')
     out_file = source.get('out_file', 'hierarchy_output')
     workflow = source.get('workflow', 'hierarchy')
     out_file_with_workflow = f"{out_file}_{workflow}.json"
-    with open(f"output/{out_file_with_workflow}", 'w') as f:
+    with open(f"{out_folder}/{out_file_with_workflow}", 'w') as f:
         json.dump(hierarchy, f, indent=2)
     
-    print(f"Hierarchical JSON saved to output/{out_file_with_workflow}")
+    print(f"Hierarchical JSON saved to {out_folder}/{out_file_with_workflow}")

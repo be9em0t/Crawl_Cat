@@ -23,6 +23,7 @@ from workflow_llm import workflow_llm
 from workflow_explore import workflow_explore
 from workflow_pydantic import workflow_pydantic
 from workflow_hierarchy import workflow_hierarchy
+from workflow_dom import workflow_dom
 
 print("Crawl4AI: Advanced Web Crawling and Data Extraction")
 print("GitHub Repository: https://github.com/unclecode/crawl4ai")
@@ -38,6 +39,7 @@ def load_config(config_file):
 # Main execution
 async def main(config_file, config_id=None):
     config = load_config(config_file)
+    common = config.get('common', {})
     sources = config.get('sources', [])
     if not sources:
         raise ValueError("No sources found in config file")
@@ -55,23 +57,25 @@ async def main(config_file, config_id=None):
         raise ValueError("Workflow key missing")
     
     workflow = source['workflow']
-    allowed_workflows = ['llm', 'explore', 'pydantic', 'hierarchy']
+    allowed_workflows = ['llm', 'explore', 'pydantic', 'hierarchy', 'dom']
     if workflow not in allowed_workflows:
         raise ValueError("Workflow key invalid")
     
     # Only get URLs for workflows that need them
     urls = None
-    if workflow in ['llm', 'explore', 'pydantic']:
+    if workflow in ['llm', 'explore', 'pydantic', 'dom']:
         urls = source.get('urls') or [source['url']]
     
     if workflow == 'llm':
-        await workflow_llm(source, urls)
+        await workflow_llm(source, urls, common)
     elif workflow == 'explore':
-        await workflow_explore(source, urls)
+        await workflow_explore(source, urls, common)
     elif workflow == 'pydantic':
-        await workflow_pydantic(source, urls)
+        await workflow_pydantic(source, urls, common)
     elif workflow == 'hierarchy':
-        await workflow_hierarchy(source, urls)
+        await workflow_hierarchy(source, urls, common)
+    elif workflow == 'dom':
+        await workflow_dom(source, urls, common)
 
 
 if __name__ == "__main__":
