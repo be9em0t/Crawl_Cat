@@ -103,6 +103,9 @@ async def workflow_dom(source, urls, common):
 
         # Control debug output
         save_debug = source.get('save_debug_nodes')
+        # Control whether node entries listed on category pages should be captured there
+        # or used only as links to drill down into node pages.
+        capture_nodes_on_category_page = bool(source.get('capture_nodes_on_category_page', True))
         # Aggregate debug information for all categories so we write one debug file
         debug_nodes = []
         for cat in categories:
@@ -150,39 +153,60 @@ async def workflow_dom(source, urls, common):
                 if save_debug:
                     print(f"[{source_id}] Category '{cat.get('category_name')}' normalized nodes with names: {len(nodes)}")
 
-                # Collect node URLs to crawl in parallel
-                node_urls_to_crawl = []
-                nodes_to_update = []
-                for node in nodes:
-                    if preview_limit and processed_nodes >= preview_limit:
-                        break
-                    node_url = node.get('node_url')
-                    if node_url:
-                        if not node_url.startswith('http'):
-                            node_url = urljoin(cat_url, node_url)
-                        node['node_url'] = node_url  # Update to full URL
-                        node_urls_to_crawl.append(node_url)
-                        nodes_to_update.append(node)
-                    processed_nodes += 1
+                # If the config indicates that nodes on the category page are just links
+                # to be followed for full details, and crawl_node_pages is True, then
+                # collect node URLs and crawl them for details. Otherwise, treat nodes
+                # on the category page as the final extracted nodes.
+                if not capture_nodes_on_category_page and crawl_node_pages:
+                    # Collect node URLs to crawl in parallel
+                    node_urls_to_crawl = []
+                    nodes_to_update = []
+                    for node in nodes:
+                        if preview_limit and processed_nodes >= preview_limit:
+                            break
+                        node_url = node.get('node_url')
+                        if node_url:
+                            if not node_url.startswith('http'):
+                                node_url = urljoin(cat_url, node_url)
+                            node['node_url'] = node_url  # Update to full URL
+                            node_urls_to_crawl.append(node_url)
+                            nodes_to_update.append(node)
+                        processed_nodes += 1
 
-                # Optionally crawl node detail pages in parallel only when enabled
-                if crawl_node_pages and node_urls_to_crawl and detail_config:
-                    async with AsyncWebCrawler() as detail_crawler:
-                        import asyncio
-                        tasks = [detail_crawler.arun(url=url, config=detail_config) for url in node_urls_to_crawl]
-                        results = await asyncio.gather(*tasks)
-                    for node, result in zip(nodes_to_update, results):
-                        details = json.loads(result.extracted_content)
-                        if details:
-                            node.update(details[0])  # Assuming one item
-
-                cat['nodes'] = nodes
+                    # Crawl node details in parallel
+                    if node_urls_to_crawl and detail_config:
+                        async with AsyncWebCrawler() as detail_crawler:
+                            import asyncio
+                            tasks = [detail_crawler.arun(url=url, config=detail_config) for url in node_urls_to_crawl]
+                            results = await asyncio.gather(*tasks)
+                        final_nodes = []
+                        for node, result in zip(nodes_to_update, results):
+                            details = json.loads(result.extracted_content)
+                            if details:
+                                # Merge details over node; details[0] expected to contain name/description etc.
+                                merged = node.copy()
+                                merged.update(details[0])
+                                final_nodes.append(merged)
+                            else:
+                                final_nodes.append(node)
+                        cat['nodes'] = final_nodes
+                    else:
+                        # No detail crawl performed; still update full URLs if present
+                        for node in nodes:
+                            if node.get('node_url') and not node['node_url'].startswith('http'):
+                                node['node_url'] = urljoin(cat_url, node['node_url'])
+                        cat['nodes'] = nodes
+                else:
+                    # Treat nodes on category page as final extracted nodes
+                    for node in nodes:
+                        if node.get('node_url') and not node['node_url'].startswith('http'):
+                            node['node_url'] = urljoin(cat_url, node['node_url'])
+                    cat['nodes'] = nodes
             if preview_limit and processed_nodes >= preview_limit:
                 break
 
         # Save aggregate debug file only when explicitly requested via config
         # Use explicit key 'save_debug_nodes: true' and optional 'debug_file' to control output
-        save_debug = source.get('save_debug_nodes')
         if save_debug:
             debug_filename = source.get('debug_file') or (os.path.splitext(output_file)[0] + "_debug_nodes.json")
             save_utils.save_json(debug_filename, debug_nodes)

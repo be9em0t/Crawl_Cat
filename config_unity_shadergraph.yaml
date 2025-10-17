@@ -199,6 +199,9 @@ sources:
     word_count_threshold: 1
     page_timeout: 80000
     expand_nodes: true
+    # For shadergraph we want to follow node links and extract details from node pages
+    capture_nodes_on_category_page: false
+    crawl_node_pages: true
     preview_limit: null
     category_schema:
       name: "ShaderGraph Categories"
