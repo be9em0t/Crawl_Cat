@@ -4,8 +4,10 @@ import yaml
 import save_utils
 from crawl4ai import AsyncWebCrawler, CacheMode, BrowserConfig, CrawlerRunConfig
 from crawl4ai import JsonCssExtractionStrategy
+from urllib.parse import urljoin
 
 async def workflow_dom(source, urls, common):
+    source_id = source.get('id', '<unknown>')
     category_schema = source.get('category_schema') or source.get('schema')
     if not category_schema:
         raise ValueError("Schema is required for dom workflow")
@@ -54,41 +56,100 @@ async def workflow_dom(source, urls, common):
     # Filter categories if needed
     categories = [item for item in categories if item.get('category_name') != 'Block']
     
+    # Make category URLs full
+    for cat in categories:
+        cat_url = cat.get('category_url')
+        if cat_url and not cat_url.startswith('http'):
+            cat['category_url'] = urljoin(main_url, cat_url)
+    
     expand_nodes = source.get('expand_nodes', False)
     if expand_nodes:
         preview_limit = source.get('preview_limit')
         processed_nodes = 0
+        # node_schema is required when expand_nodes is enabled
+        if 'node_schema' not in source:
+            raise ValueError(
+                f"Source '{source_id}': expand_nodes is True but 'node_schema' is missing in the config."
+            )
         node_schema = source.get('node_schema')
-        node_detail_schema = source.get('node_detail_schema')
+        # Crawling node detail pages is optional. Control with 'crawl_node_pages' flag.
+        crawl_node_pages = bool(source.get('crawl_node_pages', False))
+        node_detail_schema = None
+        if crawl_node_pages:
+            if 'node_detail_schema' not in source:
+                raise ValueError(
+                    f"Source '{source_id}': 'crawl_node_pages' is True but 'node_detail_schema' is missing in the config."
+                )
+            node_detail_schema = source.get('node_detail_schema')
         
         node_config = CrawlerRunConfig(
             extraction_strategy=JsonCssExtractionStrategy(node_schema),
-            css_selector=css_selector,
+            css_selector=node_schema.get('css_selector', css_selector),
             cache_mode=CacheMode[cache_mode.upper()] if cache_mode else CacheMode.BYPASS,
             word_count_threshold=word_count_threshold,
             page_timeout=page_timeout
         )
         
-        detail_config = CrawlerRunConfig(
-            extraction_strategy=JsonCssExtractionStrategy(node_detail_schema),
-            css_selector=None,  # Whole page
-            cache_mode=CacheMode[cache_mode.upper()] if cache_mode else CacheMode.BYPASS,
-            word_count_threshold=word_count_threshold,
-            page_timeout=page_timeout
-        )
-        
+        # Only build a detail_config when crawling node pages is enabled
+        detail_config = None
+        if crawl_node_pages:
+            detail_config = CrawlerRunConfig(
+                extraction_strategy=JsonCssExtractionStrategy(node_detail_schema),
+                css_selector=None,  # Whole page
+                cache_mode=CacheMode[cache_mode.upper()] if cache_mode else CacheMode.BYPASS,
+                word_count_threshold=word_count_threshold,
+                page_timeout=page_timeout
+            )
+
+        # Control debug output
+        save_debug = source.get('save_debug_nodes')
+        # Aggregate debug information for all categories so we write one debug file
+        debug_nodes = []
         for cat in categories:
             cat_url = cat.get('category_url')
             if cat_url:
                 # Make full URL if relative
                 if not cat_url.startswith('http'):
-                    from urllib.parse import urljoin
                     cat_url = urljoin(main_url, cat_url)
                 
                 async with AsyncWebCrawler() as node_crawler:
                     result = await node_crawler.arun(url=cat_url, config=node_config)
                     nodes = json.loads(result.extracted_content)
-                
+                if save_debug:
+                    print(f"[{source_id}] Category '{cat.get('category_name')}' raw nodes: {len(nodes)}")
+
+                # Normalize and clean nodes: ensure node_name, node_url, description exist
+                normalized = []
+                for node in nodes:
+                    # defensive field mapping
+                    name = node.get('node_name') or node.get('name') or node.get('title') or ''
+                    node_url = node.get('node_url') or node.get('url') or node.get('link') or ''
+                    # Houdini uses 'summary' for node short descriptions; map it into description
+                    desc = node.get('description') or node.get('summary') or node.get('body') or node.get('text') or ''
+
+                    # Clean description by removing leading node name if present
+                    if name and desc.startswith(name):
+                        desc = desc[len(name):].strip()
+
+                    # Build canonical node dict while preserving other fields
+                    canon = {'node_name': name, 'node_url': node_url, 'description': desc}
+                    for k, v in node.items():
+                        if k not in canon:
+                            canon[k] = v
+                    normalized.append(canon)
+
+                # Save normalized nodes to debug aggregation
+                debug_nodes.append({
+                    'category_name': cat.get('category_name'),
+                    'category_url': cat.get('category_url'),
+                    'nodes': normalized
+                })
+
+                # Filter nodes to only those with names
+                nodes = [node for node in normalized if node.get('node_name')]
+                if save_debug:
+                    print(f"[{source_id}] Category '{cat.get('category_name')}' normalized nodes with names: {len(nodes)}")
+
                 # Collect node URLs to crawl in parallel
                 node_urls_to_crawl = []
                 nodes_to_update = []
@@ -103,9 +164,9 @@ async def workflow_dom(source, urls, common):
                         node_urls_to_crawl.append(node_url)
                         nodes_to_update.append(node)
                     processed_nodes += 1
-                
-                # Crawl node details in parallel
-                if node_urls_to_crawl:
+
+                # Optionally crawl node detail pages in parallel only when enabled
+                if crawl_node_pages and node_urls_to_crawl and detail_config:
                     async with AsyncWebCrawler() as detail_crawler:
                         import asyncio
                         tasks = [detail_crawler.arun(url=url, config=detail_config) for url in node_urls_to_crawl]
@@ -114,10 +175,20 @@ async def workflow_dom(source, urls, common):
                         details = json.loads(result.extracted_content)
                         if details:
                             node.update(details[0])  # Assuming one item
-                
+
                 cat['nodes'] = nodes
             if preview_limit and processed_nodes >= preview_limit:
                 break
+
+        # Save aggregate debug file only when explicitly requested via config
+        # Use explicit key 'save_debug_nodes: true' and optional 'debug_file' to control output
+        save_debug = source.get('save_debug_nodes')
+        if save_debug:
+            debug_filename = source.get('debug_file') or (os.path.splitext(output_file)[0] + "_debug_nodes.json")
+            save_utils.save_json(debug_filename, debug_nodes)
+        else:
+            # Do not write debug output unless explicitly requested. This avoids unexpected files.
+            pass
     
     # Save the extracted data
     save_utils.save_json(output_file, categories)

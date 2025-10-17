@@ -153,3 +153,36 @@ Let's execute with the following restraints:
 - I hope we can achieve this without LLM, and will try LLM approach in our next case.
 - Analyze the task first, check documentation at #fetch https://docs.crawl4ai.com/core/content-selection/
  and tell me what will work and what will not work within these constraints:
+
+---
+Hooray, the debug json is not written out ny more.
+
+Lets continue to fixing id: "houdini21_content_dom_minimal"
+
+Currently we are only capturing the top-level categories using DOM selectors.
+Update the schema so that we extract not only categories, but hieararchically include node names, node urls and node summaries listed on each category page. Do not crawl the node pages themselves for full descriptions, this will be very slow.
+
+Example:
+the schema correctly captures 
+  {
+    "category_name": "Channel nodes",
+    "category_url": "https://www.sidefx.com/docs/houdini21.0/nodes/chop/index.html",
+    "description": "Channel nodes create, filter, and manipulate channel data."
+  }
+From the category_url we need to look up 
+<ul class="subtopics_item_group item_group">. It contains multiple #ind_item selectors, one for each node we need to capture.
+The #ind_item selectors contain something like 
+<a class="label-text node" href="agent.html">Agent</a> - this is the name of the node and it's url.
+<p class="summary">Imports an animation clip from an agent primitive.</p> - this the node summary.
+So, using these selectors, please update the schema to capture correclty hierarchical structure and save it out as json.
+
+
+Store not relative, but full urls, please, to be used for online referencing when necessary.
+
+
+---
+improving shadergraph:
+on node pages crawl only the contents of #_content, and from it use
+- the first <h1> is the node name
+- after it there may are mai not be an <h2> which we ignore (usually its just a title "Description")
+- all the <p> tags after it and before the #ports are the description
