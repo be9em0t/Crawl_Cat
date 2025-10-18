@@ -230,13 +230,17 @@ sources:
           attribute: "href"
     node_detail_schema:
       name: "Node Details"
-      baseSelector: "body"
+      # Limit extraction to the content area and extract the first H1 as the name
+      # then capture paragraphs following the H1 as the description.
+      baseSelector: "#_content"
       fields:
         - name: "name"
           selector: "h1:first-of-type"
           type: "text"
+        # Select all <p> siblings after the first H1. Multiple <p> matches will be
+        # coalesced into a single string by the merging logic in workflow_dom.
         - name: "description"
-          selector: "h2:first-of-type + p"
+          selector: "h1:first-of-type ~ p"
           type: "text"
 
   - id: "houdini21_content_dom_minimal"
@@ -296,6 +300,9 @@ sources:
           type: "text"
     # Do not crawl individual node pages by default (slow). Control with crawl_node_pages flag.
     crawl_node_pages: false
+    # Exclude verbose 'description' field; keep 'summary' for short descriptions
+    exclude_fields:
+      - description
 
   - id: "shadergraph_hierarchy"
     title: null

@@ -6,6 +6,32 @@ from crawl4ai import AsyncWebCrawler, CacheMode, BrowserConfig, CrawlerRunConfig
 from crawl4ai import JsonCssExtractionStrategy
 from urllib.parse import urljoin
 
+
+# Helper: parse include/exclude field specs and apply to node dicts
+def _parse_field_list(spec):
+    if spec is None:
+        return None
+    if isinstance(spec, str):
+        return [s.strip() for s in spec.split(',') if s.strip()]
+    if isinstance(spec, (list, tuple)):
+        return list(spec)
+    return None
+
+
+def _filter_node_fields(node, include_fields, exclude_fields):
+    """Return a copy of node with fields filtered.
+
+    Precedence: include_fields (if provided) wins; otherwise exclude_fields removes keys.
+    If neither provided, return node as-is.
+    """
+    if not isinstance(node, dict):
+        return node
+    if include_fields:
+        return {k: node[k] for k in include_fields if k in node}
+    if exclude_fields:
+        return {k: v for k, v in node.items() if k not in exclude_fields}
+    return node
+
 async def workflow_dom(source, urls, common):
     source_id = source.get('id', '<unknown>')
     category_schema = source.get('category_schema') or source.get('schema')
@@ -101,13 +127,17 @@ async def workflow_dom(source, urls, common):
                 page_timeout=page_timeout
             )
 
-        # Control debug output
+    # Control debug output
         save_debug = source.get('save_debug_nodes')
         # Control whether node entries listed on category pages should be captured there
         # or used only as links to drill down into node pages.
         capture_nodes_on_category_page = bool(source.get('capture_nodes_on_category_page', True))
         # Aggregate debug information for all categories so we write one debug file
         debug_nodes = []
+        # Field filtering configuration per-source
+        include_fields = _parse_field_list(source.get('include_fields'))
+        exclude_fields = _parse_field_list(source.get('exclude_fields'))
+
         for cat in categories:
             cat_url = cat.get('category_url')
             if cat_url:
@@ -139,7 +169,10 @@ async def workflow_dom(source, urls, common):
                     for k, v in node.items():
                         if k not in canon:
                             canon[k] = v
-                    normalized.append(canon)
+
+                    # Apply include/exclude filtering immediately so debug shows the filtered shape
+                    filtered = _filter_node_fields(canon, include_fields, exclude_fields)
+                    normalized.append(filtered)
 
                 # Save normalized nodes to debug aggregation
                 debug_nodes.append({
@@ -185,7 +218,17 @@ async def workflow_dom(source, urls, common):
                             if details:
                                 # Merge details over node; details[0] expected to contain name/description etc.
                                 merged = node.copy()
-                                merged.update(details[0])
+                                # Merge details then normalize description field
+                                detail_obj = details[0].copy()
+                                desc = detail_obj.get('description')
+                                if isinstance(desc, list):
+                                    # Join multiple paragraph matches into a single string
+                                    # Preserve paragraph breaks with double newlines
+                                    detail_obj['description'] = '\n\n'.join([d.strip() for d in desc if d and d.strip()])
+                                elif isinstance(desc, str):
+                                    detail_obj['description'] = desc.strip()
+                                merged.update(detail_obj)
+                                merged = _filter_node_fields(merged, include_fields, exclude_fields)
                                 final_nodes.append(merged)
                             else:
                                 final_nodes.append(node)
@@ -195,12 +238,16 @@ async def workflow_dom(source, urls, common):
                         for node in nodes:
                             if node.get('node_url') and not node['node_url'].startswith('http'):
                                 node['node_url'] = urljoin(cat_url, node['node_url'])
+                            # Ensure final filtering applied (in case normalized earlier didn't include dynamic merges)
+                            node = _filter_node_fields(node, include_fields, exclude_fields)
                         cat['nodes'] = nodes
                 else:
                     # Treat nodes on category page as final extracted nodes
-                    for node in nodes:
+                    for i, node in enumerate(nodes):
                         if node.get('node_url') and not node['node_url'].startswith('http'):
                             node['node_url'] = urljoin(cat_url, node['node_url'])
+                        # Apply filtering to each final node
+                        nodes[i] = _filter_node_fields(node, include_fields, exclude_fields)
                     cat['nodes'] = nodes
             if preview_limit and processed_nodes >= preview_limit:
                 break
