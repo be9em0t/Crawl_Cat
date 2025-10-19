@@ -32,6 +32,28 @@ def _filter_node_fields(node, include_fields, exclude_fields):
         return {k: v for k, v in node.items() if k not in exclude_fields}
     return node
 
+
+def _resolve_field_filters(source, node_detail_schema=None):
+    """Resolve include/exclude filters from node_detail_schema and source.
+
+    Precedence: source-level keys override schema-level keys. Returns a tuple
+    (include_fields, exclude_fields) where each is either a list or None.
+    """
+    include = None
+    exclude = None
+    # Schema-level first
+    if isinstance(node_detail_schema, dict):
+        include = _parse_field_list(node_detail_schema.get('include_fields'))
+        exclude = _parse_field_list(node_detail_schema.get('exclude_fields'))
+    # Source-level overrides
+    s_include = _parse_field_list(source.get('include_fields'))
+    s_exclude = _parse_field_list(source.get('exclude_fields'))
+    if s_include is not None:
+        include = s_include
+    if s_exclude is not None:
+        exclude = s_exclude
+    return include, exclude
+
 async def workflow_dom(source, urls, common):
     source_id = source.get('id', '<unknown>')
     category_schema = source.get('category_schema') or source.get('schema')
@@ -127,16 +149,22 @@ async def workflow_dom(source, urls, common):
                 page_timeout=page_timeout
             )
 
-    # Control debug output
+        # Control debug output
         save_debug = source.get('save_debug_nodes')
         # Control whether node entries listed on category pages should be captured there
         # or used only as links to drill down into node pages.
         capture_nodes_on_category_page = bool(source.get('capture_nodes_on_category_page', True))
         # Aggregate debug information for all categories so we write one debug file
         debug_nodes = []
-        # Field filtering configuration per-source
-        include_fields = _parse_field_list(source.get('include_fields'))
-        exclude_fields = _parse_field_list(source.get('exclude_fields'))
+        # Field filtering configuration: resolve from schema or source (source overrides)
+        include_fields, exclude_fields = _resolve_field_filters(source, source.get('node_detail_schema'))
+        # Detail-name preservation: allow per-schema or per-source override
+        preserve_detail_name = False
+        if isinstance(source.get('node_detail_schema'), dict):
+            preserve_detail_name = bool(source.get('node_detail_schema', {}).get('preserve_name', False))
+        # Source-level override
+        if 'preserve_detail_name' in source:
+            preserve_detail_name = bool(source.get('preserve_detail_name'))
 
         for cat in categories:
             cat_url = cat.get('category_url')
@@ -227,6 +255,10 @@ async def workflow_dom(source, urls, common):
                                     detail_obj['description'] = '\n\n'.join([d.strip() for d in desc if d and d.strip()])
                                 elif isinstance(desc, str):
                                     detail_obj['description'] = desc.strip()
+                                # Remove 'name' from detail pages unless preservation is requested.
+                                if not preserve_detail_name:
+                                    # Avoid conflicting with canonical 'node_name' from category pages.
+                                    detail_obj.pop('name', None)
                                 merged.update(detail_obj)
                                 merged = _filter_node_fields(merged, include_fields, exclude_fields)
                                 final_nodes.append(merged)

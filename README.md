@@ -79,5 +79,40 @@ Required files:
 - config_<name>.yaml: Configuration file with sources, URLs, models, etc.
 - providers.yaml: Provider definitions with LLM aliases and API keys reference
 
-## Yaml - Extracion filters
-... documenta consizely ..
+## Field filters and detail-name preservation
+
+You can control which fields are included in the final extracted node objects using simple filters in your YAML config. Filters can be placed at two levels:
+
+- Schema-level (recommended when the filter is specific to a particular extraction schema):
+  - Add `include_fields` or `exclude_fields` inside a schema object such as `node_detail_schema`.
+  - Example:
+    ```yaml
+    node_detail_schema:
+      baseSelector: "#_content"
+      fields:
+        - name: "description"
+          selector: "h1:first-of-type ~ p"
+          type: "text"
+      include_fields: ["description"]
+    ```
+
+- Source-level (overrides schema-level and applies to the whole source):
+  - Add `include_fields` or `exclude_fields` at the top-level of a `sources` entry.
+  - Example:
+    ```yaml
+    - id: houdini21_content_dom_minimal
+      exclude_fields:
+        - description
+    ```
+
+Precedence rules
+- If both schema-level and source-level filters exist, the source-level filters take precedence.
+- `include_fields` has higher precedence than `exclude_fields` — if `include_fields` is present, only those fields will be kept.
+
+Detail-page name preservation
+- By default the crawler treats the category page `node_name` as the canonical name and will remove any `name` extracted from a node detail page to avoid duplication or conflicts.
+- To override this behavior you can set either:
+  - `node_detail_schema.preserve_name: true` (schema-level)
+  - `preserve_detail_name: true` (source-level)
+
+This makes the extraction flexible: keep `name` when detail pages are authoritative, or drop it when category pages already provide the canonical `node_name`.
