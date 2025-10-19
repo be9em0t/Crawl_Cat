@@ -322,7 +322,10 @@ sources:
     out_file: "houdini_vex_functions"
     out_format: "json"
     extraction_type: null
-    css_selector: "#subtopics-body"
+    # Scope the extraction to the primary content area that contains the VEX
+    # function categories and their lists. This matches the user's DOM note:
+    # <div class="original filtered-body"> ... </div>
+    css_selector: "div.original.filtered-body"
     headless: true
     cache_mode: "BYPASS"
     word_count_threshold: 1
@@ -330,36 +333,62 @@ sources:
     expand_nodes: true
     preview_limit: null
     category_schema:
-      name: "Houdini Node Categories"
-      baseSelector: "li"  # List items for categories
+      name: "VEX Function Categories"
+      # Each category is a <section class="heading pull left  "> containing
+      # an <h2 class="label heading pull left" id="..." data-title="...">Name</h2>
+      baseSelector: "section.heading.pull.left"
       fields:
         - name: "category_name"
-          selector: "a"  # Link text
+          # The visible category title
+          selector: "h2.label.heading.pull.left"
           type: "text"
-        - name: "category_url"
-          selector: "a"
+        - name: "category_id"
+          # Capture the H2 id so callers can locate the corresponding content
+          selector: "h2.label.heading.pull.left"
           type: "attribute"
-          attribute: "href"
+          attribute: "id"
         - name: "description"
-          selector: "p:nth-of-type(2)"  # Second paragraph for description
+          # If categories include an introductory paragraph, capture it.
+          selector: "div.content > p:first-of-type"
           type: "text"
+        - name: "functions"
+          # Nested list of functions inside this category's content container
+          selector: "div.content li.item.subtopics_item, div.content li"
+          type: "nested_list"
+          fields:
+            - name: "function_name"
+              selector: "p.label a.label-text.vex, a.label-text.vex, a"
+              type: "text"
+            - name: "function_url"
+              selector: "p.label a.label-text.vex, a.label-text.vex, a"
+              type: "attribute"
+              attribute: "href"
+            - name: "summary"
+              # Use the per-item summary paragraph which consistently contains
+              # the short description for each function.
+              selector: "p.summary"
+              type: "text"
     node_schema:
-      name: "Houdini Nodes"
-      # On Houdini category pages, node entries are inside the #item_group container
-      # Each node is represented by an element matching #ind_item. Inside that element
-      # the node link has class 'label-text node' and the summary is in a <p class="summary">.
-      # Use the subtopics item group list which contains the node entries
-      baseSelector: "ul.subtopics_item_group.item_group li"
+      name: "VEX Functions"
+      # The functions are rendered as anchors inside the category content,
+      # often formatted as a link followed by a paragraph summary. Use the
+      # anchor as the base element and capture the link text, href and the
+      # immediately-following paragraph (<p>) as the summary.
+      baseSelector: "div.content a.label-text.vex, div.content a"
       fields:
-        - name: "node_name"
-          selector: "a.label-text.node"
+        - name: "function_name"
+          selector: ""
+          # Use the anchor element's text content (the extraction engine will
+          # apply the selector to the base element when empty).
           type: "text"
-        - name: "node_url"
-          selector: "a.label-text.node"
+        - name: "function_url"
+          selector: ""
           type: "attribute"
           attribute: "href"
         - name: "summary"
-          selector: "p.summary"
+          # Select the first <p> sibling following the anchor element which
+          # contains the short description in the page HTML.
+          selector: "a + p, a ~ p"
           type: "text"
     # Do not crawl individual node pages by default (slow). Control with crawl_node_pages flag.
     crawl_node_pages: false
