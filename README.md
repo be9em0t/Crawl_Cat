@@ -5,10 +5,10 @@ Minimal, actionable README for automated/AI consumption.
 ## Quickstart (concise)
 - Ensure Python 3.11+ and dependencies from `requirements.txt` are installed.
 - Put provider API keys in a `.env` at project root and configure `providers.yaml`.
-- Run a source from `config_unity_shadergraph.yaml`:
+- Run a source from `config.yaml`:
 
 ```bash
-python crawl-cat2.py -cfg config_unity_shadergraph.yaml -id shadergraph_content_dom
+python crawl-cat2.py -cfg config.yaml -id shadergraph_content_dom
 ```
 
 ## Core concepts (short)

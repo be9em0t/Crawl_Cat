@@ -190,7 +190,7 @@ sources:
     temperature: 0.0
     top_p: 0.9
     max_tokens: 8000
-    out_file: "shadergraph_content"
+    out_file: "shadergraph_nodes"
     out_format: "json"
     extraction_type: null
     css_selector: "#_content"
@@ -245,7 +245,7 @@ sources:
           type: "text"
       preserve_name: false
 
-  - id: "houdini21_content_dom_minimal"
+  - id: "houdini21_nodes_dom_minimal"
     workflow: "dom"
     url: "https://www.sidefx.com/docs/houdini21.0/nodes/index.html"
     urls:
@@ -258,7 +258,68 @@ sources:
     temperature: 0.0
     top_p: 0.9
     max_tokens: 8000
-    out_file: "houdini_content"
+    out_file: "houdini_nodes_minimal"
+    out_format: "json"
+    extraction_type: null
+    css_selector: "#subtopics-body"
+    headless: true
+    cache_mode: "BYPASS"
+    word_count_threshold: 1
+    page_timeout: 80000
+    expand_nodes: true
+    preview_limit: null
+    category_schema:
+      name: "Houdini Node Categories"
+      baseSelector: "li"  # List items for categories
+      fields:
+        - name: "category_name"
+          selector: "a"  # Link text
+          type: "text"
+        - name: "category_url"
+          selector: "a"
+          type: "attribute"
+          attribute: "href"
+        - name: "description"
+          selector: "p:nth-of-type(2)"  # Second paragraph for description
+          type: "text"
+    node_schema:
+      name: "Houdini Nodes"
+      # On Houdini category pages, node entries are inside the #item_group container
+      # Each node is represented by an element matching #ind_item. Inside that element
+      # the node link has class 'label-text node' and the summary is in a <p class="summary">.
+      # Use the subtopics item group list which contains the node entries
+      baseSelector: "ul.subtopics_item_group.item_group li"
+      fields:
+        - name: "node_name"
+          selector: "a.label-text.node"
+          type: "text"
+        - name: "node_url"
+          selector: "a.label-text.node"
+          type: "attribute"
+          attribute: "href"
+        - name: "summary"
+          selector: "p.summary"
+          type: "text"
+    # Do not crawl individual node pages by default (slow). Control with crawl_node_pages flag.
+    crawl_node_pages: false
+    # Exclude verbose 'description' field; keep 'summary' for short descriptions
+    exclude_fields:
+      - description
+
+  - id: "houdini21_vex_dom_minimal"
+    workflow: "dom"
+    url: "https://www.sidefx.com/docs/houdini21.0/vex/functions/index.html"
+    urls:
+    title: null
+    description: "Crawl and extract the hierarchical structure of Houdini VEX functions using DOM selectors. Limit extraction to categories, function names, urls and function descriptions from the vex functions overview page. Do not crawl the function pages themselves for full descriptions. Use the AI to help generate the correct schema."
+    instruction: null
+    prompt_file: "none"
+    pydantic_model: null
+    llm: null
+    temperature: 0.0
+    top_p: 0.9
+    max_tokens: 8000
+    out_file: "houdini_vex_functions"
     out_format: "json"
     extraction_type: null
     css_selector: "#subtopics-body"

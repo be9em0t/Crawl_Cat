@@ -112,82 +112,25 @@ The documentation confirms that Crawl4AI's content selection capabilities will m
 - **Next Steps**: Start with 'llm' (done), then 'explore' (link discovery), 'dom' (CSS extraction), 'html' (raw download). Add optionals last.
 
 
-# Remarks
-- Seems that llm workflow can generate pretty well a non-structured json and markdown, whcih than hierarchy workwlow sorts nicely. We still miss ui nodes for some reason, but on the right track.
-- the idea for next step was to build flexible dom workflow, that can follow detailed dom element instructions as in the propmt below
-
-# dom workflow creation prompt:
-Next we will work on dom workflow.
-
-The goal is to extract information specified by the user based on dom elements, using the strengths if crawl4ai.
-
-Our first use case will be set using this yaml id: "shadergraph_content_dom"
-
-We will use this source
-url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
-
-We will be extracting Node names and descriptions, hierarchically ordered under Categories.
-
-We will limit contents to css_selector: "#_content"
 
 
-Analyze the task first, check documentation at #fetch https://docs.crawl4ai.com/core/content-selection/ and tell me what will work and what will not work within these constraints:
-- We should be able to do this only using DOM selectors.
-- If we need a specific python function optimized for this case it's also fine, but it needs to be modular. If we can do it with universal python code driven by a well-formed yaml config - even better.
-- You will provide a DOM selectror schema template that the user can fill to extract the right information from the rigth category
-- In a future development we can include LLM inthe DOM discovery process
+-- extract 
+https://www.sidefx.com/docs/houdini21.0/vex/functions/index.html
 
-----
+  - id: "houdini21_vex_dom_minimal"
 
-
-We will limit contents of css_selector: "#toc"
-
-- filter out the contents of "#toc" and keep only
-  * [Node Library](https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html "Node Library") and all of its sub-pages, remove all other content. (we might need to use LLM request for this)
-
-- structure them hierarchically, exactly as they are structured in captured #toc
-
-- capture for each Node (this are always the furthest down the hierachy) the 
- -- name (<h1> containing something like "Normal Strength Node". Node seems to be always present.)
- -- description (first <p> after the <h1>)
-
-
-Let's execute with the following restraints:
-- It seems we should be able to do this only using DOM selectors.
-- If we need a specific python function optimized for this case it's also fine, but it needs to be modular.
-- I hope we can achieve this without LLM, and will try LLM approach in our next case.
-- Analyze the task first, check documentation at #fetch https://docs.crawl4ai.com/core/content-selection/
- and tell me what will work and what will not work within these constraints:
-
----
-Hooray, the debug json is not written out ny more.
-
-Lets continue to fixing id: "houdini21_content_dom_minimal"
-
-Currently we are only capturing the top-level categories using DOM selectors.
-Update the schema so that we extract not only categories, but hieararchically include node names, node urls and node summaries listed on each category page. Do not crawl the node pages themselves for full descriptions, this will be very slow.
-
-Example:
-the schema correctly captures 
-  {
-    "category_name": "Channel nodes",
-    "category_url": "https://www.sidefx.com/docs/houdini21.0/nodes/chop/index.html",
-    "description": "Channel nodes create, filter, and manipulate channel data."
-  }
-From the category_url we need to look up 
-<ul class="subtopics_item_group item_group">. It contains multiple #ind_item selectors, one for each node we need to capture.
-The #ind_item selectors contain something like 
-<a class="label-text node" href="agent.html">Agent</a> - this is the name of the node and it's url.
-<p class="summary">Imports an animation clip from an agent primitive.</p> - this the node summary.
-So, using these selectors, please update the schema to capture correclty hierarchical structure and save it out as json.
-
-
-Store not relative, but full urls, please, to be used for online referencing when necessary.
-
-
----
-improving shadergraph:
-on node pages crawl only the contents of #_content, and from it use
-- the first <h1> is the node name
-- after it there may are mai not be an <h2> which we ignore (usually its just a title "Description")
-- all the <p> tags after it and before the #ports are the description
+DOM description:
+Limit extraction only to <div class="original filtered-body">
+It will contain multiple <section class="heading pull left  ">, which contain the VEX categories
+Each such <section class="heading pull left  "> will contain the name of the category and the list of functions in that category.
+Name of category, for example 'Arrays' will be contained in someting like
+<h2 class="label heading pull left" id="array_group" data-title="arrays">Arrays</h2>.
+List of functions in that category will be contained inside <div id="array_group-body" class="content">.
+Finally, each of the fucntions is defined inside list item, for example 'append' function name, url and summary are defined like this:
+<li class="item subtopics_item ind-item   " data-title="append">
+   <p class="label">
+            <a class="label-text vex" href="append.html">append</a>
+   </p>
+      <p class="summary">Adds an item to an array or string.</p>
+</li>
+Please unclude full, not relative, urls for easy reference.
