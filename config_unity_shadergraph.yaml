@@ -230,18 +230,20 @@ sources:
           attribute: "href"
     node_detail_schema:
       name: "Node Details"
-      # Limit extraction to the content area and extract the first H1 as the name
-      # then capture paragraphs following the H1 as the description.
+      # Limit extraction to the content area and capture paragraphs after the
+      # primary heading. Some pages lack an <h1> but have an <h2> followed by
+      # paragraphs — include those as a fallback. We intentionally do NOT
+      # extract a "name" from the detail page because the canonical
+      # `node_name` comes from the category page.
       baseSelector: "#_content"
       fields:
-        - name: "name"
-          selector: "h1:first-of-type"
-          type: "text"
-        # Select all <p> siblings after the first H1. Multiple <p> matches will be
-        # coalesced into a single string by the merging logic in workflow_dom.
+        # Select all <p> siblings after the first H1 or after the first H2.
+        # Multiple <p> matches will be coalesced into a single string by the
+        # merging logic in workflow_dom.
         - name: "description"
-          selector: "h1:first-of-type ~ p"
+          selector: "h1:first-of-type ~ p, h2:first-of-type ~ p"
           type: "text"
+      preserve_name: false
 
   - id: "houdini21_content_dom_minimal"
     workflow: "dom"
