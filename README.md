@@ -46,6 +46,10 @@ python crawl-cat2.py -cfg config.yaml -id shadergraph_content_dom
 - JSON structure: a list of category objects. Each category may contain `nodes` (list of node dicts). Node keys commonly include `node_name`, `node_url`, `description`, `summary`.
 - `exclude_fields` will remove keys from node objects; `include_fields` restricts to listed keys.
 
+Note on post-processing:
+- Extracted category and node/function names are cleaned (trailing pilcrow `¶` characters removed and whitespace trimmed).
+- Relative URLs found in extracted fields (for example `function_url` or `node_url`) are automatically resolved to absolute URLs using the category URL or the source URL as the base. This ensures output contains full, directly-usable links.
+
 ## Troubleshooting
 - If descriptions are empty, adjust `node_detail_schema.baseSelector` to narrower selector (e.g., `#_content`) and `description` selector (e.g., `h1:first-of-type ~ p, h2:first-of-type ~ p`).
 

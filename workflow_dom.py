@@ -173,9 +173,14 @@ async def workflow_dom(source, urls, common):
                 if not cat_url.startswith('http'):
                     cat_url = urljoin(main_url, cat_url)
                 
-                async with AsyncWebCrawler() as node_crawler:
-                    result = await node_crawler.arun(url=cat_url, config=node_config)
-                    nodes = json.loads(result.extracted_content)
+                try:
+                    async with AsyncWebCrawler() as node_crawler:
+                        result = await node_crawler.arun(url=cat_url, config=node_config)
+                        nodes = json.loads(result.extracted_content) if result and result.extracted_content else []
+                except Exception as e:
+                    # If the browser fails to start or another error occurs, skip node extraction for this category
+                    print(f"[{source_id}] Warning: failed to crawl category page '{cat.get('category_name')}' ({cat_url}): {e}")
+                    nodes = []
                 if save_debug:
                     print(f"[{source_id}] Category '{cat.get('category_name')}' raw nodes: {len(nodes)}")
 
@@ -236,13 +241,24 @@ async def workflow_dom(source, urls, common):
 
                     # Crawl node details in parallel
                     if node_urls_to_crawl and detail_config:
-                        async with AsyncWebCrawler() as detail_crawler:
-                            import asyncio
-                            tasks = [detail_crawler.arun(url=url, config=detail_config) for url in node_urls_to_crawl]
-                            results = await asyncio.gather(*tasks)
+                        try:
+                            async with AsyncWebCrawler() as detail_crawler:
+                                import asyncio
+                                tasks = [detail_crawler.arun(url=url, config=detail_config) for url in node_urls_to_crawl]
+                                results = await asyncio.gather(*tasks)
+                        except Exception as e:
+                            # If detail crawler can't start, log and skip fetching details
+                            print(f"[{source_id}] Warning: failed to crawl node detail pages for category '{cat.get('category_name')}': {e}")
+                            results = []
                         final_nodes = []
                         for node, result in zip(nodes_to_update, results):
-                            details = json.loads(result.extracted_content)
+                            raw = result.extracted_content
+                            # Some crawler runs may return no extracted_content (None).
+                            # Treat that as empty details rather than calling json.loads(None).
+                            if not raw:
+                                details = []
+                            else:
+                                details = json.loads(raw)
                             if details:
                                 # Merge details over node; details[0] expected to contain name/description etc.
                                 merged = node.copy()
@@ -294,5 +310,34 @@ async def workflow_dom(source, urls, common):
             pass
     
     # Save the extracted data
+    # Post-processing: normalize category names and resolve relative function/node URLs
+    for cat in categories:
+        # Clean category_name by removing pilcrow marks and trimming
+        cname = cat.get('category_name')
+        if isinstance(cname, str) and cname:
+            cat['category_name'] = cname.replace('¶', '').strip()
+
+        # Normalize any category-level URL as absolute (already done earlier for 'category_url'
+        # but ensure it's present and absolute for subsequent joins)
+        if cat.get('category_url') and not cat['category_url'].startswith('http'):
+            cat['category_url'] = urljoin(main_url, cat['category_url'])
+
+        # Resolve nested function or node URLs and clean names
+        for list_key in ('functions', 'nodes'):
+            items = cat.get(list_key)
+            if isinstance(items, list):
+                for item in items:
+                    # Clean function/node names
+                    for name_key in ('function_name', 'node_name', 'name', 'title'):
+                        if name_key in item and isinstance(item[name_key], str):
+                            item[name_key] = item[name_key].replace('¶', '').strip()
+
+                    # Resolve common URL-like fields to absolute URLs
+                    for url_key in ('function_url', 'node_url', 'url', 'link', 'href'):
+                        val = item.get(url_key)
+                        if isinstance(val, str) and val and not val.startswith('http'):
+                            base = cat.get('category_url') or main_url
+                            item[url_key] = urljoin(base, val)
+
     save_utils.save_json(output_file, categories)
     print(f"Extracted data saved to {output_file}")
