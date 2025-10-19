@@ -13,17 +13,17 @@ Soem reqire user interaction (JS) to browse.
 
 ## Next Steps Plan
 
-1. **Support CSS-based extraction**
+1. **Done - Support CSS-based extraction**
    - Inspect Unity page DOM to identify selectors for node names/descriptions (e.g., `.node-title`, `.node-desc`).
    - Use `JsonCssExtractionStrategy` for structured output without LLM (generate schema once if needed).
    - If pages are dynamic, add `js_code` to expand/load content.
 
-2. **Implement sidebar reading and selection**
+2. **Done - Implement sidebar reading and selection**
    - Use deep crawl or JS actions to extract sidebar links from the main page.
    - Filter links to only those under "Node Library".
    - Print the list for user approval; proceed only after confirmation.
 
-3. **Integrate deep crawl**
+3. **Done - Integrate deep crawl**
    - If manual URL listing is insufficient, use `BFSDeepCrawlStrategy` with filters to auto-discover and crawl selected pages.
 
 4. **OPTIONAL - Integrate JS if necessary**
@@ -33,9 +33,14 @@ Soem reqire user interaction (JS) to browse.
 5. **Fallback to hybrid LLM/CSS**
    - If CSS selectors fail for complex pages, combine LLM for schema generation with CSS for extraction.
 
-6. **Validate and optimize**
+6. **Done - Validate and optimize**
    - Test on a subset of pages; ensure all nodes are captured without duplicates.
-   - Monitor speed and cost; aim for non-LLM extraction where possible.
+
+7. **Streamline config.json**
+   - Remove redundant fields.
+   - Unify.
+   - Make template.
+   - Extract default fields to a defaults caegory.
 
 ## Notes on Useful Functions Analyzed
 From Crawl4ai examples (`quickstart.py`, `quickstart_examples_set_1.py` and `quickstart_examples_set_2.py`):

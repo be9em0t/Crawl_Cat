@@ -1,118 +1,53 @@
-# Name
-crawl-cat2.py
+# crawl-cat (crawl-cat2)
 
-# Crawl-cat Crawl4Ai-based documentation extractor
-Documentation extraction crawler that uses crawl4ai, LLM capability to analyze schema and select elements, then use DOM selectors for actual content extraction.
+Minimal, actionable README for automated/AI consumption.
 
-# Prerequisites
-- pyenv to match the project's Python version (see `.python-version` if present)
-- Python 3.11+ (the project was tested with pyenv Python 3.13.x)
-- An API keys stored in a `.env` file at the project root
-- Crawl4Ai installed and verified.
-
-## Verify Crawl4ai install:
-```
-# Install the package
-pip install -U crawl4ai
-
-# For pre release versions
-pip install crawl4ai --pre
-
-# Run post-installation setup
-crawl4ai-setup
-
-# Verify your installation
-crawl4ai-doctor
-```
-
-## Install dependencies
-
-Use the included `requirements.txt`:
+## Quickstart (concise)
+- Ensure Python 3.11+ and dependencies from `requirements.txt` are installed.
+- Put provider API keys in a `.env` at project root and configure `providers.yaml`.
+- Run a source from `config_unity_shadergraph.yaml`:
 
 ```bash
-python -m pip install -r requirements.txt
+python crawl-cat2.py -cfg config_unity_shadergraph.yaml -id shadergraph_content_dom
 ```
 
-If you use pyenv and want to activate the project's Python version:
+## Core concepts (short)
+- Workflows: `explore`, `llm`, `dom`, `html`.
+- Config: `config_<name>.yaml` contains `sources` (list). Each source declares extraction schemas and options.
+- Extraction schemas: `category_schema`, `node_schema`, `node_detail_schema` (each a CSS-based schema used by crawl4ai).
 
-```bash
-pyenv shell $(cat .python-version)
-```
+## Important config knobs (concise)
+- Output naming: `out_file` is combined with `workflow` and `.json` is appended. If `out_folder` set, output saved there.
+- Debug: `save_debug_nodes: true` writes debug JSON; `debug_file` overrides filename.
+- Node expansion: `expand_nodes: true` enables node extraction; `capture_nodes_on_category_page` (default true) controls whether to treat category-page nodes as final or follow `node_url`.
+- Crawl detail pages: `crawl_node_pages: true` + `node_detail_schema` will fetch and merge detail info.
 
-# What the script does
-- Crawls page(s)
-- May use user-supplied pythonic model
-- Uses crawl4ai's extraction strategies to extract structured information
-- Supports different workflows
-    - explore (explore the structure using CSS selectors)
-    - llm (ai-assisted extraction)
-    - dom (or css) - non-ai extraction
-    - html - page extraction for loacal processing
-- Prints the extracted information to stdout
-- Saves to JSON, markdown, HTML (depending on yaml settings)
+## Filters & name preservation (machine-oriented)
+- Filters can be declared at schema-level or source-level. Source-level overrides schema-level.
+  - Schema-level example (inside `node_detail_schema`):
+    - `include_fields: ["description"]`
+    - `exclude_fields: ["other_field"]`
+  - Source-level example (top-level under a `sources` entry):
+    - `exclude_fields: ["description"]`
+- Precedence: `include_fields` > `exclude_fields`. If `include_fields` exists, only those fields are kept.
+- Name preservation:
+  - Default behavior: detail-page `name` is removed to avoid conflict; `node_name` from category page is canonical.
+  - To preserve detail `name`: set `node_detail_schema.preserve_name: true` or `preserve_detail_name: true` at source-level.
 
+## Add a new source (checklist)
+1. Duplicate an existing `sources` entry in `config_*.yaml`.
+2. Set `id`, `url` (and optional `urls`).
+3. Provide `category_schema` and `node_schema` (CSS selectors + `fields`).
+4. If you need detailed node pages, add `node_detail_schema` and set `crawl_node_pages: true`.
+5. Tune `include_fields` / `exclude_fields` and `preserve_name` as needed.
+6. Run the script with `-cfg` and `-id`.
 
-# Internal structure
-```text
-Root
-├── .env
-├── requirements.txt
-├── config_<1>.yaml 
-├── config_<2>.yaml 
-├── providers.yaml
-├── crawl_cat2.py
-├── save_utils.py
-├── main.py
-└── output
-```
+## Output expectations
+- JSON structure: a list of category objects. Each category may contain `nodes` (list of node dicts). Node keys commonly include `node_name`, `node_url`, `description`, `summary`.
+- `exclude_fields` will remove keys from node objects; `include_fields` restricts to listed keys.
 
+## Troubleshooting
+- If descriptions are empty, adjust `node_detail_schema.baseSelector` to narrower selector (e.g., `#_content`) and `description` selector (e.g., `h1:first-of-type ~ p, h2:first-of-type ~ p`).
 
-# Usage
-
-## Running the script
-
-Usage examples:
-  python crawl-cat2.py -cfg config_openai_fees.yaml
-  python crawl-cat2.py -cfg config_openai_fees.yaml -id openai_fees_or-gpt4o-mini
-
-Required files:
-- config_<name>.yaml: Configuration file with sources, URLs, models, etc.
-- providers.yaml: Provider definitions with LLM aliases and API keys reference
-
-## Field filters and detail-name preservation
-
-You can control which fields are included in the final extracted node objects using simple filters in your YAML config. Filters can be placed at two levels:
-
-- Schema-level (recommended when the filter is specific to a particular extraction schema):
-  - Add `include_fields` or `exclude_fields` inside a schema object such as `node_detail_schema`.
-  - Example:
-    ```yaml
-    node_detail_schema:
-      baseSelector: "#_content"
-      fields:
-        - name: "description"
-          selector: "h1:first-of-type ~ p"
-          type: "text"
-      include_fields: ["description"]
-    ```
-
-- Source-level (overrides schema-level and applies to the whole source):
-  - Add `include_fields` or `exclude_fields` at the top-level of a `sources` entry.
-  - Example:
-    ```yaml
-    - id: houdini21_content_dom_minimal
-      exclude_fields:
-        - description
-    ```
-
-Precedence rules
-- If both schema-level and source-level filters exist, the source-level filters take precedence.
-- `include_fields` has higher precedence than `exclude_fields` — if `include_fields` is present, only those fields will be kept.
-
-Detail-page name preservation
-- By default the crawler treats the category page `node_name` as the canonical name and will remove any `name` extracted from a node detail page to avoid duplication or conflicts.
-- To override this behavior you can set either:
-  - `node_detail_schema.preserve_name: true` (schema-level)
-  - `preserve_detail_name: true` (source-level)
-
-This makes the extraction flexible: keep `name` when detail pages are authoritative, or drop it when category pages already provide the canonical `node_name`.
+---
+This README is intentionally concise so an automated agent can resume work (add sources, tweak schemas, run crawls).
