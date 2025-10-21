@@ -293,6 +293,77 @@ sources:
     exclude_fields:
       - description
 
+
+  - id: "houdini21_vex_dom_minimal"
+    url: "https://www.sidefx.com/docs/houdini21.0/vex/functions/index.html"
+    description: "Crawl and extract the hierarchical structure of Houdini VEX functions using DOM selectors. Limit extraction to categories, function names, urls and function descriptions from the vex functions overview page. Do not crawl the function pages themselves for full descriptions. Use the AI to help generate the correct schema."
+    out_file: "houdini_vex_functions"
+    out_format: "json"
+    css_selector: "div.original.filtered-body"
+    workflow: "dom"
+    expand_nodes: true
+    crawl_node_pages: false
+    category_schema:
+      name: "VEX Function Categories"
+      # Each category is a <section class="heading pull left  "> containing
+      # an <h2 class="label heading pull left" id="..." data-title="...">Name</h2>
+      baseSelector: "section.heading.pull.left"
+      fields:
+        - name: "category_name"
+          # The visible category title
+          selector: "h2.label.heading.pull.left"
+          type: "text"
+        - name: "category_id"
+          # Capture the H2 id so callers can locate the corresponding content
+          selector: "h2.label.heading.pull.left"
+          type: "attribute"
+          attribute: "id"
+        - name: "description"
+          # If categories include an introductory paragraph, capture it.
+          selector: "div.content > p:first-of-type"
+          type: "text"
+        - name: "functions"
+          # Nested list of functions inside this category's content container
+          selector: "div.content li.item.subtopics_item, div.content li"
+          type: "nested_list"
+          fields:
+            - name: "function_name"
+              selector: "p.label a.label-text.vex, a.label-text.vex, a"
+              type: "text"
+            - name: "function_url"
+              selector: "p.label a.label-text.vex, a.label-text.vex, a"
+              type: "attribute"
+              attribute: "href"
+            - name: "summary"
+              # Use the per-item summary paragraph which consistently contains
+              # the short description for each function.
+              selector: "p.summary"
+              type: "text"
+    node_schema:
+      name: "VEX Functions"
+      # The functions are rendered as anchors inside the category content,
+      # often formatted as a link followed by a paragraph summary. Use the
+      # anchor as the base element and capture the link text, href and the
+      # immediately-following paragraph (<p>) as the summary.
+      baseSelector: "div.content a.label-text.vex, div.content a"
+      fields:
+        - name: "function_name"
+          selector: ""
+          # Use the anchor element's text content (the extraction engine will
+          # apply the selector to the base element when empty).
+          type: "text"
+        - name: "function_url"
+          selector: ""
+          type: "attribute"
+          attribute: "href"
+        - name: "summary"
+          # Select the first <p> sibling following the anchor element which
+          # contains the short description in the page HTML.
+          selector: "a + p, a ~ p"
+          type: "text"
+    exclude_fields:
+      - description
+
   - id: "pyqgis_340_minimal" # Extracts QGIS Python API classes using DOM selectors
     url: "https://qgis.org/pyqgis/3.40/index.html"
     description: "Crawl and extract the hierarchical structure of QGIS Python API classes using DOM selectors. Extract categories from root, subcategories (tables) from category pages, and classes with names, URLs, and descriptions."
