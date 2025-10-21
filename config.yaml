@@ -1,6 +1,45 @@
 common:
   out_folder: "output"
 
+defaults:
+  url: null
+  urls: null
+  description: null
+  instruction: null
+  pydantic_model: null
+  llm: null
+  temperature: 0.0
+  top_p: 0.9
+  max_tokens: 8000
+  out_file: null
+  extraction_type: "schema"
+  css_selector: null
+  headless: true
+  cache_mode: "BYPASS"
+  word_count_threshold: 1
+  page_timeout: 80000
+  workflow: null
+  deep_crawl: false
+  max_depth: 3
+  max_pages: 10
+  filters: []
+  expand_nodes: false
+  capture_nodes_on_category_page: true
+  crawl_node_pages: false
+  preview_limit: null
+  category_schema: null
+  node_schema: null
+  node_detail_schema: null
+  exclude_fields: []
+  include_fields: []
+  preserve_detail_name: false
+  debug_file: null
+  save_debug_nodes: false
+  input_file: null
+  out_format: ["json"]
+  prompt: null
+  preserve_name: false
+
 sources:
   - id: "shadergraph_nodes_opengpt4o-mini"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
@@ -44,16 +83,7 @@ sources:
           graph_nodes: List[Category] = Field(..., description="List of graph node categories.")
           block_nodes: List[Category] = Field(..., description="List of block node categories.")
     llm: "openrouter_gpt4o-mini"
-    temperature: 0.0
-    top_p: 0.9
-    max_tokens: 8000
     out_file: "shadergraph_nodes_gpt4o-mini"
-    extraction_type: "schema"
-    css_selector: null
-    headless: true
-    cache_mode: "BYPASS"
-    word_count_threshold: 1
-    page_timeout: 80000
     workflow: "llm"
 
   - id: "shadergraph_categories_opengpt4o-mini"
@@ -85,75 +115,36 @@ sources:
           graph_nodes: List[Category] = Field(..., description="List of graph node categories.")
           block_nodes: List[Category] = Field(..., description="List of block node categories.")
     llm: "openrouter_gpt4o-mini"
-    temperature: 0.0
-    top_p: 0.9
-    max_tokens: 8000
     out_file: "shadergraph_categories"
-    extraction_type: "schema"
-    css_selector: null
-    headless: true
-    cache_mode: "BYPASS"
-    word_count_threshold: 1
-    page_timeout: 80000
     workflow: "llm"
 
 
   - id: "shadergraph_toc_explore"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
-    urls:
     description: "Explore Unity Shadergraph node library structure based on sidebar. At this point only extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, without crawling individual nodes for descriptions."
     instruction: |
       From the URL focus on the sidebar. It represents structure of the topics in Shadergaph documentation.
       - Extract the entire sidebar structure, starting with "About Shadergraph" and ending with Samples/Terrain Shaders/Performance Comparison
       - Save as well structured Markdown, preserving nested hierarchy.
-    pydantic_model: null
-    llm: null
-    temperature: 0.0
-    top_p: 0.9
-    max_tokens: 8000
     out_file: "shadergraph_toc_explore"
     out_format: ["markdown", "json"]
-    extraction_type: "block"
     css_selector: "#toc"
-    headless: true
-    cache_mode: "BYPASS"
-    word_count_threshold: 1
-    page_timeout: 80000
     workflow: "explore"
-    deep_crawl: false
-    max_depth: 3
-    max_pages: 10
 
   - id: "shadergraph_content_explore"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
-    urls:
     description: "Explore the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes arrays with nested categories and nodes."
     instruction: |
       From the URL focus on the page content, not the sidebar. It contains tables with links to Shadergraph categories, which in turn contain sub-category tables with Shadergraph nodes.
       - Extract the entire Shadergrah Nodes structure, and list all nodes under their correct categories.
       - Save as well structured Markdown, preserving nested hierarchy.
-    pydantic_model: null
-    llm: null
-    temperature: 0.0
-    top_p: 0.9
-    max_tokens: 8000
     out_file: "shadergraph_content"
     out_format: ["markdown", "json"]
-    extraction_type: "block"
     css_selector: "#_content"
-    headless: true
-    cache_mode: "BYPASS"
-    word_count_threshold: 1
-    page_timeout: 80000
-    # Allowed workflow values: 'llm' (uses LLM for structured extraction with Pydantic models), 'explore' (basic crawling without LLM/Pydantic)
     workflow: "explore"
-    # For explore workflow: enable deep crawling to follow links up to max_depth levels
     deep_crawl: true
-    # Maximum depth for deep crawling (default: 3)
     max_depth: 4
-    # Maximum number of pages to crawl (default: 10)
     max_pages: 50
-    # Filters for deep crawling (optional)
     filters:
       - type: DomainFilter
         allowed_domains: ["docs.unity3d.com"]
@@ -170,29 +161,15 @@ sources:
       #   keywords: ["shader", "node", "unity"]
 
   - id: "shadergraph_content_dom"
-    workflow: "dom"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
-    urls:
     description: "Unity Shadergraph node library structure based on DOM selectors. Seems to work great off the bat, we still dont capture sub-categories. Use the AI to help generate the correct schema."
-    instruction: null
-    pydantic_model: null
-    llm: null
-    temperature: 0.0
-    top_p: 0.9
-    max_tokens: 8000
     out_file: "shadergraph_nodes"
     out_format: "json"
-    extraction_type: null
     css_selector: "#_content"
-    headless: true
-    cache_mode: "BYPASS"
-    word_count_threshold: 1
-    page_timeout: 80000
+    workflow: "dom"
     expand_nodes: true
-    # For shadergraph we want to follow node links and extract details from node pages
     capture_nodes_on_category_page: false
     crawl_node_pages: true
-    preview_limit: null
     category_schema:
       name: "ShaderGraph Categories"
       baseSelector: "div:first-of-type table tbody tr"  # First div's table body rows for graph nodes categories
@@ -236,26 +213,14 @@ sources:
       preserve_name: false
 
   - id: "houdini21_nodes_dom_minimal"
-    workflow: "dom"
     url: "https://www.sidefx.com/docs/houdini21.0/nodes/index.html"
-    urls:
     description: "Crawl and extract the hierarchical structure of Houdini nodes using DOM selectors. Limit extraction to categories, node names, urls and node descriptions from the category pages. Do not crawl the node pages themselves for full descriptions. Use the AI to help generate the correct schema."
-    instruction: null
-    pydantic_model: null
-    llm: null
-    temperature: 0.0
-    top_p: 0.9
-    max_tokens: 8000
     out_file: "houdini_nodes_minimal"
     out_format: "json"
-    extraction_type: null
     css_selector: "#subtopics-body"
-    headless: true
-    cache_mode: "BYPASS"
-    word_count_threshold: 1
-    page_timeout: 80000
+    workflow: "dom"
     expand_nodes: true
-    preview_limit: null
+    crawl_node_pages: false
     category_schema:
       name: "Houdini Node Categories"
       baseSelector: "li"  # List items for categories
@@ -288,36 +253,18 @@ sources:
         - name: "summary"
           selector: "p.summary"
           type: "text"
-    # Do not crawl individual node pages by default (slow). Control with crawl_node_pages flag.
-    crawl_node_pages: false
-    # Exclude verbose 'description' field; keep 'summary' for short descriptions
     exclude_fields:
       - description
 
   - id: "houdini21_vex_dom_minimal"
-    workflow: "dom"
     url: "https://www.sidefx.com/docs/houdini21.0/vex/functions/index.html"
-    urls:
     description: "Crawl and extract the hierarchical structure of Houdini VEX functions using DOM selectors. Limit extraction to categories, function names, urls and function descriptions from the vex functions overview page. Do not crawl the function pages themselves for full descriptions. Use the AI to help generate the correct schema."
-    instruction: null
-    pydantic_model: null
-    llm: null
-    temperature: 0.0
-    top_p: 0.9
-    max_tokens: 8000
     out_file: "houdini_vex_functions"
     out_format: "json"
-    extraction_type: null
-    # Scope the extraction to the primary content area that contains the VEX
-    # function categories and their lists. This matches the user's DOM note:
-    # <div class="original filtered-body"> ... </div>
     css_selector: "div.original.filtered-body"
-    headless: true
-    cache_mode: "BYPASS"
-    word_count_threshold: 1
-    page_timeout: 80000
+    workflow: "dom"
     expand_nodes: true
-    preview_limit: null
+    crawl_node_pages: false
     category_schema:
       name: "VEX Function Categories"
       # Each category is a <section class="heading pull left  "> containing
@@ -376,9 +323,6 @@ sources:
           # contains the short description in the page HTML.
           selector: "a + p, a ~ p"
           type: "text"
-    # Do not crawl individual node pages by default (slow). Control with crawl_node_pages flag.
-    crawl_node_pages: false
-    # Exclude verbose 'description' field; keep 'summary' for short descriptions
     exclude_fields:
       - description
 
@@ -433,14 +377,7 @@ sources:
       Ensure the models can be used for schema-based extraction.
 
       Output only the Python code for the models, starting with necessary imports and class definitions. No explanations or markdown.
-    pydantic_model: null
     llm: "openrouter_gpt4o-mini"
-    temperature: 0.0
-    top_p: 0.9
     max_tokens: 16000
     out_file: "shadergraph_content"
-    headless: true
-    cache_mode: "BYPASS"
-    word_count_threshold: 1
-    page_timeout: 80000
     workflow: "pydantic"

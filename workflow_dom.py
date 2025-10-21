@@ -241,17 +241,16 @@ async def workflow_dom(source, urls, common):
 
                     # Crawl node details in parallel
                     if node_urls_to_crawl and detail_config:
-                        try:
-                            async with AsyncWebCrawler() as detail_crawler:
-                                import asyncio
-                                tasks = [detail_crawler.arun(url=url, config=detail_config) for url in node_urls_to_crawl]
-                                results = await asyncio.gather(*tasks)
-                        except Exception as e:
-                            # If detail crawler can't start, log and skip fetching details
-                            print(f"[{source_id}] Warning: failed to crawl node detail pages for category '{cat.get('category_name')}': {e}")
-                            results = []
+                        async with AsyncWebCrawler() as detail_crawler:
+                            import asyncio
+                            tasks = [detail_crawler.arun(url=url, config=detail_config) for url in node_urls_to_crawl]
+                            results = await asyncio.gather(*tasks, return_exceptions=True)
                         final_nodes = []
                         for node, result in zip(nodes_to_update, results):
+                            if isinstance(result, Exception):
+                                print(f"[{source_id}] Warning: failed to crawl node detail page {node.get('node_url')}: {result}")
+                                final_nodes.append(node)
+                                continue
                             raw = result.extracted_content
                             # Some crawler runs may return no extracted_content (None).
                             # Treat that as empty details rather than calling json.loads(None).

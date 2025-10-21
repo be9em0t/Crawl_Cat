@@ -114,7 +114,7 @@ The documentation confirms that Crawl4AI's content selection capabilities will m
 
 
 
--- extract 
+-- DONE extract minimal 
 https://www.sidefx.com/docs/houdini21.0/vex/functions/index.html
 
   - id: "houdini21_vex_dom_minimal"

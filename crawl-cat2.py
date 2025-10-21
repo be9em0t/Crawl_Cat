@@ -53,6 +53,10 @@ async def main(config_file, config_id=None):
         available_ids = [s.get('id') for s in sources if s.get('id')]
         raise ValueError(f"Config ID '{config_id}' not found. \nAvailable IDs: {available_ids}")
     
+    # Merge with defaults
+    defaults = config.get('defaults', {})
+    source = {**defaults, **source}
+    
     if 'workflow' not in source:
         raise ValueError("Workflow key missing")
     
