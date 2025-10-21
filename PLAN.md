@@ -136,9 +136,83 @@ Finally, each of the fucntions is defined inside list item, for example 'append'
 Please unclude full, not relative, urls for easy reference.
 
 
+
 -- extract minimal PyQGIS 
 https://qgis.org/pyqgis/3.40/index.html
 
   - id: "pyqgis_340_minimal"
 
-DOM description:
+I've created a new source id: "pyqgis_340_minimal" that will contain YAML settings to extract documentation from https://qgis.org/pyqgis/3.40/index.html
+We need to use the dom workflow, and generate a correct YAML that will do the crawl and extraction without using LLM.
+If you have to edit the python code, limit edits only to #file:workflow_dom.py  and make sure not to break existing functionality that captures unity nodes and houdini nodes and functions with names, urls, descriptions and summaries.
+
+Here is a DOM guidance:
+from the root URL we're instrested only in the Python classes:
+<div class="toctree-wrapper compound">
+
+There all class categories are listed inside <ul></ul> tag
+The main categories are on their separate index pages, foe example:
+<li class="toctree-l1"><a class="reference internal" href="core/index.html">core</a><ul>
+
+The category pages, mentioned above (<a class="reference internal" href="core/index.html">core</a>) have to be crawled carfully.
+For each category page we have to extract all sub-categories, classes, class URLs and class descriptions.
+
+Sub-categories mostly live in something like this:
+<section id="d">
+and right below the subcategory name is in 
+<span id="core-3d">
+Under it you will have 
+<table class="docutils align-default">
+that containes the class name, URL and short description:
+<tr class="row-odd"><td><p><a class="reference external" href="Qgs3DRendererAbstractMetadata.html">Qgs3DRendererAbstractMetadata</a></p></td>
+<td><p>Base metadata class for 3D renderers. Instances of derived classes may be registered in Qgs3DRendererRegistry.</p></td>
+</tr>
+
+The exception to this are classes that do not have sub-category, but belong to the category directly. 
+They can be listed in 
+<table class="docutils align-default">
+but without <section id> or <span id>.
+These are classes directly belonging to the Category, and not part of any sub-category.
+
+So, to reiterate:
+We need to hierarchically extract PyQGIS classes 
+PyQGIS 3.40
+  - Categories
+      - Classes with URLs and descriptions
+      - Sub-categories
+         - Classes with URLs and descriptions
+
+Please verify my DOM guidance aginst the url: https://qgis.org/pyqgis/3.40/index.html
+
+
+
+
+  - id: "pyqgis_340_minimal"
+
+I've created a new source id: "pyqgis_340_minimal" that will contain YAML settings to extract documentation from https://qgis.org/pyqgis/3.40/index.html
+We need to use the dom workflow, and generate a correct YAML that will do the crawl and extraction without using LLM.
+If you have to edit the python code, limit edits only to #file:workflow_dom.py  and make sure not to break existing functionality that captures unity nodes and houdini nodes and functions with names, urls, descriptions and summaries.
+
+Here is a DOM guidance:
+from the root URL we're instrested only in the Python classes:
+<div class="toctree-wrapper compound">
+
+There all class categories are listed inside <ul></ul> tag
+The main categories are on their separate index pages, foe example:
+<li class="toctree-l1"><a class="reference internal" href="core/index.html">core</a><ul>
+
+The category pages, mentioned above (<a class="reference internal" href="core/index.html">core</a>) have to be crawled carfully.
+For each category page we have to extract all sub-categories, classes, class URLs and class descriptions.
+
+There are multiple <table class="docutils align-default"> on each category page. Capture them all as different sub-categories. You can name them sub 01, sub 02 etc if the name of the category is not obvious.
+
+Each of these tables (sub-categories) contains multiple class names, URLs and short descriptions:
+<tr class="row-odd"><td><p><a class="reference external" href="Qgs3DRendererAbstractMetadata.html">Qgs3DRendererAbstractMetadata</a></p></td>
+<td><p>Base metadata class for 3D renderers. Instances of derived classes may be registered in Qgs3DRendererRegistry.</p></td>
+</tr>
+
+Make sure the JSON is structured in a way that the categoires contain subcategories which contain classes with name, url and description. 
+
+It is not expected that classes will be duplicated, if this happens we probably have error in the dom crawling.
+
+Please verify my DOM guidance aginst the url: https://qgis.org/pyqgis/3.40/index.html

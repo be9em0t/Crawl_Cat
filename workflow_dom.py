@@ -184,6 +184,29 @@ async def workflow_dom(source, urls, common):
                 if save_debug:
                     print(f"[{source_id}] Category '{cat.get('category_name')}' raw nodes: {len(nodes)}")
 
+                if source.get('has_subcategories'):
+                    subcategories = []
+                    for i, table_data in enumerate(nodes):
+                        subcat_name = f"sub{i+1:02d}"
+                        classes = table_data.get('classes', [])
+                        normalized_classes = []
+                        for cls in classes:
+                            name = cls.get('class_name', '') or cls.get('name', '') or cls.get('title', '')
+                            url = cls.get('class_url', '') or cls.get('url', '') or cls.get('link', '')
+                            desc = cls.get('description', '') or cls.get('summary', '') or ''
+                            if url and not url.startswith('http'):
+                                url = urljoin(cat_url, url)
+                            normalized_classes.append({'name': name, 'url': url, 'description': desc})
+                        subcategories.append({'name': subcat_name, 'classes': normalized_classes})
+                    cat['subcategories'] = subcategories
+                    if save_debug:
+                        debug_nodes.append({
+                            'category_name': cat.get('category_name'),
+                            'category_url': cat.get('category_url'),
+                            'subcategories': subcategories
+                        })
+                    continue  # Skip further processing for this category
+
                 # Normalize and clean nodes: ensure node_name, node_url, description exist
                 normalized = []
                 for node in nodes:
@@ -337,6 +360,21 @@ async def workflow_dom(source, urls, common):
                         if isinstance(val, str) and val and not val.startswith('http'):
                             base = cat.get('category_url') or main_url
                             item[url_key] = urljoin(base, val)
+
+        # Handle subcategories
+        for subcat in cat.get('subcategories', []):
+            for cls in subcat.get('classes', []):
+                # Clean class names
+                for name_key in ('name',):
+                    if name_key in cls and isinstance(cls[name_key], str):
+                        cls[name_key] = cls[name_key].replace('¶', '').strip()
+
+                # Resolve class URLs
+                for url_key in ('url',):
+                    val = cls.get(url_key)
+                    if isinstance(val, str) and val and not val.startswith('http'):
+                        base = cat.get('category_url') or main_url
+                        cls[url_key] = urljoin(base, val)
 
     save_utils.save_json(output_file, categories)
     print(f"Extracted data saved to {output_file}")

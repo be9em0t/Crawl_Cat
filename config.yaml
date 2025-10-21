@@ -293,57 +293,43 @@ sources:
     exclude_fields:
       - description
 
-  - id: "houdini21_vex_dom_minimal" # Correctly extracts node names and descriptions using DOM Selectors on the category page
-    url: "https://www.sidefx.com/docs/houdini21.0/vex/functions/index.html"
-    description: "Crawl and extract the hierarchical structure of Houdini VEX functions using DOM selectors. Limit extraction to categories, function names, urls and function descriptions from the vex functions overview page. Do not crawl the function pages themselves for full descriptions. Use the AI to help generate the correct schema."
-    out_file: "houdini_vex_functions"
+  - id: "pyqgis_340_minimal" # Extracts QGIS Python API classes using DOM selectors
+    url: "https://qgis.org/pyqgis/3.40/index.html"
+    description: "Crawl and extract the hierarchical structure of QGIS Python API classes using DOM selectors. Extract categories from root, subcategories (tables) from category pages, and classes with names, URLs, and descriptions."
+    out_file: "pyqgis_340_minimal_dom"
     out_format: "json"
-    css_selector: "div.original.filtered-body"
     workflow: "dom"
     expand_nodes: true
+    capture_nodes_on_category_page: true
     crawl_node_pages: false
+    has_subcategories: true
     category_schema:
-      name: "VEX Function Categories"
-      baseSelector: "section.heading.pull.left"
+      name: "QGIS Categories"
+      baseSelector: "li.toctree-l1"
       fields:
         - name: "category_name"
-          selector: "h2.label.heading.pull.left"
+          selector: "a.reference.internal"
           type: "text"
-        - name: "category_id"
-          selector: "h2.label.heading.pull.left"
-          type: "attribute"
-          attribute: "id"
-        - name: "description"
-          selector: "div.content > p:first-of-type"
-          type: "text"
-        - name: "functions"
-          selector: "div.content li.item.subtopics_item, div.content li"
-          type: "nested_list"
-          fields:
-            - name: "function_name"
-              selector: "p.label a.label-text.vex, a.label-text.vex, a"
-              type: "text"
-            - name: "function_url"
-              selector: "p.label a.label-text.vex, a.label-text.vex, a"
-              type: "attribute"
-              attribute: "href"
-            - name: "summary"
-              selector: "p.summary"
-              type: "text"
-    node_schema:
-      name: "VEX Functions"
-      baseSelector: "div.content a.label-text.vex, div.content a"
-      fields:
-        - name: "function_name"
-          selector: ""
-          type: "text"
-        - name: "function_url"
-          selector: ""
+        - name: "category_url"
+          selector: "a.reference.internal"
           type: "attribute"
           attribute: "href"
-        - name: "summary"
-          selector: "a + p, a ~ p"
-          type: "text"
-    exclude_fields:
-      - description
+    node_schema:
+      name: "Subcategories"
+      baseSelector: "table.docutils.align-default"
+      fields:
+        - name: "classes"
+          selector: "tr"
+          type: "nested_list"
+          fields:
+            - name: "class_name"
+              selector: "td:first-child a"
+              type: "text"
+            - name: "class_url"
+              selector: "td:first-child a"
+              type: "attribute"
+              attribute: "href"
+            - name: "description"
+              selector: "td:nth-child(2)"
+              type: "text"
 
