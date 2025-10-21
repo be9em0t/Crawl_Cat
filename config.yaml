@@ -347,3 +347,39 @@ sources:
     exclude_fields:
       - description
 
+  - id: "pyqgis_340_minimal"
+    url: "https://qgis.org/pyqgis/3.40/index.html"
+    description: "Crawl and extract the hierarchical structure of QGIS Python API classes using DOM selectors. Extract categories from root, subcategories (tables) from category pages, and classes with names, URLs, and descriptions. DOM-only workflow, no LLM."
+    out_file: "pyqgis_340_minimal"
+    out_format: "json"
+    workflow: "dom"
+    css_selector: "div.wy-nav-content"
+    expand_nodes: true
+    capture_nodes_on_category_page: true
+    crawl_node_pages: false
+    has_subcategories: true
+    category_schema:
+      name: "QGIS Categories"
+      baseSelector: "li.toctree-l1"
+      fields:
+        - name: "category_name"
+          selector: "a.reference.internal"
+          type: "text"
+        - name: "category_url"
+          selector: "a.reference.internal"
+          type: "attribute"
+          attribute: "href"
+    node_schema:
+      name: "Classes"
+      baseSelector: "table.docutils.align-default tr"
+      fields:
+        - name: "node_name"
+          selector: "td:first-child a"
+          type: "text"
+        - name: "node_url"
+          selector: "td:first-child a"
+          type: "attribute"
+          attribute: "href"
+        - name: "description"
+          selector: "td:nth-child(2)"
+          type: "text"
