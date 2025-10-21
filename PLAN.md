@@ -216,3 +216,14 @@ Make sure the JSON is structured in a way that the categoires contain subcategor
 It is not expected that classes will be duplicated, if this happens we probably have error in the dom crawling.
 
 Please verify my DOM guidance aginst the url: https://qgis.org/pyqgis/3.40/index.html
+
+----------
+
+We now have a pretty solid hierarchical extraction of categories, subcategories and classes.
+
+We intentionally do not capure subcategory names, just calling them sub01, sub02 etc.
+Each category lives in its own baseSelector: "table.docutils.align-default"
+Some of the tables are preceded by a <h2> containing the subcategory name, please use it if available.
+If not just use leave the subcategory name blank.
+
+Do not alter the structure. Do not filter out nodes. Just work on subcategory name capture.
