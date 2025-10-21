@@ -15,7 +15,6 @@ sources:
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/ui-nodes.html"
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Utility-Nodes.html"
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/UV-Nodes.html"
-    title: null
     description: "Extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes arrays with nested categories and nodes."
     instruction: |
       From the crawled content of this page, extract Unity ShaderGraph nodes, categories, or subcategories present.
@@ -24,7 +23,6 @@ sources:
       - If this page is a category page (e.g., Artistic Nodes), populate graph_nodes with a single category object containing its name, and either subcategories (if the page has sections like Adjustment, Blend) with their nodes, or direct nodes if no subcategories.
       - Do not output multiple objects or empty categories. Ensure subcategories are nested under their parent category.
       - Only include data actually present on the page.
-    prompt_file: "none"
     pydantic_model: |
       from pydantic import BaseModel, Field
       from typing import List, Optional
@@ -60,14 +58,12 @@ sources:
 
   - id: "shadergraph_categories_opengpt4o-mini"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
-    title: null
     description: "Process Unity Shadergraph category page and extract the ShaderGraph categories from the url."
     instruction: |
       From the crawled content of this page, extract Unity ShaderGraph categories.
       Output a single NodeLibrary object.
       - If this page is the main Node Library page, categories with descriptions. Skip block_nodes similarly.
       - Only include data actually present on the page.
-    prompt_file: "none"
     pydantic_model: |
       from pydantic import BaseModel, Field
       from typing import List, Optional
@@ -105,13 +101,11 @@ sources:
   - id: "shadergraph_toc_explore"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
     urls:
-    title: null
     description: "Explore Unity Shadergraph node library structure based on sidebar. At this point only extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, without crawling individual nodes for descriptions."
     instruction: |
       From the URL focus on the sidebar. It represents structure of the topics in Shadergaph documentation.
       - Extract the entire sidebar structure, starting with "About Shadergraph" and ending with Samples/Terrain Shaders/Performance Comparison
       - Save as well structured Markdown, preserving nested hierarchy.
-    prompt_file: "none"
     pydantic_model: null
     llm: null
     temperature: 0.0
@@ -133,13 +127,11 @@ sources:
   - id: "shadergraph_content_explore"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
     urls:
-    title: null
     description: "Explore the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes arrays with nested categories and nodes."
     instruction: |
       From the URL focus on the page content, not the sidebar. It contains tables with links to Shadergraph categories, which in turn contain sub-category tables with Shadergraph nodes.
       - Extract the entire Shadergrah Nodes structure, and list all nodes under their correct categories.
       - Save as well structured Markdown, preserving nested hierarchy.
-    prompt_file: "none"
     pydantic_model: null
     llm: null
     temperature: 0.0
@@ -181,10 +173,8 @@ sources:
     workflow: "dom"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
     urls:
-    title: null
     description: "Unity Shadergraph node library structure based on DOM selectors. Seems to work great off the bat, we still dont capture sub-categories. Use the AI to help generate the correct schema."
     instruction: null
-    prompt_file: "none"
     pydantic_model: null
     llm: null
     temperature: 0.0
@@ -249,10 +239,8 @@ sources:
     workflow: "dom"
     url: "https://www.sidefx.com/docs/houdini21.0/nodes/index.html"
     urls:
-    title: null
     description: "Crawl and extract the hierarchical structure of Houdini nodes using DOM selectors. Limit extraction to categories, node names, urls and node descriptions from the category pages. Do not crawl the node pages themselves for full descriptions. Use the AI to help generate the correct schema."
     instruction: null
-    prompt_file: "none"
     pydantic_model: null
     llm: null
     temperature: 0.0
@@ -310,10 +298,8 @@ sources:
     workflow: "dom"
     url: "https://www.sidefx.com/docs/houdini21.0/vex/functions/index.html"
     urls:
-    title: null
     description: "Crawl and extract the hierarchical structure of Houdini VEX functions using DOM selectors. Limit extraction to categories, function names, urls and function descriptions from the vex functions overview page. Do not crawl the function pages themselves for full descriptions. Use the AI to help generate the correct schema."
     instruction: null
-    prompt_file: "none"
     pydantic_model: null
     llm: null
     temperature: 0.0
@@ -397,7 +383,6 @@ sources:
       - description
 
   - id: "shadergraph_hierarchy"
-    title: null
     description: "Build hierarchical structure from explore output. Process the flat crawled markdown data from explore workflow and build a hierarchical JSON structure of ShaderGraph nodes."
     input_file: "shadergraph_content.json"
     out_file: "shadergraph_hierarchy"
@@ -418,7 +403,6 @@ sources:
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/ui-nodes.html"
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Utility-Nodes.html"
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/UV-Nodes.html"
-    title: null
     description: "Generate Pydantic models from explore JSON: use LLM to analyze the explore JSON output and generate appropriate Pydantic models for the hierarchical structure"
     instruction: |
       From the crawled content of this page, extract Unity ShaderGraph nodes, categories, or subcategories present.
@@ -449,7 +433,6 @@ sources:
       Ensure the models can be used for schema-based extraction.
 
       Output only the Python code for the models, starting with necessary imports and class definitions. No explanations or markdown.
-    prompt_file: "none"
     pydantic_model: null
     llm: "openrouter_gpt4o-mini"
     temperature: 0.0
