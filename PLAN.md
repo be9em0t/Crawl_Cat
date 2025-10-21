@@ -134,3 +134,11 @@ Finally, each of the fucntions is defined inside list item, for example 'append'
       <p class="summary">Adds an item to an array or string.</p>
 </li>
 Please unclude full, not relative, urls for easy reference.
+
+
+-- extract minimal PyQGIS 
+https://qgis.org/pyqgis/3.40/index.html
+
+  - id: "pyqgis_340_minimal"
+
+DOM description:

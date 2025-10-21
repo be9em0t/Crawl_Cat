@@ -1,49 +1,49 @@
 common:
-  out_folder: "output"
+  out_folder: "output"  # Directory to save output files
 
-defaults:
-  url: null
-  urls: null
-  description: null
-  instruction: null
-  pydantic_model: null
-  llm: null
-  temperature: 0.0
-  top_p: 0.9
-  max_tokens: 8000
-  out_file: null
-  extraction_type: "schema"
-  css_selector: null
-  headless: true
-  cache_mode: "BYPASS"
-  word_count_threshold: 1
-  page_timeout: 80000
-  workflow: null
-  deep_crawl: false
-  max_depth: 3
-  max_pages: 10
-  filters: []
-  expand_nodes: false
-  capture_nodes_on_category_page: true
-  crawl_node_pages: false
-  preview_limit: null
-  category_schema: null
-  node_schema: null
-  node_detail_schema: null
-  exclude_fields: []
-  include_fields: []
-  preserve_detail_name: false
-  debug_file: null
-  save_debug_nodes: false
-  input_file: null
-  out_format: ["json"]
-  prompt: null
-  preserve_name: false
+defaults:  # Default values for all sources, overridden by source-specific settings
+  url: null  # Main URL to crawl (single page)
+  urls: null  # List of URLs to crawl (multiple pages)
+  description: null  # Human-readable description of the source
+  instruction: null  # Instructions for LLM extraction
+  pydantic_model: null  # Pydantic model code for structured extraction
+  llm: null  # LLM provider alias for extraction
+  temperature: 0.0  # LLM temperature for randomness
+  top_p: 0.9  # LLM top-p for nucleus sampling
+  max_tokens: 8000  # Maximum tokens for LLM response
+  out_file: null  # Base name for output files
+  extraction_type: "schema"  # Type of extraction (schema or block)
+  css_selector: null  # CSS selector for content extraction
+  headless: true  # Run browser in headless mode
+  cache_mode: "BYPASS"  # Caching mode for web crawling
+  word_count_threshold: 1  # Minimum word count for page relevance
+  page_timeout: 80000  # Timeout for page loading (ms)
+  workflow: null  # Workflow type (llm, explore, pydantic, hierarchy, dom)
+  deep_crawl: false  # Enable deep crawling for multiple pages
+  max_depth: 3  # Maximum depth for deep crawling
+  max_pages: 10  # Maximum pages to crawl in deep mode
+  filters: []  # Filters for deep crawling (domain, URL patterns, etc.)
+  expand_nodes: false  # Expand to crawl individual node pages
+  capture_nodes_on_category_page: true  # Capture nodes directly from category pages
+  crawl_node_pages: false  # Crawl individual node detail pages
+  preview_limit: null  # Limit number of nodes to process
+  category_schema: null  # Schema for extracting categories
+  node_schema: null  # Schema for extracting nodes
+  node_detail_schema: null  # Schema for extracting node details
+  exclude_fields: []  # Fields to exclude from extraction
+  include_fields: []  # Fields to include in extraction
+  preserve_detail_name: false  # Preserve node names from detail pages
+  debug_file: null  # File for debug output
+  save_debug_nodes: false  # Enable debug output for nodes
+  input_file: null  # Input file for hierarchy workflow
+  out_format: ["json"]  # Output formats (json, markdown)
+  prompt: null  # Custom prompt for LLM
+  preserve_name: false  # Preserve names in extraction
 
 sources:
-  - id: "shadergraph_nodes_opengpt4o-mini"
-    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
-    urls:
+  - id: "shadergraph_nodes_opengpt4o-mini"  # Unique identifier for this source configuration. Uses llm to crawl data, WIP.
+    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"  # Main URL to crawl
+    urls:  # List of URLs to crawl
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Artistic-Nodes.html"
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Channel-Nodes.html"
@@ -54,15 +54,15 @@ sources:
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/ui-nodes.html"
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Utility-Nodes.html"
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/UV-Nodes.html"
-    description: "Extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes arrays with nested categories and nodes."
-    instruction: |
+    description: "Extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes arrays with nested categories and nodes."  # Human-readable description
+    instruction: |  # Instructions for LLM extraction
       From the crawled content of this page, extract Unity ShaderGraph nodes, categories, or subcategories present.
       Output a single NodeLibrary object.
       - If this page is the main Node Library page, populate graph_nodes with category objects (name only, no subcategories or nodes), and block_nodes similarly.
       - If this page is a category page (e.g., Artistic Nodes), populate graph_nodes with a single category object containing its name, and either subcategories (if the page has sections like Adjustment, Blend) with their nodes, or direct nodes if no subcategories.
       - Do not output multiple objects or empty categories. Ensure subcategories are nested under their parent category.
       - Only include data actually present on the page.
-    pydantic_model: |
+    pydantic_model: |  # Pydantic model code for structured extraction
       from pydantic import BaseModel, Field
       from typing import List, Optional
 
@@ -82,11 +82,11 @@ sources:
       class NodeLibrary(BaseModel):
           graph_nodes: List[Category] = Field(..., description="List of graph node categories.")
           block_nodes: List[Category] = Field(..., description="List of block node categories.")
-    llm: "openrouter_gpt4o-mini"
-    out_file: "shadergraph_nodes_gpt4o-mini"
-    workflow: "llm"
+    llm: "openrouter_gpt4o-mini"  # LLM provider alias
+    out_file: "shadergraph_nodes_gpt4o-mini"  # Base name for output files
+    workflow: "llm"  # Workflow type
 
-  - id: "shadergraph_categories_opengpt4o-mini"
+  - id: "shadergraph_categories_opengpt4o-mini" #Uses llm to crawl data, WIP.
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
     description: "Process Unity Shadergraph category page and extract the ShaderGraph categories from the url."
     instruction: |
@@ -119,7 +119,7 @@ sources:
     workflow: "llm"
 
 
-  - id: "shadergraph_toc_explore"
+  - id: "shadergraph_toc_explore" # Extracts all dom selectors from the sidebar.
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
     description: "Explore Unity Shadergraph node library structure based on sidebar. At this point only extract the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, without crawling individual nodes for descriptions."
     instruction: |
@@ -131,7 +131,7 @@ sources:
     css_selector: "#toc"
     workflow: "explore"
 
-  - id: "shadergraph_content_explore"
+  - id: "shadergraph_content_explore" # Extracts all dom selectors from the iframe content
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
     description: "Explore the hierarchical structure of Unity ShaderGraph nodes, including categories, subcategories, and individual nodes with descriptions. Require graph_nodes arrays with nested categories and nodes."
     instruction: |
@@ -160,181 +160,17 @@ sources:
       #   threshold: 0.5
       #   keywords: ["shader", "node", "unity"]
 
-  - id: "shadergraph_content_dom"
-    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
-    description: "Unity Shadergraph node library structure based on DOM selectors. Seems to work great off the bat, we still dont capture sub-categories. Use the AI to help generate the correct schema."
-    out_file: "shadergraph_nodes"
-    out_format: "json"
-    css_selector: "#_content"
-    workflow: "dom"
-    expand_nodes: true
-    capture_nodes_on_category_page: false
-    crawl_node_pages: true
-    category_schema:
-      name: "ShaderGraph Categories"
-      baseSelector: "div:first-of-type table tbody tr"  # First div's table body rows for graph nodes categories
-      fields:
-        - name: "category_name"
-          selector: "a"  # Link text
-          type: "text"
-        - name: "category_url"
-          selector: "a"
-          type: "attribute"
-          attribute: "href"
-        - name: "description"
-          selector: "td:nth-child(2)"  # Second column for description
-          type: "text"
-    node_schema:
-      name: "ShaderGraph Nodes"
-      baseSelector: "table tbody tr"  # Table body rows for nodes on category pages
-      fields:
-        - name: "node_name"
-          selector: "a"  # Link text
-          type: "text"
-        - name: "node_url"
-          selector: "a"
-          type: "attribute"
-          attribute: "href"
-    node_detail_schema:
-      name: "Node Details"
-      # Limit extraction to the content area and capture paragraphs after the
-      # primary heading. Some pages lack an <h1> but have an <h2> followed by
-      # paragraphs — include those as a fallback. We intentionally do NOT
-      # extract a "name" from the detail page because the canonical
-      # `node_name` comes from the category page.
-      baseSelector: "#_content"
-      fields:
-        # Select all <p> siblings after the first H1 or after the first H2.
-        # Multiple <p> matches will be coalesced into a single string by the
-        # merging logic in workflow_dom.
-        - name: "description"
-          selector: "h1:first-of-type ~ p, h2:first-of-type ~ p"
-          type: "text"
-      preserve_name: false
 
-  - id: "houdini21_nodes_dom_minimal"
-    url: "https://www.sidefx.com/docs/houdini21.0/nodes/index.html"
-    description: "Crawl and extract the hierarchical structure of Houdini nodes using DOM selectors. Limit extraction to categories, node names, urls and node descriptions from the category pages. Do not crawl the node pages themselves for full descriptions. Use the AI to help generate the correct schema."
-    out_file: "houdini_nodes_minimal"
-    out_format: "json"
-    css_selector: "#subtopics-body"
-    workflow: "dom"
-    expand_nodes: true
-    crawl_node_pages: false
-    category_schema:
-      name: "Houdini Node Categories"
-      baseSelector: "li"  # List items for categories
-      fields:
-        - name: "category_name"
-          selector: "a"  # Link text
-          type: "text"
-        - name: "category_url"
-          selector: "a"
-          type: "attribute"
-          attribute: "href"
-        - name: "description"
-          selector: "p:nth-of-type(2)"  # Second paragraph for description
-          type: "text"
-    node_schema:
-      name: "Houdini Nodes"
-      # On Houdini category pages, node entries are inside the #item_group container
-      # Each node is represented by an element matching #ind_item. Inside that element
-      # the node link has class 'label-text node' and the summary is in a <p class="summary">.
-      # Use the subtopics item group list which contains the node entries
-      baseSelector: "ul.subtopics_item_group.item_group li"
-      fields:
-        - name: "node_name"
-          selector: "a.label-text.node"
-          type: "text"
-        - name: "node_url"
-          selector: "a.label-text.node"
-          type: "attribute"
-          attribute: "href"
-        - name: "summary"
-          selector: "p.summary"
-          type: "text"
-    exclude_fields:
-      - description
 
-  - id: "houdini21_vex_dom_minimal"
-    url: "https://www.sidefx.com/docs/houdini21.0/vex/functions/index.html"
-    description: "Crawl and extract the hierarchical structure of Houdini VEX functions using DOM selectors. Limit extraction to categories, function names, urls and function descriptions from the vex functions overview page. Do not crawl the function pages themselves for full descriptions. Use the AI to help generate the correct schema."
-    out_file: "houdini_vex_functions"
-    out_format: "json"
-    css_selector: "div.original.filtered-body"
-    workflow: "dom"
-    expand_nodes: true
-    crawl_node_pages: false
-    category_schema:
-      name: "VEX Function Categories"
-      # Each category is a <section class="heading pull left  "> containing
-      # an <h2 class="label heading pull left" id="..." data-title="...">Name</h2>
-      baseSelector: "section.heading.pull.left"
-      fields:
-        - name: "category_name"
-          # The visible category title
-          selector: "h2.label.heading.pull.left"
-          type: "text"
-        - name: "category_id"
-          # Capture the H2 id so callers can locate the corresponding content
-          selector: "h2.label.heading.pull.left"
-          type: "attribute"
-          attribute: "id"
-        - name: "description"
-          # If categories include an introductory paragraph, capture it.
-          selector: "div.content > p:first-of-type"
-          type: "text"
-        - name: "functions"
-          # Nested list of functions inside this category's content container
-          selector: "div.content li.item.subtopics_item, div.content li"
-          type: "nested_list"
-          fields:
-            - name: "function_name"
-              selector: "p.label a.label-text.vex, a.label-text.vex, a"
-              type: "text"
-            - name: "function_url"
-              selector: "p.label a.label-text.vex, a.label-text.vex, a"
-              type: "attribute"
-              attribute: "href"
-            - name: "summary"
-              # Use the per-item summary paragraph which consistently contains
-              # the short description for each function.
-              selector: "p.summary"
-              type: "text"
-    node_schema:
-      name: "VEX Functions"
-      # The functions are rendered as anchors inside the category content,
-      # often formatted as a link followed by a paragraph summary. Use the
-      # anchor as the base element and capture the link text, href and the
-      # immediately-following paragraph (<p>) as the summary.
-      baseSelector: "div.content a.label-text.vex, div.content a"
-      fields:
-        - name: "function_name"
-          selector: ""
-          # Use the anchor element's text content (the extraction engine will
-          # apply the selector to the base element when empty).
-          type: "text"
-        - name: "function_url"
-          selector: ""
-          type: "attribute"
-          attribute: "href"
-        - name: "summary"
-          # Select the first <p> sibling following the anchor element which
-          # contains the short description in the page HTML.
-          selector: "a + p, a ~ p"
-          type: "text"
-    exclude_fields:
-      - description
-
-  - id: "shadergraph_hierarchy"
+  - id: "shadergraph_content_hierarchy" # Can be used to make hierarhical JSON based on explore workflow output
     description: "Build hierarchical structure from explore output. Process the flat crawled markdown data from explore workflow and build a hierarchical JSON structure of ShaderGraph nodes."
-    input_file: "shadergraph_content.json"
+    input_file: "shadergraph_content_explore.json"
     out_file: "shadergraph_hierarchy"
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
     workflow: "hierarchy"
 
 
-  - id: "shadergraph_content_pydantic"
+  - id: "shadergraph_content_pydantic" # Supposed to create a pydantic schema and use it for extraction. Disapponting.
     url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
     urls:
       - "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
@@ -357,27 +193,157 @@ sources:
       - Only include data actually present on the page.
     prompt: |
       You are provided with the output from an explore workflow: a JSON file containing a list of pages with their URLs and raw markdown content, and a markdown file with combined content.
-
       The site is the Unity ShaderGraph Node Library documentation. The structure is hierarchical:
-
       - Root: NodeLibrary with graph_nodes and block_nodes (both lists of Category)
-
       - Category: name, url (optional), description (optional), subcategories (optional list of Subcategory), nodes (optional list of Node)
-
       - Subcategory: name, anchor (optional), nodes (list of Node)
-
       - Node: name, url (optional), description (optional)
-
       Analyze the provided data to understand the exact hierarchy and fields present.
-
       Generate appropriate Pydantic BaseModel classes in Python that accurately represent this structure.
-
       Include proper field types (str, List, Optional), descriptions using Field, and relationships.
-
       Ensure the models can be used for schema-based extraction.
-
       Output only the Python code for the models, starting with necessary imports and class definitions. No explanations or markdown.
     llm: "openrouter_gpt4o-mini"
     max_tokens: 16000
     out_file: "shadergraph_content"
     workflow: "pydantic"
+
+
+  - id: "shadergraph_content_dom" # Correctly extracts node names and descriptions using DOM Selectors crwaling node pages in parallel.
+    url: "https://docs.unity3d.com/Packages/com.unity.shadergraph@17.4/manual/Node-Library.html"
+    description: "Unity Shadergraph node library structure based on DOM selectors. Seems to work great off the bat, we still dont capture sub-categories. Use the AI to help generate the correct schema."
+    out_file: "shadergraph_nodes"
+    out_format: "json"
+    css_selector: "#_content"
+    workflow: "dom"
+    expand_nodes: true
+    capture_nodes_on_category_page: false
+    crawl_node_pages: true
+    category_schema:
+      name: "ShaderGraph Categories"
+      baseSelector: "div:first-of-type table tbody tr"
+      fields:
+        - name: "category_name"
+          selector: "a"
+          type: "text"
+        - name: "category_url"
+          selector: "a"
+          type: "attribute"
+          attribute: "href"
+        - name: "description"
+          selector: "td:nth-child(2)"
+          type: "text"
+    node_schema:
+      name: "ShaderGraph Nodes"
+      baseSelector: "table tbody tr"
+      fields:
+        - name: "node_name"
+          selector: "a"
+          type: "text"
+        - name: "node_url"
+          selector: "a"
+          type: "attribute"
+          attribute: "href"
+    node_detail_schema:
+      name: "Node Details"
+      baseSelector: "#_content"
+      fields:
+        - name: "description"
+          selector: "h1:first-of-type ~ p, h2:first-of-type ~ p"
+          type: "text"
+      preserve_name: false
+
+  - id: "houdini21_nodes_dom_minimal" # Correctly extracts node names and descriptions using DOM Selectors on the category pages
+    url: "https://www.sidefx.com/docs/houdini21.0/nodes/index.html"
+    description: "Crawl and extract the hierarchical structure of Houdini nodes using DOM selectors. Limit extraction to categories, node names, urls and node descriptions from the category pages. Do not crawl the node pages themselves for full descriptions. Use the AI to help generate the correct schema."
+    out_file: "houdini_nodes_minimal"
+    out_format: "json"
+    css_selector: "#subtopics-body"
+    workflow: "dom"
+    expand_nodes: true
+    crawl_node_pages: false
+    category_schema:
+      name: "Houdini Node Categories"
+      baseSelector: "li"
+      fields:
+        - name: "category_name"
+          selector: "a"
+          type: "text"
+        - name: "category_url"
+          selector: "a"
+          type: "attribute"
+          attribute: "href"
+        - name: "description"
+          selector: "p:nth-of-type(2)"
+          type: "text"
+    node_schema:
+      name: "Houdini Nodes"
+      baseSelector: "ul.subtopics_item_group.item_group li"
+      fields:
+        - name: "node_name"
+          selector: "a.label-text.node"
+          type: "text"
+        - name: "node_url"
+          selector: "a.label-text.node"
+          type: "attribute"
+          attribute: "href"
+        - name: "summary"
+          selector: "p.summary"
+          type: "text"
+    exclude_fields:
+      - description
+
+  - id: "houdini21_vex_dom_minimal" # Correctly extracts node names and descriptions using DOM Selectors on the category page
+    url: "https://www.sidefx.com/docs/houdini21.0/vex/functions/index.html"
+    description: "Crawl and extract the hierarchical structure of Houdini VEX functions using DOM selectors. Limit extraction to categories, function names, urls and function descriptions from the vex functions overview page. Do not crawl the function pages themselves for full descriptions. Use the AI to help generate the correct schema."
+    out_file: "houdini_vex_functions"
+    out_format: "json"
+    css_selector: "div.original.filtered-body"
+    workflow: "dom"
+    expand_nodes: true
+    crawl_node_pages: false
+    category_schema:
+      name: "VEX Function Categories"
+      baseSelector: "section.heading.pull.left"
+      fields:
+        - name: "category_name"
+          selector: "h2.label.heading.pull.left"
+          type: "text"
+        - name: "category_id"
+          selector: "h2.label.heading.pull.left"
+          type: "attribute"
+          attribute: "id"
+        - name: "description"
+          selector: "div.content > p:first-of-type"
+          type: "text"
+        - name: "functions"
+          selector: "div.content li.item.subtopics_item, div.content li"
+          type: "nested_list"
+          fields:
+            - name: "function_name"
+              selector: "p.label a.label-text.vex, a.label-text.vex, a"
+              type: "text"
+            - name: "function_url"
+              selector: "p.label a.label-text.vex, a.label-text.vex, a"
+              type: "attribute"
+              attribute: "href"
+            - name: "summary"
+              selector: "p.summary"
+              type: "text"
+    node_schema:
+      name: "VEX Functions"
+      baseSelector: "div.content a.label-text.vex, div.content a"
+      fields:
+        - name: "function_name"
+          selector: ""
+          type: "text"
+        - name: "function_url"
+          selector: ""
+          type: "attribute"
+          attribute: "href"
+        - name: "summary"
+          selector: "a + p, a ~ p"
+          type: "text"
+    exclude_fields:
+      - description
+
