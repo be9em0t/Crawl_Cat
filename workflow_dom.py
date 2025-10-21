@@ -101,6 +101,9 @@ async def workflow_dom(source, urls, common):
                 data = json.loads(result.extracted_content)
                 categories.extend(data)
     
+    # Deduplicate categories by name, keeping the first occurrence
+    categories = list({cat['category_name']: cat for cat in categories if cat.get('category_name')}.values())
+    
     # Filter categories if needed
     categories = [item for item in categories if item.get('category_name') != 'Block']
     
