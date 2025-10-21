@@ -358,6 +358,8 @@ sources:
     capture_nodes_on_category_page: true
     crawl_node_pages: false
     has_subcategories: true
+    exclude_categories:
+      - "Frequently Asked Questions"
     category_schema:
       name: "QGIS Categories"
       baseSelector: "li.toctree-l1"

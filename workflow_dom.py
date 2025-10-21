@@ -103,6 +103,17 @@ async def workflow_dom(source, urls, common):
     
     # Filter categories if needed
     categories = [item for item in categories if item.get('category_name') != 'Block']
+
+    # Optionally exclude categories by name (source-level override)
+    # Accepts a single string or a list of names under 'exclude_category_names' or 'exclude_categories'
+    exclude_cat_names = source.get('exclude_category_names') or source.get('exclude_categories')
+    if exclude_cat_names:
+        if isinstance(exclude_cat_names, str):
+            exclude_cat_names = [exclude_cat_names]
+        # Normalize strings
+        exclude_set = {n.strip() for n in exclude_cat_names if isinstance(n, str)}
+        if exclude_set:
+            categories = [c for c in categories if (not isinstance(c.get('category_name'), str)) or (c.get('category_name').strip() not in exclude_set)]
     
     # Make category URLs full
     for cat in categories:
