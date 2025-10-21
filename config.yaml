@@ -347,7 +347,7 @@ sources:
     exclude_fields:
       - description
 
-  - id: "pyqgis_340_minimal"
+  - id: "pyqgis_340_minimal" # Correctly extracts Class names and descriptions using DOM Selectors on the category page
     url: "https://qgis.org/pyqgis/3.40/index.html"
     description: "Crawl and extract the hierarchical structure of QGIS Python API classes using DOM selectors. Extract categories from root, subcategories (tables) from category pages, and classes with names, URLs, and descriptions. DOM-only workflow, no LLM."
     out_file: "pyqgis_340_minimal"
@@ -385,3 +385,58 @@ sources:
         - name: "description"
           selector: "td:nth-child(2)"
           type: "text"
+
+  - id: "pyqgis_340_detail" # Prototype for deeper extraction of classes, not actully useful in this case.
+    url: "https://qgis.org/pyqgis/3.40/index.html"
+    description: "Crawl PyQGIS categories and then follow each class link to extract full class descriptions and examples from detail pages. DOM-only workflow, no LLM."
+    out_file: "pyqgis_340_detail"
+    out_format: "json"
+    workflow: "dom"
+    css_selector: "div.wy-nav-content"
+    expand_nodes: true
+    capture_nodes_on_category_page: false
+    crawl_node_pages: true
+    preview_limit: 50
+    page_timeout: 20000
+    has_subcategories: true
+    exclude_categories:
+      - "Frequently Asked Questions"
+    category_schema:
+      name: "QGIS Categories"
+      baseSelector: "li.toctree-l1"
+      fields:
+        - name: "category_name"
+          selector: "a.reference.internal"
+          type: "text"
+        - name: "category_url"
+          selector: "a.reference.internal"
+          type: "attribute"
+          attribute: "href"
+    node_schema:
+      name: "Classes"
+      baseSelector: "table.docutils.align-default tr"
+      fields:
+        - name: "node_name"
+          selector: "td:first-child a"
+          type: "text"
+        - name: "node_url"
+          selector: "td:first-child a"
+          type: "attribute"
+          attribute: "href"
+        - name: "description"
+          selector: "td:nth-child(2)"
+          type: "text"
+    node_detail_schema:
+      name: "Class Details"
+      baseSelector: "div.rst-content, div.document"
+      fields:
+        - name: "name"
+          selector: "h1, h2"
+          type: "text"
+        - name: "description"
+          selector: "div.rst-content > p, div.document > p"
+          type: "text"
+        - name: "examples"
+          selector: "div.rst-content pre, div.document pre, pre code"
+          type: "text"
+      preserve_name: false
